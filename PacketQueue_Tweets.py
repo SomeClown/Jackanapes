@@ -191,7 +191,7 @@ def getStream():
 	#return(0)
 
 def directSend(user, text):
-	'''
+	
 	nameCheck = re.compile(r'(@)+')
 	nameResult = nameCheck.search(user)
 	
@@ -202,7 +202,7 @@ def directSend(user, text):
 	else:
 		directTweet = api.send_direct_message(screen_name=user, text=text)
 	return(0)
-'''
+
 
 def statusUpdate(text):
 
@@ -230,36 +230,37 @@ def cursesTest():
 
 def main():
 
+	progVersion = str('Alpha 0.1')
+
 	parser = argparse.ArgumentParser(description='Command line Twitter client', 
-			epilog='For questions contact @SomeClown')
+			formatter_class=argparse.RawTextHelpFormatter, epilog='For questions contact @SomeClown')
 	
 	parser.add_argument('--tweets', '-t', action="store", type=int, dest="tweetsNum", 
-			help="Get 'n' number of recent tweets from main feed")
+			metavar='', help="Get 'n' number of recent tweets from main feed")
 	
 	parser.add_argument('--stream', '-s', action='store_true', 
 			help='start client in streaming mode')
 	
 	parser.add_argument('--friends', '-f', action="store", type=int, dest='numFriends', 
-			help='print list of friends')
+			metavar='', help='print list of friends')
 	
 	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
-			dest='directMessage', help='send a direct message')
+			dest='directMessage', metavar='', help='send a direct message')
 	
 	parser.add_argument('--status', '-S', nargs='*', action="store", type=str, 
-			dest='statusUpdate', help='update twitter status')
-	
-	parser.add_argument('--verbose', action='store_true', help='verbose flag')
+			dest='statusUpdate', metavar='', help='update twitter status')
 
-	parser.add_argument('--cursesTest', '-c', action='store_true',
-			help='ncurses testing...')
+	parser.add_argument('--version', action='version', version=progVersion)
+
+	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
+
+	parser.add_argument('--cursesTest', '-c', action='store_true', help='ncurses testing...')
 
 	# Use vars() to create dictionary of command line switches and text.
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
-	#print(argsDict)
 
 	initialAuth()
-	#cursesTest()
 
 	# Get timeline with 'n' number of tweets
 	if command_args.tweetsNum:
