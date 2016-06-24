@@ -170,8 +170,23 @@ class MyStreamListener(tweepy.StreamListener):
 
 class DictStreamListener(tweepy.StreamListener):
 	
+	#import pdb; pdb.set_trace()
+	
 	def on_status(self,status):
 		print(color_red.format(str(status.user.name)) + ': ' + status.text)
+
+	#screen = curses.initscr() # Creates our screen
+	#curses.noecho() # Keeps the keys we press from
+	#curses.cbreak() # Takes input right away
+	#screen.keypad(1)
+	#screen.addstr(0,0,"Resist Monsanto!") # Add a string at 10,0
+	#screen.refresh() # Refresh screen now that strings added
+	# While loop to wait for key events, then
+	#while 1:
+		#key = screen.getch() # Get presse keys
+		#if key == ord("q"):
+			#curses.endwin() # Closes curses environmenti
+			#break
 	
 	# This is consuming everything
 	# including the session opening friends list
