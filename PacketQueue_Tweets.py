@@ -119,6 +119,9 @@ def printFriends(number):
 	print('-------------------------------------------------------')
 	print(user.screen_name)
 	print('-------------------------------------------------------')
+	
+	import pdb; pdb.set_trace()
+	
 	print('Friends Count: ' + str(user.followers_count))
 	for friend in user.friends(count=number):
 		print('\t' + friend.screen_name)
