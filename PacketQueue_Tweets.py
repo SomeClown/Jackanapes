@@ -64,6 +64,8 @@ def initialAuth():
 	color_cyan = "\033[1;36m{0}\033[00m"
 	color_white = "\033[1;37m{0}\033[00m"
 
+
+
 	auth = derp.hokum()	
 	api = tweepy.API(auth)	
 	user = api.get_user('SomeClown')
@@ -171,22 +173,43 @@ class MyStreamListener(tweepy.StreamListener):
 class DictStreamListener(tweepy.StreamListener):
 	
 	#import pdb; pdb.set_trace()
-	
-	def on_status(self,status):
-		print(color_red.format(str(status.user.name)) + ': ' + status.text)
 
-	#screen = curses.initscr() # Creates our screen
-	#curses.noecho() # Keeps the keys we press from
-	#curses.cbreak() # Takes input right away
-	#screen.keypad(1)
-	#screen.addstr(0,0,"Resist Monsanto!") # Add a string at 10,0
-	#screen.refresh() # Refresh screen now that strings added
-	# While loop to wait for key events, then
-	#while 1:
-		#key = screen.getch() # Get presse keys
-		#if key == ord("q"):
-			#curses.endwin() # Closes curses environmenti
-			#break
+#TODO: So, this whole thing below is a giant pain in the ass, but we're getting somewhere now.
+#TODO: Right now it's streaming, in color, but only when you press the 'enter' key after every
+#TODO: tweet comes in (monitoring in another client.)
+#TODO: So:
+#TODO: 	Fix that, and then add signal catcher for control-c so program stops blowing up
+
+	def on_status(self,status):
+		#print(color_red.format(str(status.user.name)) + ': ' + status.text)
+		while 1:
+			screen = curses.initscr() # Create screen
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			#curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
+			#screen.addstr(str(status.user.name),curses.color_pair(1))
+			#screen.addstr(str(': ' + status.text + '\n'))
+			#screen.refresh() # Refresh screen now that strings added
+			key = screen.getch()
+			if key == ord("q"):
+				curses.endwin()
+			else:
+				curses.start_color()
+				curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
+		
+				screen.addstr(str(status.user.name),curses.color_pair(1))
+				screen.addstr(str(': ' + status.text + '\n'))
+				screen.refresh() # Refresh screen now that strings added
+				break
+
+	
+		# While loop to wait for key events, then
+		#while 1:
+		#	key = screen.getch() # Get presse keys
+		#	if key == ord("q"):
+		#		curses.endwin() # Closes curses environmenti
+		#		break
 	
 	# This is consuming everything
 	# including the session opening friends list
@@ -231,21 +254,6 @@ def statusUpdate(text):
 	return(0)
 
 
-def cursesTest():
-	
-	screen = curses.initscr()
-	curses.noecho()
-	curses.curs_set(0)
-	screen.keypad(1)
-	while True:
-		event = screen.getch()
-		if event == ord("q"): break
-		addstr(getStream())
-	curses.endwin()
-
-	return(0)
-
-
 def main():
 
 	progVersion = str('Alpha 0.1')
@@ -271,8 +279,6 @@ def main():
 	parser.add_argument('--version', action='version', version=progVersion)
 
 	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
-
-	parser.add_argument('--cursesTest', '-c', action='store_true', help='ncurses testing...')
 
 	# Use vars() to create dictionary of command line switches and text.
 	command_args = parser.parse_args()
@@ -302,9 +308,6 @@ def main():
 	elif command_args.statusUpdate:
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(command_args.statusUpdate[0])
-
-	elif command_args.cursesTest:
-		cursesTest()
 
 	else: print(sys.argv)
 
