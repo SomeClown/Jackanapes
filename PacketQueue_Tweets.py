@@ -174,44 +174,27 @@ class DictStreamListener(tweepy.StreamListener):
 	
 	#import pdb; pdb.set_trace()
 
-#TODO: So, this whole thing below is a giant pain in the ass, but we're getting somewhere now.
-#TODO: Right now it's streaming, in color, but only when you press the 'enter' key after every
-#TODO: tweet comes in (monitoring in another client.)
-#TODO: So:
-#TODO: 	Fix that, and then add signal catcher for control-c so program stops blowing up
+#TODO: Need signal catcher for control-c so program stops blowing up
+#TODO: Doesn't need to go here... but I liked this space for random comment
 
 	def on_status(self,status):
-		#print(color_red.format(str(status.user.name)) + ': ' + status.text)
-		screen = curses.initscr()
-		key = screen.getch()
-		if key == ord("q"):
-			curses.endwin()
-		else:
-		#while 1:
-			#screen = curses.initscr() # Create screen
-			curses.noecho()	# Keeps key presses from echoing to screen
-			curses.cbreak() # Takes input away
-			screen.keypad(1)
-			screen.refresh()
-			#curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
-			#screen.addstr(str(status.user.name),curses.color_pair(1))
-			#screen.addstr(str(': ' + status.text + '\n'))
-			#screen.refresh() # Refresh screen now that strings added
-			curses.start_color()
-			curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
-			curses.use_default_colors()
-			#curses.noecho()	# Keeps key presses from echoing to screen
-			screen.addstr(str(status.user.name),curses.color_pair(1))
-			screen.addstr(str(': ' + status.text + '\n'))
-			#screen.refresh() # Refresh screen now that strings added
-			
 	
-		# While loop to wait for key events, then
-		#while 1:
-		#	key = screen.getch() # Get presse keys
-		#	if key == ord("q"):
-		#		curses.endwin() # Closes curses environmenti
-		#		break
+		screen = curses.initscr()
+		curses.noecho()	# Keeps key presses from echoing to screen
+		curses.cbreak() # Takes input away
+		screen.keypad(1)
+		curses.start_color()
+		curses.use_default_colors()
+		curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+		#TODO: Pull status.text into named str, regex for @handle and #hashtag
+		screen.addstr(str(status.user.name),curses.color_pair(1))
+		screen.addstr(str(': ' + status.text + '\n'))
+		screen.refresh() # Refresh screen now that strings added
+		#key = screen.getch()
+		#if key == ord("q"):
+		#	curses.endwin() # Closes curses environment
+
+
 	
 	# This is consuming everything
 	# including the session opening friends list
@@ -231,6 +214,7 @@ def getStream():
 	terenListener = DictStreamListener()
 	terenStream = tweepy.Stream(auth, listener=terenListener)
 	terenStream.userstream()
+	
 	#return(0)
 
 def directSend(user, text):
