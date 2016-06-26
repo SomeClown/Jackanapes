@@ -182,27 +182,29 @@ class DictStreamListener(tweepy.StreamListener):
 
 	def on_status(self,status):
 		#print(color_red.format(str(status.user.name)) + ': ' + status.text)
-		while 1:
-			screen = curses.initscr() # Create screen
+		screen = curses.initscr()
+		key = screen.getch()
+		if key == ord("q"):
+			curses.endwin()
+		else:
+		#while 1:
+			#screen = curses.initscr() # Create screen
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
 			screen.keypad(1)
+			screen.refresh()
 			#curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
 			#screen.addstr(str(status.user.name),curses.color_pair(1))
 			#screen.addstr(str(': ' + status.text + '\n'))
 			#screen.refresh() # Refresh screen now that strings added
-			key = screen.getch()
-			if key == ord("q"):
-				curses.endwin()
-			else:
-				curses.start_color()
-				curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
-		
-				screen.addstr(str(status.user.name),curses.color_pair(1))
-				screen.addstr(str(': ' + status.text + '\n'))
-				screen.refresh() # Refresh screen now that strings added
-				break
-
+			curses.start_color()
+			curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) # Foreground Red/background black
+			curses.use_default_colors()
+			#curses.noecho()	# Keeps key presses from echoing to screen
+			screen.addstr(str(status.user.name),curses.color_pair(1))
+			screen.addstr(str(': ' + status.text + '\n'))
+			#screen.refresh() # Refresh screen now that strings added
+			
 	
 		# While loop to wait for key events, then
 		#while 1:
