@@ -179,18 +179,24 @@ class DictStreamListener(tweepy.StreamListener):
 #TODO: Doesn't need to go here... but I liked this space for random comment
 
 	def on_status(self,status):
-	
-		screen = curses.initscr()
-		curses.noecho()	# Keeps key presses from echoing to screen
-		curses.cbreak() # Takes input away
-		screen.keypad(1)
-		curses.start_color()
-		curses.use_default_colors()
-		curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+		#TODO: Need to test rewrite this using urwid to see if the
+		#TODO: interaction between curses and tweepy is what is
+		#TODO: causing the program to blow up while streaming
+		#screen = curses.initscr()
+		#curses.noecho()	# Keeps key presses from echoing to screen
+		#curses.cbreak() # Takes input away
+		#screen.keypad(1)
+		#curses.start_color()
+		#curses.use_default_colors()
+		#curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+		
 		#TODO: Pull status.text into named str, regex for @handle and #hashtag
-		screen.addstr(str(status.user.name),curses.color_pair(1))
-		screen.addstr(str(': ' + status.text + '\n'))
-		screen.refresh() # Refresh screen now that strings added
+		try:
+			screen.addstr(str(status.user.name),curses.color_pair(1))
+			screen.addstr(str(': ' + status.text + '\n'))
+			screen.refresh() # Refresh screen now that strings added
+		except curses.error: pass
+		
 		#key = screen.getch()
 		#if key == ord("q"):
 		#	curses.endwin() # Closes curses environment
@@ -282,10 +288,23 @@ def main():
 		
 		#getStream()
 		try:
+			#TODO: Need to test rewrite this using urwid to see if the
+			#TODO: interaction between curses and tweepy is what is
+			#TODO: causing the program to blow up while streaming
+			global screen
+			screen = curses.initscr()
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 			getStream()
-		except Exception as e:
-	    		logging.error(traceback.format_exc())
-	        	# Logs the error appropriately. 
+		except (SystemExit):
+			raise
+		except (KeyboardInterrupt):
+			logging.exception
+			curses.endwin()
 
 
 	# Print friends list
