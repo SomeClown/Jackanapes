@@ -4,6 +4,7 @@
 
 import sys, tweepy, derp, webbrowser, os, time, json, argparse, re
 import curses, curses.textpad
+import traceback, logging
 
 #TODO: Implement argparse[] and start building out functions. Also, clean up source here,
 #TODO: and add obfuscation to user and app credentials somehow
@@ -278,8 +279,15 @@ def main():
 		
 	# Start client in streaming mode
 	elif command_args.stream:
-		getStream()
 		
+		#getStream()
+		try:
+			getStream()
+		except Exception as e:
+	    		logging.error(traceback.format_exc())
+	        	# Logs the error appropriately. 
+
+
 	# Print friends list
 	elif command_args.numFriends:
 		printFriends(command_args.numFriends)
