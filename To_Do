@@ -1,0 +1,13 @@
+#
+#
+#
+# To do list for the command line client
+# --------------------------------------
+#
+# (1) Add command for streaming to stream by user (something like PacketQueue -s -u @user
+# (2) Add additional color coding to tweets in the stream (yellow for hashtags, etc.)
+# (3) Add error-correcting code wrapper around stream to restart when stream crashes
+#     (also need to track tweet ID to pull back history for stream restart.)
+# (4) Store tweet ID in memory to have a reference for a stream restart if needed
+# (5) Add follow command (PacketQueue -f @user)
+#
