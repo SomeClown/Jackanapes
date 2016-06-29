@@ -191,6 +191,7 @@ class DictStreamListener(tweepy.StreamListener):
 		#curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 		
 		#TODO: Pull status.text into named str, regex for @handle and #hashtag
+		#key = screen.getch()
 		try:
 			screen.addstr(str(status.user.name),curses.color_pair(1))
 			screen.addstr(str(': ' + status.text + '\n'))
@@ -288,11 +289,17 @@ def main():
 		
 		#getStream()
 		try:
+
+		#key = screen.getch()
+		#if key == ord("q"):
+		#	curses.endwin() # Closes curses environment
+
 			#TODO: Need to test rewrite this using urwid to see if the
 			#TODO: interaction between curses and tweepy is what is
 			#TODO: causing the program to blow up while streaming
 			global screen
 			screen = curses.initscr()
+			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
 			screen.keypad(1)
