@@ -10,4 +10,7 @@
 #     (also need to track tweet ID to pull back history for stream restart.)
 # (4) Store tweet ID in memory to have a reference for a stream restart if needed
 # (5) Add follow command (PacketQueue -f @user)
-#
+# (6) Use tweet_id (or something) to restructure tweet stream to incorporate the history
+#     with the tweet (replied to, etc.) In other words, show replies inline with the stream.
+#     Make this a selectable option at invokation.
+# (7) 
