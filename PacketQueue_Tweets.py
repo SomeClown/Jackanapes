@@ -5,6 +5,7 @@
 import sys, tweepy, derp, webbrowser, os, time, json, argparse, re
 import curses, curses.textpad
 import traceback, logging
+from derp import *
 
 #TODO: Implement argparse[] and start building out functions. Also, clean up source here,
 #TODO: and add obfuscation to user and app credentials somehow
@@ -118,21 +119,49 @@ def initialAuth():
 
 def printFriends(number):
 
+
+	try:
+		
+		screen.addstr('\n')
+		screen.addstr('-------------------------------------------------------' + '\n')
+		screen.addstr(str(user.screen_name) + '\n')
+		screen.addstr('-------------------------------------------------------')
+		screen.addstr('\n')
+		screen.addstr('Friends Count: ' + str(user.followers_count) + '\n')
+		if number == 0:
+			return
+		else:
+			for friend in user.friends(count=number):
+				screen.addstr('\t' + friend.screen_name + '\n')
+		screen.addstr('\n')
+		screen.addstr('-------------------------------------------------------')
+		screen.addstr('\n')			
+		screen.refresh() # Refresh screen now that strings addedi
+	except curses.error:
+		pass
+	
+'''
+
 	print('\n')
 	print('-------------------------------------------------------')
 	print(user.screen_name)
 	print('-------------------------------------------------------')
 	
-	import pdb; pdb.set_trace()
-	
-	print('Friends Count: ' + str(user.followers_count))
-	for friend in user.friends(count=number):
-		print('\t' + friend.screen_name)
+	#import pdb; pdb.set_trace()
+	print('Friends Count: ' + str(user.followers_count) + '\n')
+	if number == 0:
+		return
+		
+	else:
+		for friend in user.friends(count=number):
+			print('\t' + friend.screen_name)
 
 	print('\n')
 	print('-------------------------------------------------------')
 	print('\n')
 	return(0)
+'''
+
 
 def printTimeline(number):
 
@@ -156,53 +185,20 @@ def badFollowers(cursor):	# I don't understand cursors yet
 		except tweepy.RateLimitError:
 			time.sleep(15 * 60)
 
-#TODO: Need to take the best practices from Twitter and apply them here. Specifically
-#TODO: the ones around consuming the feed and storing it in one process, and 
-#TODO: printing it (or whatever) in another process.
-
-class MyStreamListener(tweepy.StreamListener):
-	''' Deprecated at this point in favor of DictStreamListener class below '''
-	
-	# This is just consuming and printing status
-	def on_status(self, status):
-		print(status.text)
-		return True
-
 #TODO: Need to figure out how to parse this and store it in a database
 #TODO: then pull out what we want for display
 
 class DictStreamListener(tweepy.StreamListener):
 	
-	#import pdb; pdb.set_trace()
-
-#TODO: Need signal catcher for control-c so program stops blowing up
-#TODO: Doesn't need to go here... but I liked this space for random comment
-
 	def on_status(self,status):
-		#TODO: Need to test rewrite this using urwid to see if the
-		#TODO: interaction between curses and tweepy is what is
-		#TODO: causing the program to blow up while streaming
-		#screen = curses.initscr()
-		#curses.noecho()	# Keeps key presses from echoing to screen
-		#curses.cbreak() # Takes input away
-		#screen.keypad(1)
-		#curses.start_color()
-		#curses.use_default_colors()
-		#curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 		
 		#TODO: Pull status.text into named str, regex for @handle and #hashtag
-		#key = screen.getch()
 		try:
 			screen.addstr(str(status.user.name),curses.color_pair(1))
 			screen.addstr(str(': ' + status.text + '\n'))
 			screen.refresh() # Refresh screen now that strings added
-		except curses.error: pass
-		
-		#key = screen.getch()
-		#if key == ord("q"):
-		#	curses.endwin() # Closes curses environment
-
-
+		except curses.error:
+			pass
 	
 	# This is consuming everything
 	# including the session opening friends list
@@ -222,8 +218,16 @@ def getStream():
 	terenListener = DictStreamListener()
 	terenStream = tweepy.Stream(auth, listener=terenListener)
 	terenStream.userstream()
-	
-	#return(0)
+
+def getFollowStream(user):
+
+	terenListener = DictStreamListener()
+	terenStream = tweepy.Stream(auth, listener=terenListener)
+	userID = str(user)
+	if userID != '17028130':
+		terenStream.filter(follow = [userID])	
+	else: terenStream.userstream()
+
 
 def directSend(user, text):
 	
@@ -258,10 +262,10 @@ def main():
 	parser.add_argument('--tweets', '-t', action="store", type=int, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
 	
-	parser.add_argument('--stream', '-s', action='store_true', 
+	parser.add_argument('--stream', '-s', action='store', type=str, nargs='?', required=False, dest='stream', 
 			help='start client in streaming mode')
 	
-	parser.add_argument('--friends', '-f', action="store", type=int, dest='numFriends', 
+	parser.add_argument('--friends', '-f', action="store", type=int, nargs='?', default=0, required=False, dest='numFriends', 
 			metavar='', help='print list of friends')
 	
 	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
@@ -277,6 +281,8 @@ def main():
 	# Use vars() to create dictionary of command line switches and text.
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
+	
+	if not argsDict['stream']: argsDict['stream'] = 'someclown'
 
 	initialAuth()
 
@@ -284,21 +290,9 @@ def main():
 	if command_args.tweetsNum:
 		printTimeline(command_args.tweetsNum)
 		
-	# Start client in streaming mode
 	elif command_args.stream:
 		
-		#getStream()
 		try:
-
-		#key = screen.getch()
-		#if key == ord("q"):
-		#	curses.endwin() # Closes curses environment
-
-			#TODO: Need to test rewrite this using urwid to see if the
-			#TODO: interaction between curses and tweepy is what is
-			#TODO: causing the program to blow up while streaming
-			global screen
-			screen = curses.initscr()
 			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -306,18 +300,37 @@ def main():
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			getStream()
+			getUser = api.get_user(screen_name=argsDict['stream'])
+			userID = getUser.id
+			#import pdb; pdb.set_trace()
+			getFollowStream(userID)
 		except (SystemExit):
 			raise
 		except (KeyboardInterrupt):
 			logging.exception
 			curses.endwin()
 
-
-	# Print friends list
 	elif command_args.numFriends:
-		printFriends(command_args.numFriends)
-		
+
+		try:
+			screen.scrollok(True)
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			#import pdb; pdb.set_trace()
+			printFriends(command_args.numFriends)
+		except (SystemExit):
+			raise
+		except (KeyboardInterrupt):
+			logging.exception
+			curses.endwin()
+	
+	elif not command_args.numFriends:
+		printFriends(0)
+
 	# send a direct message
 	elif command_args.directMessage:
 		userDirect = command_args.directMessage[0]
@@ -328,6 +341,7 @@ def main():
 	elif command_args.statusUpdate:
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(command_args.statusUpdate[0])
+
 
 	else: print(sys.argv)
 
