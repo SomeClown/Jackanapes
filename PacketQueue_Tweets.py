@@ -252,7 +252,7 @@ def statusUpdate(text):
 	return(0)
 
 
-def main():
+def main(**kwargs):
 
 	progVersion = str('Alpha 0.1')
 
@@ -290,6 +290,7 @@ def main():
 	if command_args.tweetsNum:
 		printTimeline(command_args.tweetsNum)
 		
+	
 	elif command_args.stream:
 		
 		try:
@@ -304,12 +305,17 @@ def main():
 			userID = getUser.id
 			#import pdb; pdb.set_trace()
 			getFollowStream(userID)
+		except (tweepy.TweepError):
+			curses.endwin()
+			print(TweepError.message[0]['code'])
 		except (SystemExit):
+			curses.endwin()
 			raise
 		except (KeyboardInterrupt):
-			logging.exception
 			curses.endwin()
+			logging.exception
 
+	
 	elif command_args.numFriends:
 
 		try:
@@ -349,4 +355,4 @@ if __name__ == '__main__':
 	main()
 
 else:
-	print("loaded as module...")
+	print("loaded as module or bot...")
