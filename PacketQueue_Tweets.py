@@ -166,7 +166,7 @@ def printTimeline(number):
 
 	# Print user's public timeline
 	public_tweets = api.home_timeline(count=number)
-
+	#import pdb; pdb.set_trace()
 	print('\n')
 	for tweet in public_tweets:
 		print(color_red.format(str(tweet.user.name)) + ': ' + tweet.text)
@@ -293,13 +293,11 @@ def main(**kwargs):
 	initialAuth()
 
 	# Get timeline with 'n' number of tweets
-
-	if str(argsDict['streamUserSearch']):
-		#if command_args.tweetsNum:
+	
+	if command_args.tweetsNum:
 
 		#import pdb; pdb.set_trace()
 		printTimeline(command_args.tweetsNum)
-
 	
 	elif command_args.streamUserSearch:
 		
