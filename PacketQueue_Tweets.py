@@ -147,7 +147,6 @@ def printFriends(number):
 	print(user.screen_name)
 	print('-------------------------------------------------------')
 	
-	#import pdb; pdb.set_trace()
 	print('Friends Count: ' + str(user.followers_count) + '\n')
 	if number == 0:
 		return
@@ -172,7 +171,6 @@ def printTimeline(number):
 	for tweet in public_tweets:
 		print(color_red.format(str(tweet.user.name)) + ': ' + tweet.text)
 
-	return(0)
 
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
@@ -228,6 +226,13 @@ def getFollowStream(user):
 		terenStream.filter(follow = [userID])	
 	else: terenStream.userstream()
 
+def getStreamSearch(searchHash):
+
+	terenListener = DictStreamListener()
+	terenStream = tweepy.Stream(auth, listener=terenListener)
+	search = str(searchHash)
+	terenStream.filter(track = [search])
+
 
 def directSend(user, text):
 	
@@ -245,6 +250,7 @@ def directSend(user, text):
 
 def statusUpdate(text):
 
+	import pdb; pdb.set_trace()
 	if len(text) >= 140:
 		print('Tweets must be 140 characters or less')
 	else:
@@ -262,8 +268,11 @@ def main(**kwargs):
 	parser.add_argument('--tweets', '-t', action="store", type=int, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
 	
-	parser.add_argument('--stream', '-s', action='store', type=str, nargs='?', required=False, dest='stream', 
-			help='start client in streaming mode')
+	parser.add_argument('--stream', '-s', action='store', type=str, nargs='?', required=False, dest='streamUserSearch', 
+			help='Stream full user feed, or feed mentioning <user>')
+	
+	parser.add_argument('--search', '-e', action='store', type=str, nargs='?', required=False, dest='search', 
+			help='stream the global twitter feed by search term')
 	
 	parser.add_argument('--friends', '-f', action="store", type=int, nargs='?', default=0, required=False, dest='numFriends', 
 			metavar='', help='print list of friends')
@@ -281,17 +290,18 @@ def main(**kwargs):
 	# Use vars() to create dictionary of command line switches and text.
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
-	
-	if not argsDict['stream']: argsDict['stream'] = 'someclown'
-
 	initialAuth()
 
 	# Get timeline with 'n' number of tweets
-	if command_args.tweetsNum:
+
+	if str(argsDict['streamUserSearch']):
+		#if command_args.tweetsNum:
+
+		#import pdb; pdb.set_trace()
 		printTimeline(command_args.tweetsNum)
-		
+
 	
-	elif command_args.stream:
+	elif command_args.streamUserSearch:
 		
 		try:
 			screen.scrollok(True)
@@ -301,10 +311,12 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			getUser = api.get_user(screen_name=argsDict['stream'])
-			userID = getUser.id
-			#import pdb; pdb.set_trace()
-			getFollowStream(userID)
+			getUser = api.get_user(screen_name=argsDict['streamUserSearch'])
+			if 'all' in str(argsDict['streamUserSearch']):
+				getStream()
+			else:
+				userID = getUser.id
+				getFollowStream(userID)
 		except (tweepy.TweepError):
 			curses.endwin()
 			print(TweepError.message[0]['code'])
@@ -315,6 +327,26 @@ def main(**kwargs):
 			curses.endwin()
 			logging.exception
 
+	elif command_args.search:
+		
+		try:
+			screen.scrollok(True)
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			searchTerm = command_args.search
+			getStreamSearch(searchTerm)
+		except (tweepy.TweepError):
+			curses.endwin()
+			print(TweepError.message[0]['code'])
+		except (SystemExit):
+			curses.endwin()
+			raise
+		except (KeyboardInterrupt):
+			curses.endwin()
 	
 	elif command_args.numFriends:
 
@@ -326,7 +358,6 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			#import pdb; pdb.set_trace()
 			printFriends(command_args.numFriends)
 		except (SystemExit):
 			raise
