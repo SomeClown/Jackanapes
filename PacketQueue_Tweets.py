@@ -140,27 +140,6 @@ def printFriends(number):
 	except curses.error:
 		pass
 	
-'''
-
-	print('\n')
-	print('-------------------------------------------------------')
-	print(user.screen_name)
-	print('-------------------------------------------------------')
-	
-	print('Friends Count: ' + str(user.followers_count) + '\n')
-	if number == 0:
-		return
-		
-	else:
-		for friend in user.friends(count=number):
-			print('\t' + friend.screen_name)
-
-	print('\n')
-	print('-------------------------------------------------------')
-	print('\n')
-	return(0)
-'''
-
 
 def printTimeline(number):
 
@@ -242,7 +221,10 @@ def getStreamSearch(searchHash):
 
 
 def directSend(user, text):
-	
+
+	print(user)
+	print(text)
+	'''
 	nameCheck = re.compile(r'(@)+')
 	nameResult = nameCheck.search(user)
 	
@@ -252,6 +234,7 @@ def directSend(user, text):
 		print('Incorrect username format (must include @)')
 	else:
 		directTweet = api.send_direct_message(screen_name=user, text=text)
+	'''
 	return(0)
 
 
@@ -382,19 +365,17 @@ def main(**kwargs):
 			logging.exception
 			curses.endwin()
 	
-	elif not command_args.numFriends:
-		printFriends(0)
-
 	# send a direct message
 	elif command_args.directMessage:
 		userDirect = command_args.directMessage[0]
 		msgDirect = command_args.directMessage[1]
 		directSend(userDirect, msgDirect)
+		return(0)
 
 	# update status
 	elif command_args.statusUpdate:
 		msgStatusUpdate = command_args.statusUpdate[0]
-		statusUpdate(command_args.statusUpdate[0])
+		statusUpdate(msgStatusUpdate)
 
 
 	else: print(sys.argv)
