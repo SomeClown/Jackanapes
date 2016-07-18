@@ -167,10 +167,17 @@ def printTimeline(number):
 	# Print user's public timeline
 	public_tweets = api.home_timeline(count=number)
 	#import pdb; pdb.set_trace()
-	print('\n')
-	for tweet in public_tweets:
-		print(color_red.format(str(tweet.user.name)) + ': ' + tweet.text)
-
+	try:
+		screen.addstr('\n')
+		if number == 0:
+			return
+		else:
+			for tweet in public_tweets:
+				screen.addstr(str(tweet.user.name),curses.color_pair(1))
+				screen.addstr(str(': ' + tweet.text + '\n'))
+		screen.refresh() # Refresh screen now that strings addedi
+	except curses.error:
+		pass
 
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
@@ -265,7 +272,7 @@ def main(**kwargs):
 	parser = argparse.ArgumentParser(description='Command line Twitter client', 
 			formatter_class=argparse.RawTextHelpFormatter, epilog='For questions contact @SomeClown')
 	
-	parser.add_argument('--tweets', '-t', action="store", type=int, dest="tweetsNum", 
+	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='?', default=0, required=False, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
 	
 	parser.add_argument('--stream', '-s', action='store', type=str, nargs='?', required=False, dest='streamUserSearch', 
@@ -295,9 +302,21 @@ def main(**kwargs):
 	# Get timeline with 'n' number of tweets
 	
 	if command_args.tweetsNum:
-
+	
+		try:
+			screen.scrollok(True)
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			printTimeline(command_args.tweetsNum)
+		except (SystemExit):
+			raise
+		except (KeyboardInterrupt):
+			logging.exception
 		#import pdb; pdb.set_trace()
-		printTimeline(command_args.tweetsNum)
 	
 	elif command_args.streamUserSearch:
 		
