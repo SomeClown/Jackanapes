@@ -115,7 +115,7 @@ def initialAuth():
 			print('Error! Failed to get request token.')
 			return(1)
 	
-	return(0)
+	return None
 
 def printFriends(number):
 
@@ -140,6 +140,9 @@ def printFriends(number):
 	except curses.error:
 		pass
 	
+	return None
+
+	
 
 def printTimeline(number):
 
@@ -157,10 +160,14 @@ def printTimeline(number):
 		screen.refresh() # Refresh screen now that strings addedi
 	except curses.error:
 		pass
+	
+	return None
 
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
 		print(tweet.text)
+	return None
+
 
 def badFollowers(cursor):	# I don't understand cursors yet
 	while True:
@@ -168,6 +175,8 @@ def badFollowers(cursor):	# I don't understand cursors yet
 			yield cursor.next()
 		except tweepy.RateLimitError:
 			time.sleep(15 * 60)
+
+	return None
 
 #TODO: Need to figure out how to parse this and store it in a database
 #TODO: then pull out what we want for display
@@ -220,32 +229,28 @@ def getStreamSearch(searchHash):
 	terenStream.filter(track = [search])
 
 
-def directSend(user, text):
+def directSend(user, msg):
 
-	print(user)
-	print(text)
-	'''
 	nameCheck = re.compile(r'(@)+')
 	nameResult = nameCheck.search(user)
 	
-	if len(text) >= 140:
+	if len(msg) >= 140:
 		print('Tweets must be 140 characters or less')
 	elif nameResult == None:
 		print('Incorrect username format (must include @)')
 	else:
-		directTweet = api.send_direct_message(screen_name=user, text=text)
-	'''
-	return(0)
+		directTweet = api.send_direct_message(screen_name=user, text=msg)
+	return None
 
 
 def statusUpdate(text):
 
-	import pdb; pdb.set_trace()
+	#import pdb; pdb.set_trace()
 	if len(text) >= 140:
 		print('Tweets must be 140 characters or less')
 	else:
 		status = api.update_status(status=text)
-	return(0)
+	return None
 
 
 def main(**kwargs):
@@ -255,38 +260,38 @@ def main(**kwargs):
 	parser = argparse.ArgumentParser(description='Command line Twitter client', 
 			formatter_class=argparse.RawTextHelpFormatter, epilog='For questions contact @SomeClown')
 	
-	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='?', default=0, required=False, dest="tweetsNum", 
-			metavar='', help="Get 'n' number of recent tweets from main feed")
+	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='+', default=0, required=False, dest="tweetsNum", 
+			help="Get 'n' number of recent tweets from main feed")
 	
-	parser.add_argument('--stream', '-s', action='store', type=str, nargs='?', required=False, dest='streamUserSearch', 
+	parser.add_argument('--stream', '-s', action='store', type=str, nargs='+', dest='streamUserSearch', 
 			help='Stream full user feed, or feed mentioning <user>')
 	
-	parser.add_argument('--search', '-e', action='store', type=str, nargs='?', required=False, dest='search', 
+	parser.add_argument('--search', '-e', action='store', type=str, nargs='+', required=False, dest='search', 
 			help='stream the global twitter feed by search term')
 	
-	parser.add_argument('--friends', '-f', action="store", type=int, nargs='?', default=0, required=False, dest='numFriends', 
-			metavar='', help='print list of friends')
+	parser.add_argument('--friends', '-f', action="store", type=int, nargs='+', default=0, required=False, dest='numFriends', 
+			help='print list of friends')
 	
 	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
-			dest='directMessage', metavar='', help='send a direct message')
+			dest='directMessage', help='send a direct message')
 	
 	parser.add_argument('--status', '-S', nargs='*', action="store", type=str, 
-			dest='statusUpdate', metavar='', help='update twitter status')
+			dest='statusUpdate', help='update twitter status')
 
 	parser.add_argument('--version', action='version', version=progVersion)
 
 	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
 
 	# Use vars() to create dictionary of command line switches and text.
+	
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
-	initialAuth()
 
-	# Get timeline with 'n' number of tweets
-	
+	# Get timeline with 'n' number of tweets	
 	if command_args.tweetsNum:
 	
 		try:
+			initialAuth()
 			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -301,9 +306,12 @@ def main(**kwargs):
 			logging.exception
 		#import pdb; pdb.set_trace()
 	
+	# Start stream on <@username>
+	# If 'all' is put in place of username, stream user's home timeline
 	elif command_args.streamUserSearch:
 		
 		try:
+			initialAuth()
 			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -311,15 +319,18 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			getUser = api.get_user(screen_name=argsDict['streamUserSearch'])
-			if 'all' in str(argsDict['streamUserSearch']):
+			#getUser = api.get_user(screen_name=argsDict['streamUserSearch'])
+			if 'all' in argsDict['streamUserSearch']:
 				getStream()
 			else:
+				screenName = command_args.streamUserSearch[0]
+				getUser = api.get_user(screenName)
 				userID = getUser.id
 				getFollowStream(userID)
-		except (tweepy.TweepError):
+		except tweepy.TweepError as e:
 			curses.endwin()
-			print(TweepError.message[0]['code'])
+			print(e.response) 		#This works
+			#print(e.message[0]['code'])	#This does not work
 		except (SystemExit):
 			curses.endwin()
 			raise
@@ -327,9 +338,11 @@ def main(**kwargs):
 			curses.endwin()
 			logging.exception
 
+	# Start stream using <searchterm>
 	elif command_args.search:
 		
 		try:
+			initialAuth()
 			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -337,7 +350,7 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			searchTerm = command_args.search
+			searchTerm = command_args.search[0]
 			getStreamSearch(searchTerm)
 		except (tweepy.TweepError):
 			curses.endwin()
@@ -348,9 +361,11 @@ def main(**kwargs):
 		except (KeyboardInterrupt):
 			curses.endwin()
 	
+	# Print <n> number of friends to screen, where <n> is less than Titter max limit
 	elif command_args.numFriends:
 
 		try:
+			initialAuth()
 			screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -367,18 +382,23 @@ def main(**kwargs):
 	
 	# send a direct message
 	elif command_args.directMessage:
+	
+		initialAuth()
 		userDirect = command_args.directMessage[0]
 		msgDirect = command_args.directMessage[1]
 		directSend(userDirect, msgDirect)
-		return(0)
 
 	# update status
 	elif command_args.statusUpdate:
+		
+		initialAuth()
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(msgStatusUpdate)
 
 
-	else: print(sys.argv)
+	#else: print(sys.argv)
+
+	return None
 
 if __name__ == '__main__':
 	main()
