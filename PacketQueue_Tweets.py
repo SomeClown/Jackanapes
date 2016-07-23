@@ -163,6 +163,24 @@ def printTimeline(number):
 	
 	return None
 
+
+def printMentions(number):
+	# Print user's mentions
+	myMentions = api.mentions_timeline(count=number)
+	try:
+		screen.addstr('\n')
+		if number == 0:
+			return
+		else:
+			for mention in myMentions:
+				screen.addstr(str(mention.user.name),curses.color_pair(1))
+				screen.addstr(str(': ' + mention.text + '\n'))
+			screen.refresh()
+	except curses.error:
+		pass
+
+	return None
+
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
 		print(tweet.text)
@@ -278,6 +296,9 @@ def main(**kwargs):
 	parser.add_argument('--status', '-S', nargs='*', action="store", type=str, 
 			dest='statusUpdate', help='update twitter status')
 
+	parser.add_argument('--mentions', '-m', type=int, nargs='+', default=0, required=False, action='store',
+			dest='userMentions', help='get mentions from logged in user\'s timeline')
+	
 	parser.add_argument('--version', action='version', version=progVersion)
 
 	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
@@ -305,6 +326,28 @@ def main(**kwargs):
 		except (KeyboardInterrupt):
 			logging.exception
 		#import pdb; pdb.set_trace()
+	
+	
+	# Get mentions with 'n' number of tweets	
+	if command_args.userMentions:
+	
+		try:
+			initialAuth()
+			screen.scrollok(True)
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			printMentions(command_args.userMentions[0])
+		except (SystemExit):
+			raise
+		except (KeyboardInterrupt):
+			logging.exception
+		#import pdb; pdb.set_trace()
+	
+	
 	
 	# Start stream on <@username>
 	# If 'all' is put in place of username, stream user's home timeline
