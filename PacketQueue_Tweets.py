@@ -299,7 +299,7 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			printTimeline(command_args.tweetsNum)
+			printTimeline(command_args.tweetsNum[0])
 		except (SystemExit):
 			raise
 		except (KeyboardInterrupt):
@@ -373,7 +373,7 @@ def main(**kwargs):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			printFriends(command_args.numFriends)
+			printFriends(command_args.numFriends[0])
 		except (SystemExit):
 			raise
 		except (KeyboardInterrupt):
