@@ -2,7 +2,7 @@
 
 import sys, tweepy, curses
 
-screen = curses.initscr()
+#screen = curses.initscr()
 
 def hokum():
 	auth = tweepy.OAuthHandler('yf3KFfusQ3JiKsNKJI9cFjjgd', 'yTE2UBsXqgWB8kzTFsyswXVBNeRHJ3Ti0b3kxX1fEFsq9LfhLM')

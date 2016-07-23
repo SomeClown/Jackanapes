@@ -12,6 +12,9 @@ from derp import *
 
 def initialAuth():
 
+	global screen
+	screen = curses.initscr()
+
 	# Globals
 	global auth	# Lazy, fix later
 	global api	# Much drunk, so wow
@@ -271,23 +274,24 @@ def statusUpdate(text):
 	return None
 
 
-def main(**kwargs):
+def main():
+
 
 	progVersion = str('Alpha 0.1')
 
 	parser = argparse.ArgumentParser(description='Command line Twitter client', 
-			formatter_class=argparse.RawTextHelpFormatter, epilog='For questions contact @SomeClown')
+			epilog='For questions contact @SomeClown', add_help=True)
 	
-	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='+', default=0, required=False, dest="tweetsNum", 
+	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='+', dest="tweetsNum", 
 			help="Get 'n' number of recent tweets from main feed")
 	
 	parser.add_argument('--stream', '-s', action='store', type=str, nargs='+', dest='streamUserSearch', 
 			help='Stream full user feed, or feed mentioning <user>')
 	
-	parser.add_argument('--search', '-e', action='store', type=str, nargs='+', required=False, dest='search', 
+	parser.add_argument('--search', '-e', action='store', type=str, nargs='+', dest='search', 
 			help='stream the global twitter feed by search term')
 	
-	parser.add_argument('--friends', '-f', action="store", type=int, nargs='+', default=0, required=False, dest='numFriends', 
+	parser.add_argument('--friends', '-f', action="store", type=int, nargs='+', dest='numFriends', 
 			help='print list of friends')
 	
 	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
@@ -296,18 +300,16 @@ def main(**kwargs):
 	parser.add_argument('--status', '-S', nargs='*', action="store", type=str, 
 			dest='statusUpdate', help='update twitter status')
 
-	parser.add_argument('--mentions', '-m', type=int, nargs='+', default=0, required=False, action='store',
+	parser.add_argument('--mentions', '-m', type=int, nargs='+', action='store',
 			dest='userMentions', help='get mentions from logged in user\'s timeline')
 	
 	parser.add_argument('--version', action='version', version=progVersion)
 
 	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
 
-	# Use vars() to create dictionary of command line switches and text.
-	
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
-
+	
 	# Get timeline with 'n' number of tweets	
 	if command_args.tweetsNum:
 	
@@ -328,8 +330,8 @@ def main(**kwargs):
 		#import pdb; pdb.set_trace()
 	
 	
-	# Get mentions with 'n' number of tweets	
-	if command_args.userMentions:
+	# Get mentions with 'n' number of tweets
+	elif command_args.userMentions:
 	
 		try:
 			initialAuth()
@@ -439,12 +441,11 @@ def main(**kwargs):
 		statusUpdate(msgStatusUpdate)
 
 
-	#else: print(sys.argv)
+	else: print(sys.argv)
 
 	return None
 
 if __name__ == '__main__':
 	main()
 
-else:
-	print("loaded as module or bot...")
+else: print("loaded as module or bot...")
