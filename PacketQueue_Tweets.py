@@ -202,15 +202,27 @@ def badFollowers(cursor):	# I don't understand cursors yet
 #TODO: Need to figure out how to parse this and store it in a database
 #TODO: then pull out what we want for display
 
+class CleanUp(Exception):
+	#logging.exception
+	pass
+
+
 class DictStreamListener(tweepy.StreamListener):
 	
 	def on_status(self,status):
 		
+		screen.nodelay(1)
+		c = screen.getch()
 		#TODO: Pull status.text into named str, regex for @handle and #hashtag
 		try:
 			screen.addstr(str(status.user.name),curses.color_pair(1))
 			screen.addstr(str(': ' + status.text + '\n'))
 			screen.refresh() # Refresh screen now that strings added
+			if c == ord('q'): 
+				sys.exit()
+			else:
+				pass
+		
 		except curses.error:
 			pass
 	
@@ -324,8 +336,10 @@ def main():
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 			printTimeline(command_args.tweetsNum[0])
 		except (SystemExit):
+			curses.endwin()
 			raise
 		except (KeyboardInterrupt):
+			curses.endwin()
 			logging.exception
 		#import pdb; pdb.set_trace()
 	
@@ -344,9 +358,12 @@ def main():
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 			printMentions(command_args.userMentions[0])
 		except (SystemExit):
+			curses.endwin()
 			raise
 		except (KeyboardInterrupt):
+			curses.endwin()
 			logging.exception
+			
 		#import pdb; pdb.set_trace()
 	
 	
@@ -405,6 +422,7 @@ def main():
 			raise
 		except (KeyboardInterrupt):
 			curses.endwin()
+			logging.exception
 	
 	# Print <n> number of friends to screen, where <n> is less than Titter max limit
 	elif command_args.numFriends:
