@@ -185,6 +185,8 @@ def printMentions(number):
 
 	return None
 
+
+#TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
 def printMyInfo():
 	# Print information about me
 	myInfo = api.me()
@@ -193,31 +195,38 @@ def printMyInfo():
 		screen.addstr('\n')
 		screen.addstr(str('@'),curses.color_pair(1))
 		screen.addstr(str(myInfo.screen_name),curses.color_pair(1))
-		screen.addstr(str(' (' + myInfo.name + '/' + myInfo.id_str 
-			+ ')'))
+		screen.addstr(str(' (') + str(myInfo.name),curses.color_pair(2))
+		screen.addstr(str('/') + str(myInfo.id_str),curses.color_pair(2))
+		screen.addstr(str(')'))
 		
 		# Format and print created date for user
 		screen.addstr(str('  User since: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.created_at))
+		screen.addstr(str(myInfo.created_at),curses.color_pair(2))
 		
 		# Format and print followers count
 		screen.addstr(str(' Followers: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.followers_count))
+		screen.addstr(str(myInfo.followers_count),curses.color_pair(2))
 
 		# Format and print number of tweets
 		screen.addstr(str(' Tweets: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.statuses_count))
+		screen.addstr(str(myInfo.statuses_count),curses.color_pair(2))
 		
 		# Format and print user's reported location
 		screen.addstr(str(' Location: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.location))
+		screen.addstr(str(myInfo.location),curses.color_pair(2))
 		
 		# Format and print description from user profile
-		screen.addstr('\n' + json.dumps(myInfo.description) + '\n')
+		screen.addstr('\n' + json.dumps(myInfo.description))
+		screen.addstr('\n')
 		
 		# Format and print user's URL, if present
 		screen.addstr(str('URL: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.url) + '\n')
+		screen.addstr(str(myInfo.url))
+
+		# Format and print link to profile picture
+		screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.profile_image_url_https))
+		screen.addstr(str('\n'))
 		
 		# Add line space and clean up
 		screen.addstr('\n')
@@ -227,6 +236,7 @@ def printMyInfo():
 	
 	return None
 
+#TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
 def printNotMe(data):
 	# Print information on another user
 	notMe = api.get_user(screen_name=data)
@@ -265,8 +275,12 @@ def printNotMe(data):
 		
 		# Format and print user's URL, if present
 		screen.addstr(str('URL: '),curses.color_pair(1))
-		screen.addstr(str(notMe.url) + '\n')
+		screen.addstr(str(notMe.url))
 		
+		# Format and print link to profile picture
+		screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
+		screen.addstr(str(notMe.profile_image_url_https) + '\n')
+
 		# Add line space and clean up
 		screen.addstr('\n')
 		screen.refresh()
@@ -377,35 +391,35 @@ def main():
 	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
 			epilog='For questions contact @SomeClown')
 	
-	parser.add_argument('--tweets', '-t', type=int, action='store', nargs=1, dest="tweetsNum", 
+	parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
-	
-	parser.add_argument('--stream', '-s', action='store', type=str, nargs=1, dest='streamUserSearch', 
+
+	parser.add_argument('-s', '--stream', action='store', type=str, nargs=1, dest='streamUserSearch', 
 			metavar='', help='Stream full user feed, or feed mentioning <user>')
 	
-	parser.add_argument('--search', '-e', action='store', type=str, nargs=1, dest='search', 
+	parser.add_argument('-e', '--search', action='store', type=str, nargs=1, dest='search', 
 			metavar='', help='stream the global twitter feed by search term')
 	
-	parser.add_argument('--friends', '-f', action="store", type=int, nargs=1, dest='numFriends', 
+	parser.add_argument('-f', '--friends', action="store", type=int, nargs=1, dest='numFriends', 
 			metavar='', help='print list of friends')
 	
-	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
+	parser.add_argument('-d', '--direct', nargs=2, action="store", type=str, 
 			metavar='', dest='directMessage', help='send a direct message')
 	
-	parser.add_argument('--status', '-S', nargs=1, action="store", type=str, 
+	parser.add_argument('-S', '--status', nargs=1, action="store", type=str, 
 			metavar='', dest='statusUpdate', help='update twitter status')
 
-	parser.add_argument('--mentions', '-m', type=int, nargs=1, action='store',
+	parser.add_argument('-m', '--mentions', type=int, nargs=1, action='store',
 			metavar='', dest='userMentions', help='get mentions from logged in user\'s timeline')
 
-	parser.add_argument('--me', action='store_true', dest='myInfo', help='Get information about me')
+	parser.add_argument('-M', '--me', action='store_true', dest='myInfo', help='Get information about me')
 
-	parser.add_argument('--notme', '-n', metavar='', dest='notMe', nargs=1, type=str,
+	parser.add_argument('-n', '-notme', metavar='', dest='notMe', nargs=1, type=str,
 			help='Get information about someone other than me')
 	
-	parser.add_argument('--version', action='version', version=progVersion)
+	parser.add_argument('-V', '--version', action='version', version=progVersion)
 
-	parser.add_argument('--verbose', '-v', action='store_true', help='verbose flag')
+	parser.add_argument('-v', '--verbose', action='store_true', help='verbose flag')
 
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
@@ -558,6 +572,9 @@ def main():
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			curses.init_pair(2, curses.COLOR_YELLOW, -1)
+			curses.init_pair(3, curses.COLOR_BLUE, -1)
+			curses.init_pair(5, curses.COLOR_MAGENTA, -1)
 			printMyInfo()
 		except (SystemExit):
 			curses.endwin()
