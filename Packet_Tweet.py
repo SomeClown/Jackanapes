@@ -7,8 +7,9 @@ import curses, curses.textpad
 import traceback, logging
 from derp import *
 
-#TODO: Implement argparse[] and start building out functions. Also, clean up source here,
-#TODO: and add obfuscation to user and app credentials somehow
+#TODO: Add obfuscation to user and app credentials somehow
+#TODO: Move authentication to derp.py
+#TODO: Move functions to doStuff.py
 
 def initialAuth():
 
@@ -184,24 +185,27 @@ def printMentions(number):
 
 	return None
 
+def printMyInfo():
+	# Print information about me
+	myInfo = api.me()
+	try:
+		screen.addstr('\n')
+		#screen.addstr(str(myInfo))
+		screen.addstr(json.dumps(myInfo.description) + '\n')
+		screen.addstr('\n')
+		screen.refresh()
+	except curses.error:
+		pass
+	
+	return None
+
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
 		print(tweet.text)
 	return None
 
 
-def badFollowers(cursor):	# I don't understand cursors yet
-	while True:
-		try:
-			yield cursor.next()
-		except tweepy.RateLimitError:
-			time.sleep(15 * 60)
-
-	return None
-
-#TODO: Need to figure out how to parse this and store it in a database
-#TODO: then pull out what we want for display
-
+#TODO: Add code for clean curses, etc., shutdown
 class CleanUp(Exception):
 	#logging.exception
 	pass
@@ -218,7 +222,9 @@ class DictStreamListener(tweepy.StreamListener):
 			screen.addstr(str(status.user.name),curses.color_pair(1))
 			screen.addstr(str(': ' + status.text + '\n'))
 			screen.refresh() # Refresh screen now that strings added
-			if c == ord('q'): 
+			if c == ord('q'):
+				curses.echo()
+				curses.endwin()
 				sys.exit()
 			else:
 				pass
@@ -291,29 +297,31 @@ def main():
 
 	progVersion = str('Alpha 0.1')
 
-	parser = argparse.ArgumentParser(description='Command line Twitter client', 
-			epilog='For questions contact @SomeClown', add_help=True)
+	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
+			epilog='For questions contact @SomeClown')
 	
-	parser.add_argument('--tweets', '-t', action="store", type=int, nargs='+', dest="tweetsNum", 
-			help="Get 'n' number of recent tweets from main feed")
+	parser.add_argument('--tweets', '-t', type=int, action='store', nargs=1, dest="tweetsNum", 
+			metavar='', help="Get 'n' number of recent tweets from main feed")
 	
-	parser.add_argument('--stream', '-s', action='store', type=str, nargs='+', dest='streamUserSearch', 
-			help='Stream full user feed, or feed mentioning <user>')
+	parser.add_argument('--stream', '-s', action='store', type=str, nargs=1, dest='streamUserSearch', 
+			metavar='', help='Stream full user feed, or feed mentioning <user>')
 	
-	parser.add_argument('--search', '-e', action='store', type=str, nargs='+', dest='search', 
-			help='stream the global twitter feed by search term')
+	parser.add_argument('--search', '-e', action='store', type=str, nargs=1, dest='search', 
+			metavar='', help='stream the global twitter feed by search term')
 	
-	parser.add_argument('--friends', '-f', action="store", type=int, nargs='+', dest='numFriends', 
-			help='print list of friends')
+	parser.add_argument('--friends', '-f', action="store", type=int, nargs=1, dest='numFriends', 
+			metavar='', help='print list of friends')
 	
 	parser.add_argument('--direct', '-d', nargs=2, action="store", type=str, 
-			dest='directMessage', help='send a direct message')
+			metavar='', dest='directMessage', help='send a direct message')
 	
-	parser.add_argument('--status', '-S', nargs='*', action="store", type=str, 
-			dest='statusUpdate', help='update twitter status')
+	parser.add_argument('--status', '-S', nargs=1, action="store", type=str, 
+			metavar='', dest='statusUpdate', help='update twitter status')
 
-	parser.add_argument('--mentions', '-m', type=int, nargs='+', action='store',
-			dest='userMentions', help='get mentions from logged in user\'s timeline')
+	parser.add_argument('--mentions', '-m', type=int, nargs=1, action='store',
+			metavar='', dest='userMentions', help='get mentions from logged in user\'s timeline')
+
+	parser.add_argument('--me', metavar='', dest='myInfo', help='Get information about me')
 	
 	parser.add_argument('--version', action='version', version=progVersion)
 
@@ -458,6 +466,25 @@ def main():
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(msgStatusUpdate)
 
+	
+	elif command_args.myInfo:
+	
+		try:
+			initialAuth()
+			screen.scrollok(True)
+			curses.noecho()	# Keeps key presses from echoing to screen
+			curses.cbreak() # Takes input away
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
+			printMyInfo()
+		except (SystemExit):
+			curses.endwin()
+			raise
+		except (KeyboardInterrupt):
+			curses.endwin()
+			logging.exception
 
 	else: print(sys.argv)
 
@@ -466,4 +493,4 @@ def main():
 if __name__ == '__main__':
 	main()
 
-else: print("loaded as module or bot...")
+else: print("loaded as module, api, or Skynet...")
