@@ -189,15 +189,92 @@ def printMyInfo():
 	# Print information about me
 	myInfo = api.me()
 	try:
+		# Format and print handle, username, and user ID
 		screen.addstr('\n')
-		#screen.addstr(str(myInfo))
-		screen.addstr(json.dumps(myInfo.description) + '\n')
+		screen.addstr(str('@'),curses.color_pair(1))
+		screen.addstr(str(myInfo.screen_name),curses.color_pair(1))
+		screen.addstr(str(' (' + myInfo.name + '/' + myInfo.id_str 
+			+ ')'))
+		
+		# Format and print created date for user
+		screen.addstr(str('  User since: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.created_at))
+		
+		# Format and print followers count
+		screen.addstr(str(' Followers: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.followers_count))
+
+		# Format and print number of tweets
+		screen.addstr(str(' Tweets: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.statuses_count))
+		
+		# Format and print user's reported location
+		screen.addstr(str(' Location: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.location))
+		
+		# Format and print description from user profile
+		screen.addstr('\n' + json.dumps(myInfo.description) + '\n')
+		
+		# Format and print user's URL, if present
+		screen.addstr(str('URL: '),curses.color_pair(1))
+		screen.addstr(str(myInfo.url) + '\n')
+		
+		# Add line space and clean up
 		screen.addstr('\n')
 		screen.refresh()
 	except curses.error:
 		pass
 	
 	return None
+
+def printNotMe(data):
+	# Print information on another user
+	notMe = api.get_user(screen_name=data)
+	try:
+		
+		#screen.addstr('\n')
+		#screen.addstr(json.dumps(notMe.description) + '\n')
+		#screen.addstr('\n')
+		#screen.refresh()
+
+		# Format and print handle, username, and user ID
+		screen.addstr('\n')
+		screen.addstr(str('@'),curses.color_pair(1))
+		screen.addstr(str(notMe.screen_name),curses.color_pair(1))
+		screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str 
+			+ ')'))
+		
+		# Format and print created date for user
+		screen.addstr(str('  User since: '),curses.color_pair(1))
+		screen.addstr(str(notMe.created_at))
+		
+		# Format and print followers count
+		screen.addstr(str(' Followers: '),curses.color_pair(1))
+		screen.addstr(str(notMe.followers_count))
+
+		# Format and print number of tweets
+		screen.addstr(str(' Tweets: '),curses.color_pair(1))
+		screen.addstr(str(notMe.statuses_count))
+		
+		# Format and print user's reported location
+		screen.addstr(str(' Location: '),curses.color_pair(1))
+		screen.addstr(str(notMe.location))
+
+		# Format and print description from user profile
+		screen.addstr('\n' + json.dumps(notMe.description) + '\n')
+		
+		# Format and print user's URL, if present
+		screen.addstr(str('URL: '),curses.color_pair(1))
+		screen.addstr(str(notMe.url) + '\n')
+		
+		# Add line space and clean up
+		screen.addstr('\n')
+		screen.refresh()
+	except curses.error:
+		pass
+
+	return None
+	
 
 def statusTest():
 	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
@@ -321,7 +398,10 @@ def main():
 	parser.add_argument('--mentions', '-m', type=int, nargs=1, action='store',
 			metavar='', dest='userMentions', help='get mentions from logged in user\'s timeline')
 
-	parser.add_argument('--me', metavar='', dest='myInfo', help='Get information about me')
+	parser.add_argument('--me', action='store_true', dest='myInfo', help='Get information about me')
+
+	parser.add_argument('--notme', '-n', metavar='', dest='notMe', nargs=1, type=str,
+			help='Get information about someone other than me')
 	
 	parser.add_argument('--version', action='version', version=progVersion)
 
@@ -485,6 +565,25 @@ def main():
 		except (KeyboardInterrupt):
 			curses.endwin()
 			logging.exception
+
+	elif command_args.notMe:
+		try:
+			initialAuth()
+			screen.scrollok(True)
+			curses.noecho()
+			curses.cbreak()
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1)
+			printNotMe(command_args.notMe[0])
+		except (SystemExit):
+			curses.endwin()
+			raise
+		except (KeyboardInterrupt):
+			curses.endwin()
+			logging.exception
+
 
 	else: print(sys.argv)
 
