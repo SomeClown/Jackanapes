@@ -15,6 +15,7 @@ def initialAuth():
 
 	global screen
 	screen = curses.initscr()
+	screen.nodelay(True)
 
 	# Globals
 	global auth	# Lazy, fix later
@@ -161,7 +162,7 @@ def printTimeline(number):
 			for tweet in public_tweets:
 				screen.addstr(str(tweet.user.name),curses.color_pair(1))
 				screen.addstr(str(': ' + tweet.text + '\n'))
-		screen.refresh() # Refresh screen now that strings addedi
+				screen.refresh() # Refresh screen now that strings added
 	except curses.error:
 		pass
 	
@@ -184,6 +185,25 @@ def printMentions(number):
 		pass
 
 	return None
+
+def printRetweets(number):
+	# Print user's tweets that others have retweeted
+	otherRetweets = api.retweets_of_me(count=number, include_user_entities=False)
+	try:
+		screen.addstr('\n')
+		if number == 0:
+			return
+		else:
+			for retweets in otherRetweets:
+
+				screen.addstr(str(retweets.user.name),curses.color_pair(1))
+				screen.addstr(str(': ' + retweets.text + '\n'))
+			screen.refresh()
+	except curses.error:
+		pass
+
+	return None
+
 
 
 #TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
@@ -316,7 +336,7 @@ class DictStreamListener(tweepy.StreamListener):
 			if c == ord('q'):
 				curses.echo()
 				curses.endwin()
-				sys.exit()
+				sys.exit(1)
 			else:
 				pass
 		
@@ -414,8 +434,11 @@ def main():
 
 	parser.add_argument('-M', '--me', action='store_true', dest='myInfo', help='Get information about me')
 
-	parser.add_argument('-n', '-notme', metavar='', dest='notMe', nargs=1, type=str,
+	parser.add_argument('-n', '--notme', metavar='', dest='notMe', nargs=1, type=str,
 			help='Get information about someone other than me')
+
+	parser.add_argument('-r', '--retweets', metavar='', dest='retweets', nargs=1, type=str,
+			help='Get retweets of me by others')
 	
 	parser.add_argument('-V', '--version', action='version', version=progVersion)
 
@@ -443,9 +466,9 @@ def main():
 		except (KeyboardInterrupt):
 			curses.endwin()
 			logging.exception
+			sys.exit(1)
 		#import pdb; pdb.set_trace()
-	
-	
+		#curses.endwin()			#TODO: Need to exit curses cleanly, not working now.
 	# Get mentions with 'n' number of tweets
 	elif command_args.userMentions:
 	
@@ -601,6 +624,23 @@ def main():
 			curses.endwin()
 			logging.exception
 
+	elif command_args.retweets:
+		try:
+			initialAuth()
+			screen.scrollok(True)
+			curses.noecho()
+			curses.cbreak()
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1)
+			printRetweets(command_args.retweets[0])
+		except (SystemExit):
+			curses.endwin()
+			raise
+		except (KeyboardInterrupt):
+			curses.endwin()
+			logging.exception
 
 	else: print(sys.argv)
 
