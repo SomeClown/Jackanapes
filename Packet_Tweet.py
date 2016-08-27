@@ -82,10 +82,11 @@ def initialAuth():
 	# auth.set_access_token() method
 	try:
 		home = os.path.expanduser("~")
-		configFile = open(home + "/.packetqueue","r")
-		accessToken = configFile.readline().strip()
-		accessTokenSecret = configFile.readline().strip()
-		configFile.close()
+		configFile = (home + '/.packetqueue')
+		with open(configFile, 'r') as inFile:
+			accessToken = inFile.readline().strip()
+			accessTokenSecret = inFile.readline().strip()
+
 		auth.set_access_token(accessToken, accessTokenSecret)
 
 	# If the file doesn't exist, notify user then move through granting access token process
@@ -111,9 +112,10 @@ def initialAuth():
 			accessTokenSecret = auth.access_token_secret
 			# Write all of this good authentication stuff to a file
 			# so we don't have to do it everytime we run the program
-			configFile = open(home + "/.packetqueue","w")	# Change this to use the sheve()
-			configFile.write(accessToken + '\n')		# function as a better way to store
-			configFile.write(accessTokenSecret + '\n')	# the data
+			ifconfigFile = (home + '/.packetqueue')
+			with open(ifconfigFile, 'w') as outFile:
+				outFile.write(accessToken + '\n')	# function as a better way to store
+				outFile.write(accessTokenSecret + '\n')	# the data
 		
 		# Something is so horribly borked we're just going to say fuck it
 		except tweepy.TweepError:
