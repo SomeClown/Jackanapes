@@ -411,7 +411,7 @@ def main():
 	progVersion = str('Alpha 0.1')
 
 	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
-			epilog='For questions contact @SomeClown')
+			epilog='For questions contact @SomeClown', usage='%(prog)s [options]')
 	
 	parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
@@ -445,7 +445,11 @@ def main():
 	parser.add_argument('-V', '--version', action='version', version=progVersion)
 
 	parser.add_argument('-v', '--verbose', action='store_true', help='verbose flag')
-
+	
+	if len(sys.argv)==1:
+		parser.print_help()
+		sys.exit(1)
+	
 	command_args = parser.parse_args()
 	argsDict = vars(command_args)
 	
