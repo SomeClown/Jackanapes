@@ -126,9 +126,7 @@ def initialAuth():
 
 def printFriends(number):
 
-
 	try:
-		
 		screen.addstr('\n')
 		screen.addstr('-------------------------------------------------------' + '\n')
 		screen.addstr(str(user.screen_name) + '\n')
@@ -143,9 +141,16 @@ def printFriends(number):
 		screen.addstr('\n')
 		screen.addstr('-------------------------------------------------------')
 		screen.addstr('\n')			
-		screen.refresh() # Refresh screen now that strings addedi
+		screen.refresh() # Refresh screen now that strings added
 	except curses.error:
-		pass
+		Cleanup(1)
+	
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	
 	return None
 
@@ -165,9 +170,17 @@ def printTimeline(number):
 				screen.addstr(str(tweet.user.name),curses.color_pair(1))
 				screen.addstr(str(': ' + tweet.text + '\n'))
 				screen.refresh() # Refresh screen now that strings added
+		#Cleanup(0)
+
 	except curses.error:
-		pass
+		Cleanup(1)
 	
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 
 
@@ -183,9 +196,16 @@ def printMentions(number):
 				screen.addstr(str(mention.user.name),curses.color_pair(1))
 				screen.addstr(str(': ' + mention.text + '\n'))
 			screen.refresh()
+		#Cleanup(0)
 	except curses.error:
-		pass
+		Cleanup(1)
 
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 
 def printRetweets(number):
@@ -201,9 +221,16 @@ def printRetweets(number):
 				screen.addstr(str(retweets.user.name),curses.color_pair(1))
 				screen.addstr(str(': ' + retweets.text + '\n'))
 			screen.refresh()
+			#Cleanup(0)
 	except curses.error:
-		pass
+		Cleanup(1)
 
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 
 
@@ -253,9 +280,17 @@ def printMyInfo():
 		# Add line space and clean up
 		screen.addstr('\n')
 		screen.refresh()
+		#Cleanup(0)
+
 	except curses.error:
-		pass
+		Cleanup(1)
 	
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 
 #TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
@@ -306,9 +341,17 @@ def printNotMe(data):
 		# Add line space and clean up
 		screen.addstr('\n')
 		screen.refresh()
+		#Cleanup(0)
+	
 	except curses.error:
-		pass
+		Cleanup(1)
 
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 	
 
@@ -318,11 +361,15 @@ def statusTest():
 	return None
 
 
-#TODO: Add code for clean curses, etc., shutdown
-class CleanUp(Exception):
-	#logging.exception
-	pass
-
+def Cleanup(exitCode):
+	curses.echo()
+	curses.nocbreak()
+	curses.endwin()
+	if exitCode == 1:
+		print('Egads, it looks like we shit the bed...')
+		sys.exit(exitCode)
+	else:
+		sys.exit(exitCode)
 
 class DictStreamListener(tweepy.StreamListener):
 	
@@ -336,14 +383,12 @@ class DictStreamListener(tweepy.StreamListener):
 			screen.addstr(str(': ' + status.text + '\n'))
 			screen.refresh() # Refresh screen now that strings added
 			if c == ord('q'):
-				curses.echo()
-				curses.endwin()
-				sys.exit(1)
+				Cleanup(0)
 			else:
 				pass
 		
 		except curses.error:
-			pass
+			Cleanup(1)
 	
 	# This is consuming everything
 	# including the session opening friends list
@@ -404,55 +449,8 @@ def statusUpdate(text):
 		status = api.update_status(status=text)
 	return None
 
+def argumentProcess(command_args):
 
-def main():
-
-
-	progVersion = str('Alpha 0.1')
-
-	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
-			epilog='For questions contact @SomeClown', usage='%(prog)s [options]')
-	
-	parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", 
-			metavar='', help="Get 'n' number of recent tweets from main feed")
-
-	parser.add_argument('-s', '--stream', action='store', type=str, nargs=1, dest='streamUserSearch', 
-			metavar='', help='Stream full user feed, or feed mentioning <user>')
-	
-	parser.add_argument('-e', '--search', action='store', type=str, nargs=1, dest='search', 
-			metavar='', help='stream the global twitter feed by search term')
-	
-	parser.add_argument('-f', '--friends', action="store", type=int, nargs=1, dest='numFriends', 
-			metavar='', help='print list of friends')
-	
-	parser.add_argument('-d', '--direct', nargs=2, action="store", type=str, 
-			metavar='', dest='directMessage', help='send a direct message')
-	
-	parser.add_argument('-S', '--status', nargs=1, action="store", type=str, 
-			metavar='', dest='statusUpdate', help='update twitter status')
-
-	parser.add_argument('-m', '--mentions', type=int, nargs=1, action='store',
-			metavar='', dest='userMentions', help='get mentions from logged in user\'s timeline')
-
-	parser.add_argument('-M', '--me', action='store_true', dest='myInfo', help='Get information about me')
-
-	parser.add_argument('-n', '--notme', metavar='', dest='notMe', nargs=1, type=str,
-			help='Get information about someone other than me')
-
-	parser.add_argument('-r', '--retweets', metavar='', dest='retweets', nargs=1, type=str,
-			help='Get retweets of me by others')
-	
-	parser.add_argument('-V', '--version', action='version', version=progVersion)
-
-	parser.add_argument('-v', '--verbose', action='store_true', help='verbose flag')
-	
-	if len(sys.argv)==1:
-		parser.print_help()
-		sys.exit(1)
-	
-	command_args = parser.parse_args()
-	argsDict = vars(command_args)
-	
 	# Get timeline with 'n' number of tweets	
 	if command_args.tweetsNum:
 	
@@ -649,6 +647,54 @@ def main():
 			logging.exception
 
 	else: print(sys.argv)
+
+def main():
+
+
+	progVersion = str('Alpha 0.1')
+
+	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
+			epilog='For questions contact @SomeClown', usage='%(prog)s [options]')
+	
+	parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", 
+			metavar='', help="Get 'n' number of recent tweets from main feed")
+
+	parser.add_argument('-s', '--stream', action='store', type=str, nargs=1, dest='streamUserSearch', 
+			metavar='', help='Stream full user feed, or feed mentioning <user>')
+	
+	parser.add_argument('-e', '--search', action='store', type=str, nargs=1, dest='search', 
+			metavar='', help='stream the global twitter feed by search term')
+	
+	parser.add_argument('-f', '--friends', action="store", type=int, nargs=1, dest='numFriends', 
+			metavar='', help='print list of friends')
+	
+	parser.add_argument('-d', '--direct', nargs=2, action="store", type=str, 
+			metavar='', dest='directMessage', help='send a direct message')
+	
+	parser.add_argument('-S', '--status', nargs=1, action="store", type=str, 
+			metavar='', dest='statusUpdate', help='update twitter status')
+
+	parser.add_argument('-m', '--mentions', type=int, nargs=1, action='store',
+			metavar='', dest='userMentions', help='get mentions from logged in user\'s timeline')
+
+	parser.add_argument('-M', '--me', action='store_true', dest='myInfo', help='Get information about me')
+
+	parser.add_argument('-n', '--notme', metavar='', dest='notMe', nargs=1, type=str,
+			help='Get information about someone other than me')
+
+	parser.add_argument('-r', '--retweets', metavar='', dest='retweets', nargs=1, type=str,
+			help='Get retweets of me by others')
+	
+	parser.add_argument('-V', '--version', action='version', version=progVersion)
+
+	parser.add_argument('-v', '--verbose', action='store_true', help='verbose flag')
+	
+	if len(sys.argv)==1:
+		parser.print_help()
+		sys.exit(1)
+	
+	command_args = parser.parse_args()
+	argumentProcess(command_args)
 
 	return None
 
