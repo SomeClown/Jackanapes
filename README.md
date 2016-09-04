@@ -1,6 +1,6 @@
-#H1 Command Line Twitter Client
+# H1 Command Line Twitter Client
 
-#H2 The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface.
+# H2 The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface.
 
 usage: [program name] [options]
 
