@@ -12,10 +12,10 @@ from derp import *
 #TODO: Move functions to doStuff.py
 
 def initialAuth():
-
+	
 	global screen
-	screen = curses.initscr()
-	screen.nodelay(True)
+	#screen = curses.initscr()
+	#screen.nodelay(True)
 
 	# Globals
 	global auth	# Lazy, fix later
@@ -71,37 +71,34 @@ def initialAuth():
 	color_cyan = "\033[1;36m{0}\033[00m"
 	color_white = "\033[1;37m{0}\033[00m"
 
-
-
 	auth = derp.hokum()	
 	api = tweepy.API(auth)	
 	user = api.get_user('SomeClown')
-	
 	# Check to see if config file with credentials exists
 	# if it does, load our keys from the file and pass them to the
 	# auth.set_access_token() method
 	try:
 		home = os.path.expanduser("~")
-		configFile = (home + '/.packetqueue')
+		configFile = (home + '/.packetqueue/' + str(user.screen_name) + '/.packetqueue')
+		#print(configFile)
 		with open(configFile, 'r') as inFile:
 			accessToken = inFile.readline().strip()
 			accessTokenSecret = inFile.readline().strip()
-
-		auth.set_access_token(accessToken, accessTokenSecret)
-
+			auth.set_access_token(accessToken, accessTokenSecret)
+	
 	# If the file doesn't exist, notify user then move through granting access token process
 	except IOError:
 		print('File .packetqueue doesn\'t exist... \n')
 		
 		try:
 			redirect_url = auth.get_authorization_url()
-			webbrowser.open_new_tab(redirect_url)
-			print('If a new browser window doesn\'t open, go to this URL:')
-			print(redirect_url )
+			print('If a new browser window doesn\'t open, go to this URL: ')
+			print(redirect_url)
 			print('and authorize this app. Return here with the pin code you receive in order to finish')
 			print('authorizing this app to access your account as specified.')
+			webbrowser.open_new_tab(redirect_url)
 			verifyPin = input('Pin Code: ')
-			
+			print(verifyPin)
 			try:
 				auth.get_access_token(verifyPin)
 			except tweepy.TweepError:
@@ -110,19 +107,37 @@ def initialAuth():
 
 			accessToken = auth.access_token
 			accessTokenSecret = auth.access_token_secret
+			
 			# Write all of this good authentication stuff to a file
 			# so we don't have to do it everytime we run the program
-			ifconfigFile = (home + '/.packetqueue')
-			with open(ifconfigFile, 'w') as outFile:
+			ifconfigPath = os.path.join(home, '/.packetqueue/', str(user.screen_name))
+			if not os.path.exists(home + '/.packetqueue/'):
+				os.mkdir(home + '/.packetqueue/')
+				if not os.path.exists(home + '/.packetqueue/' + str(user.screen_name)):
+					os.mkdir(home + '/.packetqueue/' + str(user.screen_name))
+			
+			ifconfigFile = (home + '/.packetqueue/' + str(user.screen_name) + '/.packetqueue')
+			print(ifconfigFile)
+			with open(ifconfigFile, 'w+') as outFile:
 				outFile.write(accessToken + '\n')	# function as a better way to store
 				outFile.write(accessTokenSecret + '\n')	# the data
+
 		
 		# Something is so horribly borked we're just going to say fuck it
 		except tweepy.TweepError:
 			print('Error! Failed to get request token.')
 			return(1)
 	
+	screen = curses.initscr()
+	screen.nodelay(True)
 	return None
+
+def _mkdir_recursive(self, path):
+	sub_path = os.path.dirname(path)
+	if not os.path.exists(sub_path):
+		self._mkdir_recursive(sub_path)
+		if not os.path.exists(path):
+			os.mkdir(path)
 
 def printFriends(number):
 
@@ -371,7 +386,7 @@ def Cleanup(exitCode):
 	else:
 		sys.exit(exitCode)
 
-class DictStreamListener(tweepy.StreamListener):
+class Streamer(tweepy.StreamListener):
 	
 	def on_status(self,status):
 		
@@ -389,30 +404,40 @@ class DictStreamListener(tweepy.StreamListener):
 		
 		except curses.error:
 			Cleanup(1)
-	
+		except BaseException as e:
+			Cleanup(1)
+			print('failed on_status, ', str(e))
+			time.sleep(5)
+
+
+	def on__error(self, status):
+		Cleanup(1)
+		print(status)
+'''
 	# This is consuming everything
 	# including the session opening friends list
-	#def on_data(self, data):
-		# convert tweepy object to raw json/dictionary
-		#json_data = json.loads(data)
+	def on_data(self, data):
+		#convert tweepy object to raw json/dictionary
+		json_data = json.loads(data)
 		
-		#tweetText = json_data['friends']
-		#print(tweetText)
+		tweetText = json_data['friends']
+		print(tweetText)
 		
 		#Pretty print this to the screen
-		#print(json.dumps(json_data, indent=4, sort_keys=True))
-	
+		print(json.dumps(json_data, indent=4, sort_keys=True))
+'''	
 
 def getStream():
 
-	terenListener = DictStreamListener()
-	terenStream = tweepy.Stream(auth, listener=terenListener)
+	#terenListener = Streamer()
+	#terenStream = tweepy.Stream(auth, listener=terenListener)
+	terenStream = tweepy.Stream(auth, Streamer())
 	terenStream.userstream()
 
 def getFollowStream(user):
 
-	terenListener = DictStreamListener()
-	terenStream = tweepy.Stream(auth, listener=terenListener)
+	#terenListener = Streamer()
+	terenStream = tweepy.Stream(auth, Streamer())
 	userID = str(user)
 	if userID != '17028130':
 		terenStream.filter(follow = [userID])	
@@ -420,8 +445,8 @@ def getFollowStream(user):
 
 def getStreamSearch(searchHash):
 
-	terenListener = DictStreamListener()
-	terenStream = tweepy.Stream(auth, listener=terenListener)
+	#terenListener = Streamer()
+	terenStream = tweepy.Stream(auth, Streamer())
 	search = str(searchHash)
 	terenStream.filter(track = [search])
 
@@ -450,7 +475,7 @@ def statusUpdate(text):
 	return None
 
 def argumentProcess(command_args):
-
+	
 	# Get timeline with 'n' number of tweets	
 	if command_args.tweetsNum:
 	
@@ -511,7 +536,7 @@ def argumentProcess(command_args):
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
 			#getUser = api.get_user(screen_name=argsDict['streamUserSearch'])
-			if 'all' in argsDict['streamUserSearch']:
+			if 'all' in command_args.streamUserSearch:
 				getStream()
 			else:
 				screenName = command_args.streamUserSearch[0]
