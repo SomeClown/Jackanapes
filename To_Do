@@ -1,23 +1,23 @@
-#
-#
-#
-# To do list for the command line client
-# --------------------------------------
-#
-# 1. Use tweet_id (or something) to restructure tweet stream to incorporate the history
-#     with the tweet (replied to, etc.) In other words, show replies inline with the stream
-#     Make this a selectable option at invokation
-# 2. Rewrite code for config file using ConfigParser module from standard library
-# * Add current functionality to pull oauth keys
-# * Add additional functionality for colors, curses-based vs. standard text, etc.
-# 3. Add database functionality
-# * Store friends list (use ID)
-# * Store cursor for later recall of where we were in the stream when last ran
-# 4. Add progress bar for oauth authentication, as well as for possibly large data pulls (friends lists, etc.)
-# 5. Rewrite portions of code to allow for threading (use standard library's threading module)
-# * At least separate keyboard controls into separate thread to allow for mid-stream manipulation of searches, etc.
-# 6. Add colorization to hashtags both in streams and in static data pulls
-# 7. Move different functions into separate files as makes sense (argparse and oauth for instance)
-# 8. Add ability to search and add/remove followers based on different criteria such as: number of tweets, followers, etc.
-#
-#
+
+
+
+ To do list for the command line client
+ --------------------------------------
+
+ 1. Use tweet_id (or something) to restructure tweet stream to incorporate the history
+     with the tweet (replied to, etc.) In other words, show replies inline with the stream
+     Make this a selectable option at invokation
+ 2. Rewrite code for config file using ConfigParser module from standard library
+ * Add current functionality to pull oauth keys
+ * Add additional functionality for colors, curses-based vs. standard text, etc.
+ 3. Add database functionality
+ * Store friends list (use ID)
+ * Store cursor for later recall of where we were in the stream when last ran
+ 4. Add progress bar for oauth authentication, as well as for possibly large data pulls (friends lists, etc.)
+ 5. Rewrite portions of code to allow for threading (use standard library's threading module)
+ * At least separate keyboard controls into separate thread to allow for mid-stream manipulation of searches, etc.
+ 6. Add colorization to hashtags both in streams and in static data pulls
+ 7. Move different functions into separate files as makes sense (argparse and oauth for instance)
+ 8. Add ability to search and add/remove followers based on different criteria such as: number of tweets, followers, etc.
+
+
