@@ -447,8 +447,10 @@ def getStreamSearch(searchHash):
 
 	#terenListener = Streamer()
 	terenStream = tweepy.Stream(auth, Streamer())
-	search = str(searchHash)
-	terenStream.filter(track = [search])
+	i = len(searchHash)
+	#search = str(searchHash)
+	str1 = ''.join(searchHash)
+	terenStream.filter(track = [str1])
 
 
 def directSend(user, msg):
@@ -566,7 +568,7 @@ def argumentProcess(command_args):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			searchTerm = command_args.search[0]
+			searchTerm = command_args.search
 			getStreamSearch(searchTerm)
 		except (tweepy.TweepError):
 			curses.endwin()
@@ -687,7 +689,7 @@ def main():
 	parser.add_argument('-s', '--stream', action='store', type=str, nargs=1, dest='streamUserSearch', 
 			metavar='', help='Stream full user feed, or feed mentioning <user>')
 	
-	parser.add_argument('-e', '--search', action='store', type=str, nargs=1, dest='search', 
+	parser.add_argument('-e', '--search', action='store', type=str, nargs='*', dest='search', 
 			metavar='', help='stream the global twitter feed by search term')
 	
 	parser.add_argument('-f', '--friends', action="store", type=int, nargs=1, dest='numFriends', 
