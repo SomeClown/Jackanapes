@@ -370,9 +370,25 @@ def printNotMe(data):
 	return None
 	
 
-def statusTest():
-	for tweet in tweepy.Cursor(api.home_timeline(count=10)).items():
-		print(tweet.text)
+def termSearch(term):
+
+	try:
+		search = str(term[0])
+		count = int(term[1])
+		for tweet in tweepy.Cursor(api.search, q=search).items(count):	
+			screen.addstr(str(tweet.created_at) + ': ')
+			screen.addstr(str(tweet.user.name),curses.color_pair(1))
+			screen.addstr(str(': ' + tweet.text + '\n'))
+			screen.refresh() # Refresh screen now that strings added
+			
+	except curses.error:
+		Cleanup(1)
+	finally:
+		screen.addstr('\n Press q to exit program...')
+		while True:
+			key = screen.getch()
+			if key == ord('q'):
+				Cleanup(0)
 	return None
 
 
@@ -673,6 +689,22 @@ def argumentProcess(command_args):
 			curses.endwin()
 			logging.exception
 
+
+	elif command_args.term:
+		try:
+			initialAuth()
+			screen.scrollok(True)
+			curses.noecho()
+			curses.cbreak()
+			screen.keypad(1)
+			curses.start_color()
+			curses.use_default_colors()
+			curses.init_pair(1, curses.COLOR_RED, -1)
+			termSearch(command_args.term)
+		except (SystemExit):
+			curses.endwin()
+			raise
+
 	else: print(sys.argv)
 
 def main():
@@ -711,6 +743,9 @@ def main():
 
 	parser.add_argument('-r', '--retweets', metavar='', dest='retweets', nargs=1, type=str,
 			help='Get retweets of me by others')
+
+	parser.add_argument('-T', '--term', action='store', type=str, nargs=2, dest='term',
+			metavar='', help='search user timeline for search term')
 	
 	parser.add_argument('-V', '--version', action='version', version=progVersion)
 
