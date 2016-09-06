@@ -1,8 +1,7 @@
 ### Command Line Twitter Client #
 #### The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface. ##
 
-#### Command line Twitter (and stuff) client 
-#### For questions contact @SomeClown
+#### Command line Twitter (and stuff) client - For questions contact @SomeClown
 
 usage: [program name] [options]
 
