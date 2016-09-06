@@ -1,10 +1,10 @@
 # Command Line Twitter Client #
 ## The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface. ##
-'''
-usage: [program name] [options]
 
 Command line Twitter (and stuff) client
 For questions contact @SomeClown
+
+usage: [program name] [options]
 
 optional arguments:
 
@@ -22,9 +22,7 @@ optional arguments:
 	-V, --version   show program's version number and exit
 	-v, --verbose   verbose flag
 
-For questions contact @SomeClown
-
-Search Operator                         Finds tweets…
+Operator                                Finds tweets…
 
 watching now                            containing both “watching” and “now”. This is the default operator.
 “happy hour”                            containing the exact phrase “happy hour”.
@@ -48,5 +46,3 @@ puppy until:2015-12-21                  containing “puppy” and sent before t
 movie -scary :)                         containing “movie”, but not “scary”, and with a positive attitude.
 flight :(                               containing “flight” and with a negative attitude.
 traffic ?                               containing “traffic” and asking a question.
-
-'''
