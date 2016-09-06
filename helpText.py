@@ -10,16 +10,17 @@ usage: [program name] [options]
 optional arguments:
 
 	-h, --help      show this help message and exit
-	-t, --tweets    Get 'n' number of recent tweets from main feed
+	-t, --tweets    Get 'n' number of recent tweets from main feed <num>
 	-s, --stream    Stream full user feed, or feed mentioning <user>
-	-e, --search    stream the global twitter feed by search term
-	-f, --friends   print list of friends
-	-d, --direct	send a direct message
-	-S, --status    update twitter status
-	-m, --mentions  get mentions from logged in user's timeline
+	-e, --search    stream the global twitter feed by search term <search term>
+	-f, --friends   print list of friends <num>
+	-d, --direct	send a direct message <@user> <text>
+	-S, --status    update twitter status <text>
+	-m, --mentions  get mentions from logged in user's timeline <num>
 	-M, --me        Get information about me
-	-n, --notme     Get information about someone other than me
-	-r, --retweets  Get retweets of me by others
+	-n, --notme     Get information about someone other than me <@user>
+	-r, --retweets  Get retweets of me by others <num>
+	-T, --term	search logged in user's timeline for <phrase> <num>
 	-V, --version   show program's version number and exit
 	-v, --verbose   verbose flag
 
