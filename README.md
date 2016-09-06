@@ -21,7 +21,7 @@ optional arguments:
 	-r, --retweets  Get retweets of me by others
 	-V, --version   show program's version number and exit
 	-v, --verbose   verbose flag
-
+```
 Operator                                Finds tweets…
 
 watching now                            containing both “watching” and “now”. This is the default operator.
@@ -46,3 +46,4 @@ puppy until:2015-12-21                  containing “puppy” and sent before t
 movie -scary :)                         containing “movie”, but not “scary”, and with a positive attitude.
 flight :(                               containing “flight” and with a negative attitude.
 traffic ?                               containing “traffic” and asking a question.
+```
