@@ -6,6 +6,7 @@ import sys, tweepy, derp, webbrowser, os, time, json, argparse, re
 import curses, curses.textpad
 import traceback, logging
 from derp import *
+from helpText import *
 
 #TODO: Add obfuscation to user and app credentials somehow
 #TODO: Move authentication to derp.py
@@ -713,7 +714,9 @@ def main():
 	progVersion = str('Alpha 0.1')
 
 	parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client', 
-			epilog='For questions contact @SomeClown', usage='%(prog)s [options]')
+			epilog='For questions contact @SomeClown', usage=helpText())
+			
+	#usage='%(prog)s [options]')
 	
 	parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", 
 			metavar='', help="Get 'n' number of recent tweets from main feed")
