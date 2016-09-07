@@ -14,5 +14,6 @@ In other words, show replies inline with the stream. Make this a selectable opti
 - [ ] Add colorization to hashtags both in streams and in static data pulls
 - [ ] Move different functions into separate files as makes sense (argparse and oauth for instance)
 - [ ] Add ability to search and add/remove followers based on different criteria such as: number of tweets, followers, etc.
-
+- [ ] Add pause feature to streaming, or long, outputs
+- [ ] Add scrollbar functionality (ability to scroll backward in curses. Use pad.
 
