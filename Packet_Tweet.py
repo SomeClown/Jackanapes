@@ -3,7 +3,7 @@
 # Extensible so it can run as a bot, or be integrated into another application
 
 import sys, tweepy, derp, webbrowser, os, time, json, argparse, re
-import curses, curses.textpad, arguments
+import curses, curses.textpad, arguments, globalVars
 import traceback, logging
 from derp import *
 from helpText import *
@@ -13,86 +13,28 @@ from helpText import *
 #TODO: Move functions to doStuff.py
 
 def initialAuth():
-	
-	global screen
-	#screen = curses.initscr()
-	#screen.nodelay(True)
 
-	# Globals
-	global auth	# Lazy, fix later
-	global api	# Much drunk, so wow
-	global user
-	global color_black 
-	global color_red
-	global color_green
-	global color_yellow
-	global color_blue
-	global color_purple
-	global color_cyan
-	global color_white
-
-	# Set our color vars to the appropriate ansi escape codes
-	#
-	# Format: 	
-	#		\033[ - Escape code, always the same
-	# 		1 = style, 1 for normal
-	# 		32 = text color
-	#		40m = background color
-	# Foreground Colors:
-	#		30 = black
-	#		31 = red
-	#		32 = green
-	#		33 = yellow
-	#		34 = blue
-	#		35 = purple
-	#		36 = cyan
-	#		37 = white
-	# Text Style:
-	#		0 = nothing
-	#		1 = bold
-	#		2 = underline
-	#		3 = negative1
-	#		4 = negative2
-	# Background Colors:
-	#		40 = black
-	#		41 = red
-	#		42 = green
-	#		43 = yellow
-	#		44 = blue
-	#		45 = purple
-	#		46 = cyan
-	#		47 = white
-
-	color_black = "\033[1;30m{0}\033[00m"
-	color_red = "\033[01;31m{0}\033[00m"
-	color_green = "\033[1;32m{0}\033[00m"
-	color_yellow = "\033[1;33m{0}\033[00m"
-	color_blue = "\033[1;34m{0}\033[00m"
-	color_purple = "\033[1;35m{0}\033[00m"
-	color_cyan = "\033[1;36m{0}\033[00m"
-	color_white = "\033[1;37m{0}\033[00m"
-
-	auth = derp.hokum()	
-	api = tweepy.API(auth)	
-	user = api.get_user('SomeClown')
+	globalVars.auth = derp.hokum()	
+	globalVars.api = tweepy.API(globalVars.auth)	
+	globalVars.user = globalVars.api.get_user('SomeClown')
 	# Check to see if config file with credentials exists
 	# if it does, load our keys from the file and pass them to the
 	# auth.set_access_token() method
 	try:
 		home = os.path.expanduser("~")
-		configFile = (home + '/.packetqueue/' + str(user.screen_name) + '/.packetqueue')
+		configFile = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
 		#print(configFile)
 		with open(configFile, 'r') as inFile:
 			accessToken = inFile.readline().strip()
 			accessTokenSecret = inFile.readline().strip()
-			auth.set_access_token(accessToken, accessTokenSecret)
+			globalVars.auth.set_access_token(accessToken, accessTokenSecret)
 	
 	# If the file doesn't exist, notify user then move through granting access token process
 	except IOError:
 		print('File .packetqueue doesn\'t exist... \n')
 		
 		try:
-			redirect_url = auth.get_authorization_url()
+			redirect_url = globalVars.auth.get_authorization_url()
 			print('If a new browser window doesn\'t open, go to this URL: ')
 			print(redirect_url)
 			print('and authorize this app. Return here with the pin code you receive in order to finish')
@@ -101,23 +43,23 @@ def initialAuth():
 			verifyPin = input('Pin Code: ')
 			print(verifyPin)
 			try:
-				auth.get_access_token(verifyPin)
+				globalVars.auth.get_access_token(verifyPin)
 			except tweepy.TweepError:
 				print('Error! Failed to get access token, or incorrect token was entered.')
 				return(1)
 
-			accessToken = auth.access_token
-			accessTokenSecret = auth.access_token_secret
+			accessToken = globalVars.auth.access_token
+			accessTokenSecret = globalVars.auth.access_token_secret
 			
 			# Write all of this good authentication stuff to a file
 			# so we don't have to do it everytime we run the program
-			ifconfigPath = os.path.join(home, '/.packetqueue/', str(user.screen_name))
+			ifconfigPath = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
 			if not os.path.exists(home + '/.packetqueue/'):
 				os.mkdir(home + '/.packetqueue/')
-				if not os.path.exists(home + '/.packetqueue/' + str(user.screen_name)):
-					os.mkdir(home + '/.packetqueue/' + str(user.screen_name))
+				if not os.path.exists(home + '/.packetqueue/' + str(globalVars.user.screen_name)):
+					os.mkdir(home + '/.packetqueue/' + str(globalVars.user.screen_name))
 			
-			ifconfigFile = (home + '/.packetqueue/' + str(user.screen_name) + '/.packetqueue')
+			ifconfigFile = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
 			print(ifconfigFile)
 			with open(ifconfigFile, 'w+') as outFile:
 				outFile.write(accessToken + '\n')	# function as a better way to store
@@ -129,8 +71,8 @@ def initialAuth():
 			print('Error! Failed to get request token.')
 			return(1)
 	
-	screen = curses.initscr()
-	screen.nodelay(True)
+	globalVars.screen = curses.initscr()
+	globalVars.screen.nodelay(True)
 	return None
 
 def _mkdir_recursive(self, path):
@@ -143,28 +85,28 @@ def _mkdir_recursive(self, path):
 def printFriends(number):
 
 	try:
-		screen.addstr('\n')
-		screen.addstr('-------------------------------------------------------' + '\n')
-		screen.addstr(str(user.screen_name) + '\n')
-		screen.addstr('-------------------------------------------------------')
-		screen.addstr('\n')
-		screen.addstr('Friends Count: ' + str(user.followers_count) + '\n')
+		globalVars.screen.addstr('\n')
+		globalVars.screen.addstr('-------------------------------------------------------' + '\n')
+		globalVars.screen.addstr(str(globalVars.user.screen_name) + '\n')
+		globalVars.screen.addstr('-------------------------------------------------------')
+		globalVars.screen.addstr('\n')
+		globalVars.screen.addstr('Friends Count: ' + str(globalVars.user.followers_count) + '\n')
 		if number == 0:
 			return
 		else:
-			for friend in user.friends(count=number):
-				screen.addstr('\t' + friend.screen_name + '\n')
-		screen.addstr('\n')
-		screen.addstr('-------------------------------------------------------')
-		screen.addstr('\n')			
-		screen.refresh() # Refresh screen now that strings added
+			for friend in globalVars.user.friends(count=number):
+				globalVars.screen.addstr('\t' + friend.screen_name + '\n')
+		globalVars.screen.addstr('\n')
+		globalVars.screen.addstr('-------------------------------------------------------')
+		globalVars.screen.addstr('\n')			
+		globalVars.screen.refresh() # Refresh screen now that strings added
 	except curses.error:
 		Cleanup(1)
 	
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	
@@ -175,26 +117,26 @@ def printFriends(number):
 def printTimeline(number):
 
 	# Print user's public timeline
-	public_tweets = api.home_timeline(count=number)
+	public_tweets = globalVars.api.home_timeline(count=number)
 	#import pdb; pdb.set_trace()
 	try:
-		screen.addstr('\n')
+		globalVars.screen.addstr('\n')
 		if number == 0:
 			return
 		else:
 			for tweet in public_tweets:
-				screen.addstr(str(tweet.user.name),curses.color_pair(1))
-				screen.addstr(str(': ' + tweet.text + '\n'))
-				screen.refresh() # Refresh screen now that strings added
+				globalVars.screen.addstr(str(tweet.user.name),curses.color_pair(1))
+				globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
+			globalVars.screen.refresh() # Refresh screen now that strings added
 		#Cleanup(0)
 
 	except curses.error:
 		Cleanup(1)
 	
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
@@ -202,49 +144,48 @@ def printTimeline(number):
 
 def printMentions(number):
 	# Print user's mentions
-	myMentions = api.mentions_timeline(count=number)
+	myMentions = globalVars.api.mentions_timeline(count=number)
 	try:
-		screen.addstr('\n')
+		globalVars.screen.addstr('\n')
 		if number == 0:
 			return
 		else:
 			for mention in myMentions:
-				screen.addstr(str(mention.user.name),curses.color_pair(1))
-				screen.addstr(str(': ' + mention.text + '\n'))
-			screen.refresh()
+				globalVars.screen.addstr(str(mention.user.name),curses.color_pair(1))
+				globalVars.screen.addstr(str(': ' + mention.text + '\n'))
+			globalVars.screen.refresh()
 		#Cleanup(0)
 	except curses.error:
 		Cleanup(1)
 
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
 
 def printRetweets(number):
 	# Print user's tweets that others have retweeted
-	otherRetweets = api.retweets_of_me(count=number, include_user_entities=False)
+	otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
 	try:
-		screen.addstr('\n')
+		glovalVars.screen.addstr('\n')
 		if number == 0:
 			return
 		else:
 			for retweets in otherRetweets:
-
-				screen.addstr(str(retweets.user.name),curses.color_pair(1))
-				screen.addstr(str(': ' + retweets.text + '\n'))
-			screen.refresh()
-			#Cleanup(0)
+				globalVars.screen.addstr(str(retweets.id_str),curses.color_pair(1))
+				globalVars.screen.addstr(str(': ' + retweets.text + '\n'))
+			globalVars.screen.refresh()
 	except curses.error:
 		Cleanup(1)
 
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		#import pdb; pdb.set_trace()
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
@@ -254,57 +195,57 @@ def printRetweets(number):
 #TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
 def printMyInfo():
 	# Print information about me
-	myInfo = api.me()
+	myInfo = globalVars.api.me()
 	try:
 		# Format and print handle, username, and user ID
-		screen.addstr('\n')
-		screen.addstr(str('@'),curses.color_pair(1))
-		screen.addstr(str(myInfo.screen_name),curses.color_pair(1))
-		screen.addstr(str(' (') + str(myInfo.name),curses.color_pair(2))
-		screen.addstr(str('/') + str(myInfo.id_str),curses.color_pair(2))
-		screen.addstr(str(')'))
+		globalVars.screen.addstr('\n')
+		globalVars.screen.addstr(str('@'),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.screen_name),curses.color_pair(1))
+		globalVars.screen.addstr(str(' (') + str(myInfo.name),curses.color_pair(2))
+		globalVars.screen.addstr(str('/') + str(myInfo.id_str),curses.color_pair(2))
+		globalVars.screen.addstr(str(')'))
 		
 		# Format and print created date for user
-		screen.addstr(str('  User since: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.created_at),curses.color_pair(2))
+		globalVars.screen.addstr(str('  User since: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.created_at),curses.color_pair(2))
 		
 		# Format and print followers count
-		screen.addstr(str(' Followers: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.followers_count),curses.color_pair(2))
+		globalVars.screen.addstr(str(' Followers: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.followers_count),curses.color_pair(2))
 
 		# Format and print number of tweets
-		screen.addstr(str(' Tweets: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.statuses_count),curses.color_pair(2))
+		globalVars.screen.addstr(str(' Tweets: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.statuses_count),curses.color_pair(2))
 		
 		# Format and print user's reported location
-		screen.addstr(str(' Location: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.location),curses.color_pair(2))
+		globalVars.screen.addstr(str(' Location: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.location),curses.color_pair(2))
 		
 		# Format and print description from user profile
-		screen.addstr('\n' + json.dumps(myInfo.description))
-		screen.addstr('\n')
+		globalVars.screen.addstr('\n' + json.dumps(myInfo.description))
+		globalVars.screen.addstr('\n')
 		
 		# Format and print user's URL, if present
-		screen.addstr(str('URL: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.url))
+		globalVars.screen.addstr(str('URL: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.url))
 
 		# Format and print link to profile picture
-		screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
-		screen.addstr(str(myInfo.profile_image_url_https))
-		screen.addstr(str('\n'))
+		globalVars.screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(myInfo.profile_image_url_https))
+		globalVars.screen.addstr(str('\n'))
 		
 		# Add line space and clean up
-		screen.addstr('\n')
-		screen.refresh()
+		globalVars.screen.addstr('\n')
+		globalVars.screen.refresh()
 		#Cleanup(0)
 
 	except curses.error:
 		Cleanup(1)
 	
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
@@ -312,7 +253,7 @@ def printMyInfo():
 #TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
 def printNotMe(data):
 	# Print information on another user
-	notMe = api.get_user(screen_name=data)
+	notMe = globalVars.api.get_user(screen_name=data)
 	try:
 		
 		#screen.addstr('\n')
@@ -321,51 +262,51 @@ def printNotMe(data):
 		#screen.refresh()
 
 		# Format and print handle, username, and user ID
-		screen.addstr('\n')
-		screen.addstr(str('@'),curses.color_pair(1))
-		screen.addstr(str(notMe.screen_name),curses.color_pair(1))
-		screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str 
+		globalVars.screen.addstr('\n')
+		globalVars.screen.addstr(str('@'),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.screen_name),curses.color_pair(1))
+		globalVars.screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str 
 			+ ')'))
 		
 		# Format and print created date for user
-		screen.addstr(str('  User since: '),curses.color_pair(1))
-		screen.addstr(str(notMe.created_at))
+		globalVars.screen.addstr(str('  User since: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.created_at))
 		
 		# Format and print followers count
-		screen.addstr(str(' Followers: '),curses.color_pair(1))
-		screen.addstr(str(notMe.followers_count))
+		globalVars.screen.addstr(str(' Followers: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.followers_count))
 
 		# Format and print number of tweets
-		screen.addstr(str(' Tweets: '),curses.color_pair(1))
-		screen.addstr(str(notMe.statuses_count))
+		globalVars.screen.addstr(str(' Tweets: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.statuses_count))
 		
 		# Format and print user's reported location
-		screen.addstr(str(' Location: '),curses.color_pair(1))
-		screen.addstr(str(notMe.location))
+		globalVars.screen.addstr(str(' Location: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.location))
 
 		# Format and print description from user profile
-		screen.addstr('\n' + json.dumps(notMe.description) + '\n')
+		globalVars.screen.addstr('\n' + json.dumps(notMe.description) + '\n')
 		
 		# Format and print user's URL, if present
-		screen.addstr(str('URL: '),curses.color_pair(1))
-		screen.addstr(str(notMe.url))
+		globalVars.screen.addstr(str('URL: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.url))
 		
 		# Format and print link to profile picture
-		screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
-		screen.addstr(str(notMe.profile_image_url_https) + '\n')
+		globalVars.screen.addstr(str(' Profile Picture: '),curses.color_pair(1))
+		globalVars.screen.addstr(str(notMe.profile_image_url_https) + '\n')
 
 		# Add line space and clean up
-		screen.addstr('\n')
-		screen.refresh()
+		globalVars.screen.addstr('\n')
+		globalVars.screen.refresh()
 		#Cleanup(0)
 	
 	except curses.error:
 		Cleanup(1)
 
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
@@ -376,18 +317,18 @@ def termSearch(term):
 	try:
 		search = str(term[0])
 		count = int(term[1])
-		for tweet in tweepy.Cursor(api.search, q=search).items(count):	
-			screen.addstr(str(tweet.created_at) + ': ')
-			screen.addstr(str(tweet.user.name),curses.color_pair(1))
-			screen.addstr(str(': ' + tweet.text + '\n'))
-			screen.refresh() # Refresh screen now that strings added
+		for tweet in tweepy.Cursor(globalVars.api.search, q=search).items(count):	
+			globalVars.screen.addstr(str(tweet.created_at) + ': ')
+			globalVars.screen.addstr(str(tweet.user.name),curses.color_pair(1))
+			globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
+			globalVars.screen.refresh() # Refresh screen now that strings added
 			
 	except curses.error:
 		Cleanup(1)
 	finally:
-		screen.addstr('\n Press q to exit program...')
+		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
-			key = screen.getch()
+			key = globalVars.screen.getch()
 			if key == ord('q'):
 				Cleanup(0)
 	return None
@@ -407,13 +348,13 @@ class Streamer(tweepy.StreamListener):
 	
 	def on_status(self,status):
 		
-		screen.nodelay(1)
-		c = screen.getch()
+		globalVars.screen.nodelay(1)
+		c = globalVars.screen.getch()
 		#TODO: Pull status.text into named str, regex for @handle and #hashtag
 		try:
-			screen.addstr(str(status.user.name),curses.color_pair(1))
-			screen.addstr(str(': ' + status.text + '\n'))
-			screen.refresh() # Refresh screen now that strings added
+			globalVars.screen.addstr(str(status.user.name),curses.color_pair(1))
+			globalVars.screen.addstr(str(': ' + status.text + '\n'))
+			globalVars.screen.refresh() # Refresh screen now that strings added
 			if c == ord('q'):
 				Cleanup(0)
 			else:
@@ -448,22 +389,24 @@ def getStream():
 
 	#terenListener = Streamer()
 	#terenStream = tweepy.Stream(auth, listener=terenListener)
-	terenStream = tweepy.Stream(auth, Streamer())
+	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	terenStream.userstream()
 
 def getFollowStream(user):
 
 	#terenListener = Streamer()
-	terenStream = tweepy.Stream(auth, Streamer())
+	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	userID = str(user)
 	if userID != '17028130':
+		#print(userID)
+		#sleep(1000000)
 		terenStream.filter(follow = [userID])	
 	else: terenStream.userstream()
 
 def getStreamSearch(searchHash):
 
 	#terenListener = Streamer()
-	terenStream = tweepy.Stream(auth, Streamer())
+	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	i = len(searchHash)
 	#search = str(searchHash)
 	str1 = ''.join(searchHash)
@@ -480,7 +423,7 @@ def directSend(user, msg):
 	elif nameResult == None:
 		print('Incorrect username format (must include @)')
 	else:
-		directTweet = api.send_direct_message(screen_name=user, text=msg)
+		directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
 	return None
 
 
@@ -490,7 +433,7 @@ def statusUpdate(text):
 	if len(text) >= 140:
 		print('Tweets must be 140 characters or less')
 	else:
-		status = api.update_status(status=text)
+		status = globalVars.api.update_status(status=text)
 	return None
 
 def argumentProcess(command_args):
@@ -500,10 +443,10 @@ def argumentProcess(command_args):
 	
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
@@ -522,10 +465,10 @@ def argumentProcess(command_args):
 	
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
@@ -547,19 +490,19 @@ def argumentProcess(command_args):
 		
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			#getUser = api.get_user(screen_name=argsDict['streamUserSearch'])
+			#getUser = globalVars.api.get_user(screen_name=argsDict['streamUserSearch'])
 			if 'all' in command_args.streamUserSearch:
 				getStream()
 			else:
 				screenName = command_args.streamUserSearch[0]
-				getUser = api.get_user(screenName)
+				getUser = globalVars.api.get_user(screenName)
 				userID = getUser.id
 				getFollowStream(userID)
 		except tweepy.TweepError as e:
@@ -578,10 +521,10 @@ def argumentProcess(command_args):
 		
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
@@ -602,10 +545,10 @@ def argumentProcess(command_args):
 
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
@@ -636,10 +579,10 @@ def argumentProcess(command_args):
 	
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
@@ -657,10 +600,10 @@ def argumentProcess(command_args):
 	elif command_args.notMe:
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1)
@@ -675,10 +618,10 @@ def argumentProcess(command_args):
 	elif command_args.retweets:
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1)
@@ -694,10 +637,10 @@ def argumentProcess(command_args):
 	elif command_args.term:
 		try:
 			initialAuth()
-			screen.scrollok(True)
+			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
-			screen.keypad(1)
+			globalVars.screen.keypad(1)
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1)
@@ -705,6 +648,9 @@ def argumentProcess(command_args):
 		except (SystemExit):
 			curses.endwin()
 			raise
+		except (KeyboardInterrupt):
+			curses.endwin()
+			logging.exception
 
 	else: print(sys.argv)
 
