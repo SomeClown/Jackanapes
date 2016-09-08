@@ -170,15 +170,22 @@ def printRetweets(number):
 	# Print user's tweets that others have retweeted
 	otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
 	try:
-		glovalVars.screen.addstr('\n')
+		globalVars.screen.addstr('\n')
 		if number == 0:
+			#import pdb; pdb.set_trace()
+			#print(number)
+			Cleanup(1)
 			return
 		else:
+			#import pdb; pdb.set_trace()
 			for retweets in otherRetweets:
+				#idName = globalVars.api.get_user(retweets.id_str)
+				#globalVars.screen.addstr(str(idName.screen_name))
 				globalVars.screen.addstr(str(retweets.id_str),curses.color_pair(1))
 				globalVars.screen.addstr(str(': ' + retweets.text + '\n'))
 			globalVars.screen.refresh()
 	except curses.error:
+		import pdb; pdb.set_trace()
 		Cleanup(1)
 
 	finally:
@@ -625,6 +632,7 @@ def argumentProcess(command_args):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1)
+			#import pdb; pdb.set_trace()
 			printRetweets(command_args.retweets[0])
 		except (SystemExit):
 			curses.endwin()

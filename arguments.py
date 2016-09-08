@@ -29,7 +29,7 @@ def argumentsParsing():
 
 	parser.add_argument('-n', '--notme', metavar='', action='store', dest='notMe', nargs=1, type=str, help=argparse.SUPPRESS)
 
-	parser.add_argument('-r', '--retweets', metavar='', action='store', dest='retweets', nargs=1, type=str, help=argparse.SUPPRESS)
+	parser.add_argument('-r', '--retweets', metavar='', action='store', dest='retweets', nargs=1, type=int, help=argparse.SUPPRESS)
 
 	parser.add_argument('-T', '--term', action='store', type=str, nargs=2, dest='term', metavar='', help=argparse.SUPPRESS)
 
