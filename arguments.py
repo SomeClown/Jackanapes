@@ -33,7 +33,7 @@ def argumentsParsing():
 
 	parser.add_argument('-T', '--term', action='store', type=str, nargs=2, dest='term', metavar='', help=argparse.SUPPRESS)
 
-	parser.add_argument('-V', '--version', action='version', version=progVersion)
+	parser.add_argument('-V', '--version', action='version', version=progVersion, help=argparse.SUPPRESS)
 
 	parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
@@ -41,7 +41,7 @@ def argumentsParsing():
 		parser.print_help()
 		sys.exit(1)
 
-	command_args = parser.parse_args()
+	else: my_command_args = parser.parse_args()
 	
-	return(command_args)
+	return(my_command_args)
 	

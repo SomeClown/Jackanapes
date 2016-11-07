@@ -3,7 +3,7 @@
 import os, sys, derp, globalVars, tweepy, curses
 
 
-def initialAuth():
+def initialAuth(original):
 
 	globalVars.auth = derp.hokum()	
 	globalVars.api = tweepy.API(globalVars.auth)	
@@ -64,4 +64,4 @@ def initialAuth():
 	
 	globalVars.screen = curses.initscr()
 	globalVars.screen.nodelay(True)
-	return None
+	return original

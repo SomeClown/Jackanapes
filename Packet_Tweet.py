@@ -4,9 +4,11 @@
 
 import sys, tweepy, derp, webbrowser, os, time, json, argparse, re
 import curses, curses.textpad, arguments, globalVars
-import traceback, logging, authorization
+import traceback, logging
+import stuff
 from derp import *
 from helpText import *
+from authorization import initialAuth
 
 def _mkdir_recursive(self, path):
 	sub_path = os.path.dirname(path)
@@ -15,6 +17,7 @@ def _mkdir_recursive(self, path):
 		if not os.path.exists(path):
 			os.mkdir(path)
 
+@initialAuth
 def printFriends(number):
 
 	try:
@@ -45,6 +48,7 @@ def printFriends(number):
 	
 	return None
 
+@initialAuth
 def printTimeline(number):
 
 	# Print user's public timeline
@@ -72,6 +76,7 @@ def printTimeline(number):
 				Cleanup(0)
 	return None
 
+@initialAuth
 def printMentions(number):
 	# Print user's mentions
 	myMentions = globalVars.api.mentions_timeline(count=number)
@@ -96,6 +101,7 @@ def printMentions(number):
 				Cleanup(0)
 	return None
 
+@initialAuth
 def printRetweets(number):
 	# Print user's tweets that others have retweeted
 	otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
@@ -127,7 +133,7 @@ def printRetweets(number):
 				Cleanup(0)
 	return None
 
-#TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
+@initialAuth
 def printMyInfo():
 	# Print information about me
 	myInfo = globalVars.api.me()
@@ -185,7 +191,7 @@ def printMyInfo():
 				Cleanup(0)
 	return None
 
-#TODO: Wrap this in loop to test for verbose flag, if yes, dump entire JSON object to screen
+@initialAuth
 def printNotMe(data):
 	# Print information on another user
 	notMe = globalVars.api.get_user(screen_name=data)
@@ -246,7 +252,7 @@ def printNotMe(data):
 				Cleanup(0)
 	return None
 	
-
+@initialAuth
 def termSearch(term):
 
 	try:
@@ -319,6 +325,7 @@ class Streamer(tweepy.StreamListener):
 		print(json.dumps(json_data, indent=4, sort_keys=True))
 '''	
 
+@initialAuth
 def getStream():
 
 	#terenListener = Streamer()
@@ -326,6 +333,7 @@ def getStream():
 	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	terenStream.userstream()
 
+@initialAuth
 def getFollowStream(user):
 
 	#terenListener = Streamer()
@@ -337,6 +345,7 @@ def getFollowStream(user):
 		terenStream.filter(follow = [userID])	
 	else: terenStream.userstream()
 
+@initialAuth
 def getStreamSearch(searchHash):
 
 	#terenListener = Streamer()
@@ -346,6 +355,7 @@ def getStreamSearch(searchHash):
 	str1 = ''.join(searchHash)
 	terenStream.filter(track = [str1])
 
+@initialAuth
 def directSend(user, msg):
 
 	nameCheck = re.compile(r'(@)+')
@@ -359,6 +369,7 @@ def directSend(user, msg):
 		directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
 	return None
 
+@initialAuth
 def statusUpdate(text):
 
 	#import pdb; pdb.set_trace()
@@ -368,13 +379,14 @@ def statusUpdate(text):
 		status = globalVars.api.update_status(status=text)
 	return None
 
+
 def argumentProcess(command_args):
 	
-	# Get timeline with 'n' number of tweets	
+	# Get timeline with 'n' number of tweets
 	if command_args.tweetsNum:
 	
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -396,7 +408,7 @@ def argumentProcess(command_args):
 	elif command_args.userMentions:
 	
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -419,7 +431,7 @@ def argumentProcess(command_args):
 	elif command_args.streamUserSearch:
 		
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -450,7 +462,7 @@ def argumentProcess(command_args):
 	elif command_args.search:
 		
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -474,7 +486,7 @@ def argumentProcess(command_args):
 	elif command_args.numFriends:
 
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -492,7 +504,7 @@ def argumentProcess(command_args):
 	# send a direct message
 	elif command_args.directMessage:
 	
-		authorization.initialAuth()
+		#authorization.initialAuth()
 		userDirect = command_args.directMessage[0]
 		msgDirect = command_args.directMessage[1]
 		directSend(userDirect, msgDirect)
@@ -500,14 +512,14 @@ def argumentProcess(command_args):
 	# update status
 	elif command_args.statusUpdate:
 		
-		authorization.initialAuth()
+		#authorization.initialAuth()
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(msgStatusUpdate)
 
 	elif command_args.myInfo:
 	
 		try:
-			authorization.initialAuth()
+			#uthorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -528,7 +540,7 @@ def argumentProcess(command_args):
 
 	elif command_args.notMe:
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -546,7 +558,7 @@ def argumentProcess(command_args):
 
 	elif command_args.retweets:
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -565,7 +577,7 @@ def argumentProcess(command_args):
 
 	elif command_args.term:
 		try:
-			authorization.initialAuth()
+			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -580,8 +592,9 @@ def argumentProcess(command_args):
 		except (KeyboardInterrupt):
 			curses.endwin()
 			logging.exception
-
-	else: print(sys.argv)
+	
+	else:
+		print(sys.argv)
 
 def main():
 
