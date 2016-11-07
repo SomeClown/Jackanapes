@@ -53,7 +53,6 @@ def printTimeline(number):
 
 	# Print user's public timeline
 	public_tweets = globalVars.api.home_timeline(count=number)
-	#import pdb; pdb.set_trace()
 	try:
 		globalVars.screen.addstr('\n')
 		if number == 0:
@@ -63,7 +62,6 @@ def printTimeline(number):
 				globalVars.screen.addstr(str(tweet.user.name),curses.color_pair(1))
 				globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
 			globalVars.screen.refresh() # Refresh screen now that strings added
-		#Cleanup(0)
 
 	except curses.error:
 		Cleanup(1)
@@ -89,7 +87,6 @@ def printMentions(number):
 				globalVars.screen.addstr(str(mention.user.name),curses.color_pair(1))
 				globalVars.screen.addstr(str(': ' + mention.text + '\n'))
 			globalVars.screen.refresh()
-		#Cleanup(0)
 	except curses.error:
 		Cleanup(1)
 
@@ -108,12 +105,9 @@ def printRetweets(number):
 	try:
 		globalVars.screen.addstr('\n')
 		if number == 0:
-			#import pdb; pdb.set_trace()
-			#print(number)
 			Cleanup(1)
 			return
 		else:
-			#import pdb; pdb.set_trace()
 			for retweets in otherRetweets:
 				#idName = globalVars.api.get_user(retweets.id_str)
 				#globalVars.screen.addstr(str(idName.screen_name))
@@ -125,7 +119,6 @@ def printRetweets(number):
 		Cleanup(1)
 
 	finally:
-		#import pdb; pdb.set_trace()
 		globalVars.screen.addstr('\n Press q to exit program...')
 		while True:
 			key = globalVars.screen.getch()
@@ -178,7 +171,6 @@ def printMyInfo():
 		# Add line space and clean up
 		globalVars.screen.addstr('\n')
 		globalVars.screen.refresh()
-		#Cleanup(0)
 
 	except curses.error:
 		Cleanup(1)
@@ -196,11 +188,6 @@ def printNotMe(data):
 	# Print information on another user
 	notMe = globalVars.api.get_user(screen_name=data)
 	try:
-		
-		#screen.addstr('\n')
-		#screen.addstr(json.dumps(notMe.description) + '\n')
-		#screen.addstr('\n')
-		#screen.refresh()
 
 		# Format and print handle, username, and user ID
 		globalVars.screen.addstr('\n')
@@ -239,7 +226,6 @@ def printNotMe(data):
 		# Add line space and clean up
 		globalVars.screen.addstr('\n')
 		globalVars.screen.refresh()
-		#Cleanup(0)
 	
 	except curses.error:
 		Cleanup(1)
@@ -328,30 +314,23 @@ class Streamer(tweepy.StreamListener):
 @initialAuth
 def getStream():
 
-	#terenListener = Streamer()
-	#terenStream = tweepy.Stream(auth, listener=terenListener)
 	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	terenStream.userstream()
 
 @initialAuth
 def getFollowStream(user):
 
-	#terenListener = Streamer()
 	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	userID = str(user)
 	if userID != '17028130':
-		#print(userID)
-		#sleep(1000000)
 		terenStream.filter(follow = [userID])	
 	else: terenStream.userstream()
 
 @initialAuth
 def getStreamSearch(searchHash):
 
-	#terenListener = Streamer()
 	terenStream = tweepy.Stream(globalVars.auth, Streamer())
 	i = len(searchHash)
-	#search = str(searchHash)
 	str1 = ''.join(searchHash)
 	terenStream.filter(track = [str1])
 
@@ -372,7 +351,6 @@ def directSend(user, msg):
 @initialAuth
 def statusUpdate(text):
 
-	#import pdb; pdb.set_trace()
 	if len(text) >= 140:
 		print('Tweets must be 140 characters or less')
 	else:
@@ -386,7 +364,6 @@ def argumentProcess(command_args):
 	if command_args.tweetsNum:
 	
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -402,13 +379,11 @@ def argumentProcess(command_args):
 			curses.endwin()
 			logging.exception
 			sys.exit(1)
-		#import pdb; pdb.set_trace()
-		#curses.endwin()			#TODO: Need to exit curses cleanly, not working now.
+	
 	# Get mentions with 'n' number of tweets
 	elif command_args.userMentions:
 	
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -424,14 +399,11 @@ def argumentProcess(command_args):
 			curses.endwin()
 			logging.exception
 			
-		#import pdb; pdb.set_trace()
-	
 	# Start stream on <@username>
 	# If 'all' is put in place of username, stream user's home timeline
 	elif command_args.streamUserSearch:
 		
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -439,7 +411,6 @@ def argumentProcess(command_args):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1) # Foreground Red/background transparent
-			#getUser = globalVars.api.get_user(screen_name=argsDict['streamUserSearch'])
 			if 'all' in command_args.streamUserSearch:
 				getStream()
 			else:
@@ -450,7 +421,6 @@ def argumentProcess(command_args):
 		except tweepy.TweepError as e:
 			curses.endwin()
 			print(e.response) 		#This works
-			#print(e.message[0]['code'])	#This does not work
 		except (SystemExit):
 			curses.endwin()
 			raise
@@ -462,7 +432,6 @@ def argumentProcess(command_args):
 	elif command_args.search:
 		
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -486,7 +455,6 @@ def argumentProcess(command_args):
 	elif command_args.numFriends:
 
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -504,7 +472,6 @@ def argumentProcess(command_args):
 	# send a direct message
 	elif command_args.directMessage:
 	
-		#authorization.initialAuth()
 		userDirect = command_args.directMessage[0]
 		msgDirect = command_args.directMessage[1]
 		directSend(userDirect, msgDirect)
@@ -512,14 +479,12 @@ def argumentProcess(command_args):
 	# update status
 	elif command_args.statusUpdate:
 		
-		#authorization.initialAuth()
 		msgStatusUpdate = command_args.statusUpdate[0]
 		statusUpdate(msgStatusUpdate)
 
 	elif command_args.myInfo:
 	
 		try:
-			#uthorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()	# Keeps key presses from echoing to screen
 			curses.cbreak() # Takes input away
@@ -540,7 +505,6 @@ def argumentProcess(command_args):
 
 	elif command_args.notMe:
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -558,7 +522,6 @@ def argumentProcess(command_args):
 
 	elif command_args.retweets:
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -566,7 +529,6 @@ def argumentProcess(command_args):
 			curses.start_color()
 			curses.use_default_colors()
 			curses.init_pair(1, curses.COLOR_RED, -1)
-			#import pdb; pdb.set_trace()
 			printRetweets(command_args.retweets[0])
 		except (SystemExit):
 			curses.endwin()
@@ -577,7 +539,6 @@ def argumentProcess(command_args):
 
 	elif command_args.term:
 		try:
-			#authorization.initialAuth()
 			globalVars.screen.scrollok(True)
 			curses.noecho()
 			curses.cbreak()
@@ -593,13 +554,12 @@ def argumentProcess(command_args):
 			curses.endwin()
 			logging.exception
 	
-	else:
-		print(sys.argv)
-
+	else: print(sys.argv)
+	
 def main():
 
-	command_args = arguments.argumentsParsing()
-	argumentProcess(command_args)	
+	my_command_args = arguments.argumentsParsing()
+	argumentProcess(my_command_args)	
 	return None
 
 if __name__ == '__main__':

@@ -42,6 +42,4 @@ def argumentsParsing():
 		sys.exit(1)
 
 	else: my_command_args = parser.parse_args()
-	
 	return(my_command_args)
-	
