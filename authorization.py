@@ -1,10 +1,15 @@
 #!/usr/local/bin/python3
 
-import os, sys, derp, globalVars, tweepy, curses
+import os, derp, globalVars, tweepy, curses
 
 
-def initialAuth(original):
-	
+def initialAuth(original: object) -> object:
+
+	"""
+
+	:type original: object
+	:rtype: object
+	"""
 	globalVars.screen = curses.initscr()
 	globalVars.screen.nodelay(True)
 		
@@ -64,6 +69,7 @@ def initialAuth(original):
 			except tweepy.TweepError:
 				print('Error! Failed to get request token.')
 				return(1)
-		return original(*args, **kwargs)	
+			#return()
+			return original(*args, **kwargs)
 		
 	return wrapper

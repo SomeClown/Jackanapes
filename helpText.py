@@ -1,7 +1,9 @@
 #!/usr/local/bin/python3
+# coding=utf-8
 
 def helpText():
-	return '''
+	return
+	'''
 
 
 
@@ -24,8 +26,7 @@ optional arguments:
 	-V, --version   show program's version number and exit
 	-v, --verbose   verbose flag
 
-Operator                                Finds tweets…
-
+Operator								Finds tweets…
 watching now                            containing both “watching” and “now”. This is the default operator.
 “happy hour”                            containing the exact phrase “happy hour”.
 love OR hate                            containing either “love” or “hate” (or both).

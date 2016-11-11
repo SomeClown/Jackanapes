@@ -5,15 +5,21 @@ In other words, show replies inline with the stream. Make this a selectable opti
 - [ ] Rewrite code for config file using ConfigParser module from standard library
 	- [ ] Add current functionality to pull oauth keys
 	- [ ] Add additional functionality for colors, curses-based vs. standard text, etc.
-- [ ] Add database functionality
+- [ ] Add database functionality (or flat file, as appropriate)
 	- [ ] Store friends list (use ID)
 	- [ ] Store cursor for later recall of where we were in the stream when last ran
 - [ ] Add progress bar for oauth authentication, as well as for possibly large data pulls (friends lists, etc.)
 - [ ] Rewrite portions of code to allow for threading (use standard library's threading module)
 	- [ ] At least separate keyboard controls into separate thread to allow for mid-stream manipulation of searches, etc.
 - [ ] Add colorization to hashtags both in streams and in static data pulls
-- [ ] Move different functions into separate files as makes sense (argparse and oauth for instance)
 - [ ] Add ability to search and add/remove followers based on different criteria such as: number of tweets, followers, etc.
 - [ ] Add pause feature to streaming, or long, outputs
-- [ ] Add scrollbar functionality (ability to scroll backward in curses. Use pad.
+- [ ] Add scrollbar functionality (ability to scroll backward in curses.) Use pad.
+
+# Known bugs list
+#
+- [ ] Program runs and thinks it has been loaded as a module, despite __main__ = main
+- [ ] When help option is called, curses is being invoked for some reason, which suggests a program flow that is not
+      what we'd like to see. This may also be contributing to the bug above... not sure
+- [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. No obvious errors
 
