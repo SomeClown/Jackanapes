@@ -2,9 +2,8 @@
 # coding=utf-8
 
 def helpText():
-	return
-	'''
 
+	"""
 
 
 usage: [program name] [options]
@@ -50,4 +49,4 @@ movie -scary :)                         containing “movie”, but not “scary
 flight :(                               containing “flight” and with a negative attitude.
 traffic ?                               containing “traffic” and asking a question.
 
-'''
+"""

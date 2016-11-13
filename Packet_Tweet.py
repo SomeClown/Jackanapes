@@ -28,6 +28,7 @@ def printFriends(number: object) -> object:
     :rtype: object
     """
     try:
+        globalVars.screen.nodelay(True)
         globalVars.screen.addstr('\n')
         globalVars.screen.addstr('-------------------------------------------------------' + '\n')
         globalVars.screen.addstr(str(globalVars.user.screen_name) + '\n')
@@ -418,6 +419,7 @@ def directSend(user, msg):
         print('Incorrect username format (must include @)')
     else:
         directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
+        directTweet()
     return None
 
 
@@ -432,4 +434,6 @@ def statusUpdate(text):
         print('Tweets must be 140 characters or less')
     else:
         status = globalVars.api.update_status(status=text)
+        status()
+
     return None

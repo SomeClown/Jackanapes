@@ -5,7 +5,7 @@ import helpText
 import sys
 
 
-def argumentsParsing():
+def argumentsParsing(formatter_class=argparse.HelpFormatter):
     """
 
     :return:
@@ -16,7 +16,8 @@ def argumentsParsing():
     in a different module that we import (helpText()) '''
 
     parser = argparse.ArgumentParser(description='Command line Twitter (and stuff) client',
-                                     epilog='For questions contact @SomeClown', usage=helpText.helpText())
+                                     epilog='For questions contact @SomeClown',
+                                     usage=helpText.helpText())
 
     parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweetsNum", metavar='',
                         help=argparse.SUPPRESS)
@@ -54,11 +55,13 @@ def argumentsParsing():
 
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
+
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(1)
 
     else:
         my_command_args = parser.parse_args()
+
     assert isinstance(my_command_args, object)
     return my_command_args

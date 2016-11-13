@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 
 import curses
-import sys
 import tweepy
 
 import globalVars
@@ -9,13 +8,15 @@ import Packet_Tweet
 
 
 def arglebarg(command_args):
-    # Get time line with 'n' number of tweets
     """
 
     :return:
     :param command_args:
     :rtype: object
+
     """
+    globalVars.screen = curses.initscr()
+    # Get time line with 'n' number of tweets
     if command_args.tweetsNum:
 
         try:
@@ -82,7 +83,7 @@ def arglebarg(command_args):
             curses.endwin()
             raise
 
-    # Start stream using <searchterm>
+    # Start stream using <search term>
     elif command_args.search:
 
         try:
@@ -209,6 +210,5 @@ def arglebarg(command_args):
             raise
 
     else:
-        print(sys.argv)
+        return
 
-    return
