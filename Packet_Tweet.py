@@ -7,9 +7,10 @@ import json
 import os
 import re
 import time
-
 import globalVars
+
 from authorization import initialAuth
+
 from derp import *
 
 
@@ -399,7 +400,14 @@ def getStreamSearch(searchHash):
     """
     terenStream = tweepy.Stream(globalVars.auth, Streamer())
     str1 = ''.join(searchHash)
-    terenStream.filter(track=[str1])
+    try:
+        terenStream.filter(track=[str1])
+    except curses.error:
+        Cleanup(1)
+    except BaseException as e:
+        Cleanup(1)
+        print('failed on_status, ', str(e))
+        time.sleep(5)
 
 
 @initialAuth
@@ -419,6 +427,7 @@ def directSend(user, msg):
         print('Incorrect username format (must include @)')
     else:
         directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
+
         directTweet()
     return None
 

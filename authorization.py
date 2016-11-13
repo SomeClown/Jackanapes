@@ -1,7 +1,9 @@
 #!/usr/local/bin/python3
 
-import os, derp, globalVars, tweepy
-
+import os
+import derp
+import globalVars
+import tweepy
 
 def initialAuth(original: object) -> object:
     """
@@ -10,9 +12,7 @@ def initialAuth(original: object) -> object:
 	:rtype: object
 	"""
 
-
     def wrapper(*args, **kwargs):
-        #globalVars.screen.nodelay(True)
         globalVars.auth = derp.hokum()
         globalVars.api = tweepy.API(globalVars.auth)
         globalVars.user = globalVars.api.get_user('SomeClown')
@@ -69,7 +69,7 @@ def initialAuth(original: object) -> object:
             except tweepy.TweepError:
                 print('Error! Failed to get request token.')
                 return (1)
-            # return()
+                # return()
         return original(*args, **kwargs)
 
     return wrapper

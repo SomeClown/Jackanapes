@@ -5,7 +5,7 @@ import helpText
 import sys
 
 
-def argumentsParsing(formatter_class=argparse.HelpFormatter):
+def argumentsParsing():
     """
 
     :return:
