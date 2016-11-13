@@ -1,8 +1,5 @@
 #!/usr/local/bin/python3
 
-#screen = curses.initscr()
-#screen.nodelay(True)
-
 # Globals
 global screen
 global auth	# Lazy, fix later

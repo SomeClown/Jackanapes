@@ -12,7 +12,7 @@ def initialAuth(original: object) -> object:
 
 
     def wrapper(*args, **kwargs):
-        globalVars.screen.nodelay(True)
+        #globalVars.screen.nodelay(True)
         globalVars.auth = derp.hokum()
         globalVars.api = tweepy.API(globalVars.auth)
         globalVars.user = globalVars.api.get_user('SomeClown')
@@ -70,6 +70,6 @@ def initialAuth(original: object) -> object:
                 print('Error! Failed to get request token.')
                 return (1)
             # return()
-            return original(*args, **kwargs)
+        return original(*args, **kwargs)
 
     return wrapper
