@@ -56,7 +56,7 @@ def argumentsParsing(formatter_class=argparse.HelpFormatter):
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
     if len(sys.argv) == 1:
-        parser.print_help()
+        #parser.print_help()
         sys.exit(1)
 
     else:
