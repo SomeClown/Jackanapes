@@ -5,12 +5,8 @@ import derp
 import globalVars
 import tweepy
 
-def initialAuth(original: object) -> object:
-    """
 
-	:type original: object
-	:rtype: object
-	"""
+def initialAuth(original: object) -> object:
 
     def wrapper(*args, **kwargs):
         globalVars.auth = derp.hokum()
@@ -69,7 +65,7 @@ def initialAuth(original: object) -> object:
             except tweepy.TweepError:
                 print('Error! Failed to get request token.')
                 return (1)
-                # return()
         return original(*args, **kwargs)
 
+    assert isinstance(wrapper, object)
     return wrapper

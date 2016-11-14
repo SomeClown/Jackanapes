@@ -8,6 +8,7 @@ import os
 import re
 import time
 import globalVars
+import sys
 
 from authorization import initialAuth
 
@@ -427,8 +428,8 @@ def directSend(user, msg):
         print('Incorrect username format (must include @)')
     else:
         directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
-
         directTweet()
+
     return None
 
 
