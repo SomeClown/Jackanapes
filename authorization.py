@@ -7,6 +7,10 @@ import tweepy
 
 
 def initialAuth(original: object) -> object:
+    """
+    	:type original: object
+    	:rtype: object
+    	"""
 
     def wrapper(*args, **kwargs):
         globalVars.auth = derp.hokum()
