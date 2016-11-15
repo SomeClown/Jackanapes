@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+__author__ = 'SomeClown'
+
 """
 Command Line Twitter Client
 The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface.

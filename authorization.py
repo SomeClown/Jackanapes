@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+__author__ = 'SomeClown'
+
 import os
 import derp
 import globalVars

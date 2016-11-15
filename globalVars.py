@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+__author__ = 'SomeClown'
+
 # Globals
 global screen
 global auth	# Lazy, fix later

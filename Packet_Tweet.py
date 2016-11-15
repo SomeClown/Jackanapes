@@ -2,6 +2,8 @@
 # Command line twitter client in the style of traditional unix shell commands
 # Extensible so it can run as a bot, or be integrated into another application
 
+__author__ = 'SomeClown'
+
 import curses.textpad
 import json
 import os
@@ -335,9 +337,6 @@ class Streamer(tweepy.StreamListener):
             globalVars.screen.refresh()  # Refresh screen now that strings added
             if c == ord('q'):
                 Cleanup(0)
-            else:
-                pass
-
         except curses.error:
             Cleanup(1)
         except BaseException as e:
@@ -345,29 +344,31 @@ class Streamer(tweepy.StreamListener):
             print('failed on_status, ', str(e))
             time.sleep(5)
 
+
+        """
     @staticmethod
     def on__error(status):
-        """
+
 
         :param status:
-        """
+
         Cleanup(1)
         print(status)
+        """
 
+    """
+    # This is consuming everything
+    # including the session opening friends list
+    def on_data(self, data):
+        #convert tweepy object to raw json/dictionary
+        json_data = json.loads(data)
 
-'''
-	# This is consuming everything
-	# including the session opening friends list
-	def on_data(self, data):
-		#convert tweepy object to raw json/dictionary
-		json_data = json.loads(data)
-		
-		tweetText = json_data['friends']
-		print(tweetText)
-		
-		#Pretty print this to the screen
-		print(json.dumps(json_data, indent=4, sort_keys=True))
-'''
+        tweetText = json_data['friends']
+        print(tweetText)
+
+        #Pretty print this to the screen
+        print(json.dumps(json_data, indent=4, sort_keys=True))
+    """
 
 
 @initialAuth

@@ -1,10 +1,13 @@
 #!/usr/local/bin/python3
 
+__author__ = 'SomeClown'
+
 import curses
 import tweepy
 
 import globalVars
 import Packet_Tweet
+
 
 
 def arglebarg(command_args):
@@ -16,6 +19,7 @@ def arglebarg(command_args):
 
     """
     globalVars.screen = curses.initscr()
+
     # Get time line with 'n' number of tweets
     if command_args.tweetsNum:
 
@@ -119,6 +123,7 @@ def arglebarg(command_args):
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             Packet_Tweet.printFriends(command_args.numFriends[0])
         except SystemExit:
+            curses.endwin()
             raise
         except KeyboardInterrupt:
             curses.endwin()

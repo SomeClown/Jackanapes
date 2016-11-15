@@ -1,5 +1,7 @@
 #!/usr/local/bin/python3
 
+__author__ = 'SomeClown'
+
 import argparse
 import helpText
 import sys

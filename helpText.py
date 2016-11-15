@@ -1,6 +1,8 @@
 #!/usr/local/bin/python3
 # coding=utf-8
 
+__author__ = 'SomeClown'
+
 def helpText():
 
     h = """\n usage: [program name] [options]
