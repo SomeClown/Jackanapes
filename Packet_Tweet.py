@@ -331,18 +331,20 @@ class Streamer(tweepy.StreamListener):
         globalVars.screen.nodelay(1)
         c = globalVars.screen.getch()
         # TODO: Pull status.text into named str, regex for @handle and #hashtag
-        try:
-            globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
-            globalVars.screen.addstr(str(': ' + status.text + '\n'))
-            globalVars.screen.refresh()  # Refresh screen now that strings added
-            if c == ord('q'):
-                Cleanup(0)
+        #try:
+        globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
+        globalVars.screen.addstr(str(': ' + status.text + '\n'))
+        globalVars.screen.refresh()  # Refresh screen now that strings added
+        if c == ord('q'):
+            Cleanup(0)
+        """
         except curses.error:
             Cleanup(1)
         except BaseException as e:
             Cleanup(1)
             print('failed on_status, ', str(e))
             time.sleep(5)
+        """
 
 
         """
@@ -406,10 +408,10 @@ def getStreamSearch(searchHash):
         terenStream.filter(track=[str1])
     except curses.error:
         Cleanup(1)
-    except BaseException as e:
-        Cleanup(1)
-        print('failed on_status, ', str(e))
-        time.sleep(5)
+    #except BaseException as e:
+    #    Cleanup(1)
+    #    print('failed on_status, ', str(e))
+    #    time.sleep(5)
 
 
 @initialAuth

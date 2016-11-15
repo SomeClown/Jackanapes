@@ -58,8 +58,9 @@ def argumentsParsing():
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
     if len(sys.argv) == 1:
+        print(helpText.helpText())
         #parser.print_help()
-        sys.exit(1)
+        sys.exit(0)
 
     else:
         my_command_args = parser.parse_args()

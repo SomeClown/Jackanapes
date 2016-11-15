@@ -49,4 +49,4 @@ def helpText():
     traffic ?                               containing “traffic” and asking a question.
 
     """
-    print(h)
+    return h
