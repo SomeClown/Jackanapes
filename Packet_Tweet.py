@@ -430,9 +430,9 @@ def directSend(user, msg):
     elif nameResult is None:
         print('Incorrect username format (must include @)')
     else:
-        directTweet = globalVars.api.send_direct_message(screen_name=user, text=msg)
-        directTweet()
-
+        globalVars.api.send_direct_message(screen_name=user, text=msg)
+        print('\nMessage "{}" sent to {} successfully\n'.format(msg, user))
+        Cleanup(0)
     return None
 
 
@@ -446,7 +446,7 @@ def statusUpdate(text):
     if len(text) >= 140:
         print('Tweets must be 140 characters or less')
     else:
-        status = globalVars.api.update_status(status=text)
-        status()
-
+        globalVars.api.update_status(status=text)
+        print('\nStatus "{}" updated successfully\n'.format(text))
+        Cleanup(0)
     return None
