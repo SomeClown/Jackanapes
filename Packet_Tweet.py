@@ -374,7 +374,7 @@ class Streamer(tweepy.StreamListener):
 
 
 @initialAuth
-def getStream():
+def getStream() -> object:
     """
 
     """
