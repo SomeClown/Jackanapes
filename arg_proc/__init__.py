@@ -8,6 +8,14 @@ import tweepy
 import globalVars
 import Packet_Tweet
 
+"""
+
+All of the logic for the program goes here. pq.py calls pq_args which is where we set up
+the parser. The parser then passes back to this file the options selected, where the appropriate
+stanza is executed. The execution logic takes place in Packet_Tweet, where each function is also
+wrapped with the authorization function.
+
+"""
 
 
 def arglebarg(command_args):
@@ -217,5 +225,4 @@ def arglebarg(command_args):
     else:
         return
 
-    #return(command_args)
-
+        # return(command_args)
