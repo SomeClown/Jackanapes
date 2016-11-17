@@ -3,8 +3,13 @@
 
 __author__ = 'SomeClown'
 
-def helpText():
 
+def help_text() -> object:
+
+    """
+
+    :return:
+    """
     h = """\n usage: [program name] [options]
 
     optional arguments:

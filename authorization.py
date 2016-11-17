@@ -23,11 +23,11 @@ def initialAuth(original: object) -> object:
         # auth.set_access_token() method
         try:
             home = os.path.expanduser("~")
-            configFile = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
-            with open(configFile, 'r') as inFile:
-                accessToken = inFile.readline().strip()
-                accessTokenSecret = inFile.readline().strip()
-                globalVars.auth.set_access_token(accessToken, accessTokenSecret)
+            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
+            with open(config_file, 'r') as inFile:
+                access_token = inFile.readline().strip()
+                access_token_secret = inFile.readline().strip()
+                globalVars.auth.set_access_token(access_token, access_token_secret)
 
         # If the file doesn't exist, notify user then move through granting access token process
         except IOError:
@@ -40,31 +40,34 @@ def initialAuth(original: object) -> object:
                 print('and authorize this app. Return here with the pin code you receive in order to finish')
                 print('authorizing this app to access your account as specified.')
                 import webbrowser
+                assert isinstance(redirect_url, object)
                 webbrowser.open_new_tab(redirect_url)
-                verifyPin = input('Pin Code: ')
-                print(verifyPin)
+                verify_pin = input('Pin Code: ')
+                assert isinstance(verify_pin, object)
+                print(verify_pin)
                 try:
-                    globalVars.auth.get_access_token(verifyPin)
+                    globalVars.auth.get_access_token(verify_pin)
                 except tweepy.TweepError:
                     print('Error! Failed to get access token, or incorrect token was entered.')
-                    return (1)
+                    return 1
 
-                accessToken = globalVars.auth.access_token
-                accessTokenSecret = globalVars.auth.access_token_secret
+                access_token = globalVars.auth.access_token
+                access_token_secret = globalVars.auth.access_token_secret
 
                 # Write all of this good authentication stuff to a file
                 # so we don't have to do it everytime we run the program
-                ifconfigPath = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
+                home = ''
+                ifconfig_path = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
                 if not os.path.exists(home + '/.packetqueue/'):
                     os.mkdir(home + '/.packetqueue/')
                     if not os.path.exists(home + '/.packetqueue/' + str(globalVars.user.screen_name)):
                         os.mkdir(home + '/.packetqueue/' + str(globalVars.user.screen_name))
 
-                ifconfigFile = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
-                print(ifconfigFile)
-                with open(ifconfigFile, 'w+') as outFile:
-                    outFile.write(accessToken + '\n')  # function as a better way to store
-                    outFile.write(accessTokenSecret + '\n')  # the data
+                if_config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
+                print(if_config_file)
+                with open(if_config_file, 'w+') as outFile:
+                    outFile.write(access_token + '\n')  # function as a better way to store
+                    outFile.write(access_token_secret + '\n')  # the data
 
 
             # Something is so horribly borked we're just going to say fuck it
