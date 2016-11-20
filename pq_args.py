@@ -55,6 +55,8 @@ def argumentsParsing():
 
     parser.add_argument('-V', '--version', action='version', version=prog_version, help=argparse.SUPPRESS)
 
+    parser.add_argument('--f_file', action='store_true', dest='f_file', help=argparse.SUPPRESS)
+
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
     if len(sys.argv) == 1:

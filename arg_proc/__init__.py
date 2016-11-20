@@ -224,6 +224,15 @@ def arglebarg(command_args):
             curses.endwin()
             raise
 
+    elif command_args.f_file:
+        user = globalVars.user
+        try:
+            Packet_Tweet.savefriends(user)
+        except SystemExit:
+            raise
+        except KeyboardInterrupt:
+            raise
+
     else:
         return
 
