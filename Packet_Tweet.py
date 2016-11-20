@@ -8,7 +8,6 @@ import curses.textpad
 import json
 import os
 import re
-import time
 import globalVars
 import sys
 
@@ -48,7 +47,7 @@ class WriteSomeCurses(object):
 
 
 @initialAuth
-def printFriends(number: object) -> object:
+def printfriends(number: object) -> object:
     """
 
     :rtype: object
@@ -84,24 +83,31 @@ def printFriends(number: object) -> object:
 
 
 @initialAuth
-def savefriends(screen_name: object) -> object:
+def savefollowers(screen_name: object) -> object:
     """
     save friends list to a file for later use
 
     :param screen_name:
     :return:
     """
-    tweepy.Cursor(globalVars.user.friends(screen_name=screen_name, count=200, cursor=0))
-
-    with open('.filename', 'w') as f:
-        for friend in tweepy.Cursor(globalVars.user.friends).items():
-            f.write(friend)
-            print(friend)
-
-
+    myfollowers = []
+    followers_count = globalVars.user.followers_count
+    try:
+        for followers in tweepy.Cursor(globalVars.api.followers, screen_name=screen_name, count=1, cursor=100).pages():
+            myfollowers.append(followers)
+            print(myfollowers)
+        with open('.followers', 'w') as f:
+            f.write('Total Followers: ' + str(followers_count))
+            for item in myfollowers:
+                f.write(str('\n') + item)
+                print(str('\n') + item)
+    except tweepy.RateLimitError:
+        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+    except BaseException as e:
+        print(e)
 
 @initialAuth
-def printTimeline(number):
+def printtimeline(number):
     """
     print user's timeline
 
@@ -132,7 +138,7 @@ def printTimeline(number):
 
 
 @initialAuth
-def printMentions(number):
+def printmentions(number):
     """
     print user's mentions
 
@@ -162,7 +168,7 @@ def printMentions(number):
 
 
 @initialAuth
-def printRetweets(number):
+def printretweets(number):
     # Print user's tweets that others have retweeted
     """
 
@@ -196,7 +202,7 @@ def printRetweets(number):
 
 
 @initialAuth
-def printMyInfo():
+def print_my_info():
     # Print information about me
     """
 
@@ -258,7 +264,7 @@ def printMyInfo():
 
 
 @initialAuth
-def printNotMe(data):
+def print_not_me(data):
     # Print information on another user
     """
 
@@ -319,7 +325,7 @@ def printNotMe(data):
 
 
 @initialAuth
-def termSearch(term):
+def termsearch(term):
     """
 
     :param term:
@@ -413,7 +419,7 @@ class Streamer(tweepy.StreamListener):
 
 
 @initialAuth
-def getStream() -> object:
+def get_stream() -> object:
     """
 
     """
@@ -422,7 +428,7 @@ def getStream() -> object:
 
 
 @initialAuth
-def getFollowStream(user):
+def get_follow_stream(user):
     """
 
     :param user:
@@ -436,15 +442,15 @@ def getFollowStream(user):
 
 
 @initialAuth
-def getStreamSearch(searchHash):
+def get_stream_search(searchHash):
     """
 
     :param searchHash:
     """
-    terenStream = tweepy.Stream(globalVars.auth, Streamer())
+    teren_stream = tweepy.Stream(globalVars.auth, Streamer())
     str1 = ''.join(searchHash)
     try:
-        terenStream.filter(track=[str1])
+        teren_stream.filter(track=[str1])
     except curses.error:
         Cleanup(1)
     #except BaseException as e:
@@ -454,29 +460,28 @@ def getStreamSearch(searchHash):
 
 
 @initialAuth
-def directSend(user, msg):
+def direct_send(user, msg):
     """
 
     :param user:
     :param msg:
     :return:
     """
-    nameCheck = re.compile(r'(@)+')
-    nameResult = nameCheck.search(user)
+    name_check = re.compile(r'(@)+')
+    name_result = name_check.search(user)
 
     if len(msg) >= 140:
         print('Tweets must be 140 characters or less')
-    elif nameResult is None:
+    elif name_result is None:
         print('Incorrect username format (must include @)')
     else:
         globalVars.api.send_direct_message(screen_name=user, text=msg)
         print('\nMessage "{}" sent to {} successfully\n'.format(msg, user))
-        Cleanup(0)
     return None
 
 
 @initialAuth
-def statusUpdate(text):
+def status_update(text):
     """
 
     :param text:
@@ -487,5 +492,4 @@ def statusUpdate(text):
     else:
         globalVars.api.update_status(status=text)
         print('\nStatus "{}" updated successfully\n'.format(text))
-        Cleanup(0)
     return None

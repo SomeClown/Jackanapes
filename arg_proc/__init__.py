@@ -4,7 +4,6 @@ __author__ = 'SomeClown'
 
 import curses
 import tweepy
-
 import globalVars
 import Packet_Tweet
 
@@ -28,11 +27,19 @@ def arglebarg(command_args):
     :rtype: object
 
     """
-    globalVars.screen = curses.initscr()
+    if command_args.followers:
+        user = '@someclown'
+        try:
+            Packet_Tweet.savefollowers(user)
+        except SystemExit:
+            raise
+        except KeyboardInterrupt:
+            raise
+
 
     # Get time line with 'n' number of tweets
-    if command_args.tweets_num:
-
+    elif command_args.tweets_num:
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -51,7 +58,7 @@ def arglebarg(command_args):
 
     # Get mentions with 'n' number of tweets
     elif command_args.userMentions:
-
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -71,7 +78,7 @@ def arglebarg(command_args):
     # Start stream on <@username>
     # If 'all' is put in place of username, stream user's home timeline
     elif command_args.streamUserSearch:
-
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -83,10 +90,10 @@ def arglebarg(command_args):
             if 'all' in command_args.streamUserSearch:
                 Packet_Tweet.get_stream()
             else:
-                screenName = command_args.streamUserSearch[0]
-                getUser = globalVars.api.get_user(screenName)
-                userID = getUser.id
-                Packet_Tweet.get_follow_stream(userID)
+                screen_name = command_args.streamUserSearch[0]
+                get_user = globalVars.api.get_user(screen_name)
+                user_id = get_user.id
+                Packet_Tweet.get_follow_stream(user_id)
         except tweepy.TweepError as e:
             curses.endwin()
             print(e.response)  # This works
@@ -99,7 +106,7 @@ def arglebarg(command_args):
 
     # Start stream using <search term>
     elif command_args.search:
-
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -122,7 +129,7 @@ def arglebarg(command_args):
 
     # Print <n> number of friends to screen, where <n> is less than Titter max limit
     elif command_args.numFriends:
-
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -153,7 +160,7 @@ def arglebarg(command_args):
         Packet_Tweet.status_update(msg_status_update)
 
     elif command_args.myInfo:
-
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
@@ -174,6 +181,7 @@ def arglebarg(command_args):
             raise
 
     elif command_args.notMe:
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()
@@ -191,6 +199,7 @@ def arglebarg(command_args):
             raise
 
     elif command_args.retweets:
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()
@@ -208,6 +217,7 @@ def arglebarg(command_args):
             raise
 
     elif command_args.term:
+        globalVars.screen = curses.initscr()
         try:
             globalVars.screen.scrollok(True)
             curses.noecho()
@@ -224,14 +234,6 @@ def arglebarg(command_args):
             curses.endwin()
             raise
 
-    elif command_args.f_file:
-        user = globalVars.user
-        try:
-            Packet_Tweet.savefriends(user)
-        except SystemExit:
-            raise
-        except KeyboardInterrupt:
-            raise
 
     else:
         return
