@@ -24,38 +24,41 @@ def argumentsParsing():
     parser.add_argument('-t', '--tweets', type=int, action='store', nargs=1, dest="tweets_num", metavar='',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-s', '--stream', action='store', type=str, nargs=1, dest='streamUserSearch', metavar='',
+    parser.add_argument('-s', action='store', type=str, nargs=1, dest='streamUserSearch', metavar='',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-e', '--search', action='store', type=str, nargs='*', dest='search', metavar='',
+    parser.add_argument('-e', action='store', type=str, nargs='*', dest='search', metavar='',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-f', '--friends', action="store", type=int, nargs=1, dest='numFriends', metavar='',
+    parser.add_argument('-f', action="store", type=int, nargs=1, dest='numFriends', metavar='',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-d', '--direct', nargs=2, action="store", type=str, metavar='', dest='directMessage',
+    parser.add_argument('-d', nargs=2, action="store", type=str, metavar='', dest='directMessage',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-S', '--status', nargs=1, action="store", type=str, metavar='', dest='status_update',
+    parser.add_argument('-S', nargs=1, action="store", type=str, metavar='', dest='status_update',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-m', '--mentions', type=int, nargs=1, action='store', metavar='', dest='userMentions',
+    parser.add_argument('-m', type=int, nargs=1, action='store', metavar='', dest='userMentions',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-M', '--me', action='store_true', dest='myInfo', help=argparse.SUPPRESS)
+    parser.add_argument('-M', action='store_true', dest='myInfo', help=argparse.SUPPRESS)
 
-    parser.add_argument('-n', '--notme', metavar='', action='store', dest='notMe', nargs=1, type=str,
+    parser.add_argument('-n', metavar='', action='store', dest='notMe', nargs=1, type=str,
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-r', '--retweets', metavar='', action='store', dest='retweets', nargs=1, type=int,
+    parser.add_argument('-r', metavar='', action='store', dest='retweets', nargs=1, type=int,
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-T', '--term', action='store', type=str, nargs=2, dest='term', metavar='',
+    parser.add_argument('-T', action='store', type=str, nargs=2, dest='term', metavar='',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('-V', '--version', action='version', version=prog_version, help=argparse.SUPPRESS)
+    parser.add_argument('--version', action='version', version=prog_version, help=argparse.SUPPRESS)
 
     parser.add_argument('--followers', metavar='', action='store', nargs=1, type=str, dest='followers',
+                        help=argparse.SUPPRESS)
+
+    parser.add_argument('--friends', metavar='', action='store', nargs=1, type=str, dest='friends',
                         help=argparse.SUPPRESS)
 
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)

@@ -85,7 +85,7 @@ def printfriends(number: object) -> object:
 @initialAuth
 def savefollowers(my_screen_name: object) -> object:
     """
-    save friends list to a file for later use
+    save followers list to a file for later use
 
     :param screen_name:
     :return:
@@ -109,6 +109,36 @@ def savefollowers(my_screen_name: object) -> object:
     except BaseException as e:
         print(e)
     return None
+
+
+@initialAuth
+def savefriends(my_screen_name: object) -> object:
+    """
+    save friends list to a file for later use
+
+    :param screen_name:
+    :return:
+    """
+    friends_count = globalVars.user.friends_count
+    myfriends = []
+    try:
+        cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
+                               wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
+                               skip_status=True, include_user_entities=False, count=200)
+        print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
+        print('\n Getting results and writing file now.')
+        print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+        with open('.friends', 'w') as f:
+            for page in cursor.pages():
+                for item in page:
+                    myfriends.append(item.id)
+                    f.write('\n'.join(map(str, myfriends)))
+    except tweepy.RateLimitError:
+        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+    except BaseException as e:
+        print(e)
+    return None
+
 
 @initialAuth
 def printtimeline(number):

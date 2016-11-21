@@ -15,18 +15,20 @@ def help_text() -> object:
     optional arguments:
 
         -h, --help      show this help message and exit
-        -t, --tweets    Get 'n' number of recent tweets from main feed <num>
-        -s, --stream    Stream full user feed, or feed mentioning <user>
-        -e, --search    stream the global twitter feed by search term <search term>
-        -f, --friends   print list of friends <num>
-        -d, --direct	send a direct message <@user> <text>
-        -S, --status    update twitter status <text>
-        -m, --mentions  get mentions from logged in user's timeline <num>
-        -M, --me        Get information about me
-        -n, --notme     Get information about someone other than me <@user>
-        -r, --retweets  Get retweets of me by others <num>
-        -T, --term	search logged in user's timeline for <phrase> <num>
-        -V, --version   show program's version number and exit
+            --friends   Get a list of all friends of specified user and dump to file
+            --followers Get a list of all followers of specified user and dump to file
+        -t              Get 'n' number of recent tweets from main feed <num>
+        -s              Stream full user feed, or feed mentioning <user>
+        -e              stream the global twitter feed by search term <search term>
+        -f              print list of friends <num>
+        -d              send a direct message <@user> <text>
+        -S              update twitter status <text>
+        -m              get mentions from logged in user's timeline <num>
+        -M              Get information about me
+        -n              Get information about someone other than me <@user>
+        -r              Get retweets of me by others <num>
+        -T              search logged in user's timeline for <phrase> <num>
+            --version   show program's version number and exit
         -v, --verbose   verbose flag
 
     Operator								Finds tweets…
