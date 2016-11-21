@@ -93,14 +93,13 @@ def savefollowers(screen_name: object) -> object:
     myfollowers = []
     followers_count = globalVars.user.followers_count
     try:
-        for followers in tweepy.Cursor(globalVars.api.followers, screen_name=screen_name, count=1, cursor=100).pages():
-            myfollowers.append(followers)
-            print(myfollowers)
-        with open('.followers', 'w') as f:
-            f.write('Total Followers: ' + str(followers_count))
-            for item in myfollowers:
-                f.write(str('\n') + item)
-                print(str('\n') + item)
+        for followers_of_me in tweepy.Cursor(globalVars.api.followers, screen_name=screen_name, count=1, cursor=100).pages():
+            myfollowers.append(followers_of_me)
+            with open('.followers', 'w') as f:
+                f.write('Total Followers: ' + str(followers_count))
+                for item in myfollowers:
+                    f.write(str(item))
+                    print(str(item))
     except tweepy.RateLimitError:
         print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
     except BaseException as e:
