@@ -28,9 +28,9 @@ def arglebarg(command_args):
 
     """
     if command_args.followers:
-        user = '@someclown'
+        #user = '@someclown'
         try:
-            Packet_Tweet.savefollowers(user)
+            Packet_Tweet.savefollowers(command_args.followers[0])
         except SystemExit:
             raise
         except KeyboardInterrupt:

@@ -55,7 +55,8 @@ def argumentsParsing():
 
     parser.add_argument('-V', '--version', action='version', version=prog_version, help=argparse.SUPPRESS)
 
-    parser.add_argument('--followers', action='store_true', dest='followers', help=argparse.SUPPRESS)
+    parser.add_argument('--followers', metavar='', action='store', nargs=1, type=str, dest='followers',
+                        help=argparse.SUPPRESS)
 
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
 
