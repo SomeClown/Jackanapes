@@ -92,33 +92,23 @@ def savefollowers(my_screen_name: object) -> object:
     """
     followers_count = globalVars.user.followers_count
     myfollowers = []
-
-    cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
-                           wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
-                           skip_status=True, include_user_entities=False, count=200)
-    print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-    print('\n Getting results and writing file now.')
-    print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
-    with open('.followers', 'w') as f:
-        for page in cursor.pages():
-            for item in page:
-                myfollowers.append(item)
-                f.write('\n'.join(map(str, myfollowers)))
-    """
-    with open('.followers', 'w') as f:
-        f.write('Total Followers: ' + str(followers_count))
-        try:
+    try:
+        cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
+                               wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
+                               skip_status=True, include_user_entities=False, count=200)
+        print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
+        print('\n Getting results and writing file now.')
+        print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+        with open('.followers', 'w') as f:
             for page in cursor.pages():
-                print(page)
                 for item in page:
-                        #myfollowers.append(item.user_id)
-                        print(item)
-            #f.write('\n'.join(map(str, myfollowers)))
-        except tweepy.RateLimitError:
-            print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
-        except BaseException as e:
-            print(e)
-    """
+                    myfollowers.append(item)
+                    f.write('\n'.join(map(str, myfollowers)))
+    except tweepy.RateLimitError:
+        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+    except BaseException as e:
+        print(e)
+    return None
 
 @initialAuth
 def printtimeline(number):
