@@ -168,7 +168,7 @@ def printmentions(number):
 
 
 @initialAuth
-def printretweets(number):
+def print_retweets(number):
     # Print user's tweets that others have retweeted
     """
 
