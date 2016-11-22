@@ -10,6 +10,7 @@ import os
 import re
 import globalVars
 import sys
+import itertools
 
 from authorization import initialAuth
 
@@ -103,7 +104,7 @@ def savefollowers(my_screen_name: object) -> object:
             for page in cursor.pages():
                 for item in page:
                     myfollowers.append(item)
-                    f.write('\n'.join(map(str, myfollowers)))
+            f.write('\n'.join(map(str, myfollowers)))
     except tweepy.RateLimitError:
         print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
     except BaseException as e:
@@ -121,6 +122,7 @@ def savefriends(my_screen_name: object) -> object:
     """
     friends_count = globalVars.user.friends_count
     myfriends = []
+    index = 0
     try:
         cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
                                wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -132,13 +134,43 @@ def savefriends(my_screen_name: object) -> object:
             for page in cursor.pages():
                 for item in page:
                     myfriends.append(item.id)
-                    f.write('\n'.join(map(str, myfriends)))
+            f.write('\n'.join(map(str, myfriends)))
+            print(len(myfriends))
+
     except tweepy.RateLimitError:
         print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
     except BaseException as e:
         print(e)
     return None
 
+
+@initialAuth
+def comparefollowers(foo):
+
+    friendslist = []
+    followerlist = []
+    baddieslist = []
+    index = 0
+
+    try:
+
+        with open('.friends', 'r') as friends, open('.followers', 'r') as followers:
+            for i in followers:
+                followerlist.append(i)
+            for j in friends:
+                friendslist.append(j)
+        with open('.baddies', 'w') as baddies:
+            for item in friendslist:
+                if item not in followerlist:
+                    baddieslist.append(item)
+                    print(index, item)
+                    index += 1
+            baddies.write('\n'.join(map(str, baddieslist)))
+    except tweepy.RateLimitError:
+        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+    except BaseException as e:
+        print(e)
+    return None
 
 @initialAuth
 def printtimeline(number):

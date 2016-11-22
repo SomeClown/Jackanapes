@@ -17,6 +17,7 @@ def help_text() -> object:
         -h, --help      show this help message and exit
             --friends   Get a list of all friends of specified user and dump to file
             --followers Get a list of all followers of specified user and dump to file
+            --compare   Compare friends and followers to see who you follow and are not followed back
         -t              Get 'n' number of recent tweets from main feed <num>
         -s              Stream full user feed, or feed mentioning <user>
         -e              stream the global twitter feed by search term <search term>

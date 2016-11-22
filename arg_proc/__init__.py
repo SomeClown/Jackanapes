@@ -45,6 +45,13 @@ def arglebarg(command_args):
         except KeyboardInterrupt:
             raise
 
+    if command_args.baddies:
+        try:
+            Packet_Tweet.comparefollowers(command_args.baddies[0])
+        except SystemExit:
+            raise
+        except KeyboardInterrupt:
+            raise
 
     # Get time line with 'n' number of tweets
     elif command_args.tweets_num:
