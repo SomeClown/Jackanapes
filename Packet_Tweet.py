@@ -100,7 +100,9 @@ def savefollowers(my_screen_name: object) -> object:
         print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
         print('\n Getting results and writing file now.')
         print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
-        with open('.followers', 'w') as f:
+        home = os.path.expanduser("~")
+        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+        with open(config_file, 'w') as f:
             for page in cursor.pages():
                 for item in page:
                     myfollowers.append(item)
@@ -130,7 +132,9 @@ def savefriends(my_screen_name: object) -> object:
         print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
         print('\n Getting results and writing file now.')
         print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 results per 15 minutes.')
-        with open('.friends', 'w') as f:
+        home = os.path.expanduser("~")
+        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
+        with open(config_file, 'w') as f:
             for page in cursor.pages():
                 for item in page:
                     myfriends.append(item.id)
@@ -153,19 +157,22 @@ def comparefollowers(foo):
     index = 0
 
     try:
-
-        with open('.friends', 'r') as friends, open('.followers', 'r') as followers:
+        home = os.path.expanduser("~")
+        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.baddies')
+        friends_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
+        followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+        with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
             for i in followers:
                 followerlist.append(i)
             for j in friends:
                 friendslist.append(j)
-        with open('.baddies', 'w') as baddies:
+        with open(config_file, 'w') as baddies:
             for item in friendslist:
                 if item not in followerlist:
                     baddieslist.append(item)
                     print(index, item)
                     index += 1
-            baddies.write('\n'.join(map(str, baddieslist)))
+            baddies.write(''.join(map(str, baddieslist)))
     except tweepy.RateLimitError:
         print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
     except BaseException as e:
