@@ -6,8 +6,9 @@ import os
 import derp
 import globalVars
 import tweepy
+from log_wrapper import logging_wrapper
 
-
+@logging_wrapper
 def initialAuth(original: object) -> object:
     """
     	:type original: object
