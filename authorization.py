@@ -6,6 +6,7 @@ import os
 import derp
 import globalVars
 import tweepy
+from functools import wraps
 from log_wrapper import logging_wrapper
 
 @logging_wrapper
@@ -14,7 +15,7 @@ def initialAuth(original: object) -> object:
     	:type original: object
     	:rtype: object
     	"""
-
+    @wraps(original)
     def wrapper(*args, **kwargs):
         globalVars.auth = derp.hokum()
         globalVars.api = tweepy.API(globalVars.auth)
