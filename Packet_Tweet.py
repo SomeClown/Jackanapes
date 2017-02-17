@@ -566,3 +566,10 @@ def status_update(text):
         globalVars.api.update_status(status=text)
         print('\nStatus "{}" updated successfully\n'.format(text))
     return None
+
+def main():
+    pass
+if __name__ == '__main__':
+    main()
+else:
+    pass

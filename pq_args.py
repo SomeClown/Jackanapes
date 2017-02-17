@@ -76,3 +76,10 @@ def argumentsParsing():
 
     assert isinstance(my_command_args, object)
     return my_command_args
+
+def main():
+    pass
+if __name__ == '__main__':
+    pass
+else:
+    pass

@@ -255,3 +255,10 @@ def arglebarg(command_args):
         return
 
         # return(command_args)
+
+def main():
+    pass
+if __name__ == '__main__':
+    pass
+else:
+    pass

@@ -80,3 +80,10 @@ def initialAuth(original: object) -> object:
 
     assert isinstance(wrapper, object)
     return wrapper
+
+def main():
+    pass
+if __name__ == '__main__':
+    main()
+else:
+    pass
