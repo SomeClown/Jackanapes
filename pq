@@ -21,6 +21,5 @@ def main() -> object:
 
 if __name__ == "__main__":
     main()
-
 else:
-    print('Loaded as module')
+    pass

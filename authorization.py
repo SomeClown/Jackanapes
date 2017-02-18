@@ -58,6 +58,7 @@ def initialAuth(original: object) -> object:
 
                 # Write all of this good authentication stuff to a file
                 # so we don't have to do it everytime we run the program
+                #TODO: Change this to use os.mkdirs() so this is more concise
                 home = ''
                 ifconfig_path = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
                 if not os.path.exists(home + '/.packetqueue/'):

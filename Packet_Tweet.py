@@ -45,7 +45,9 @@ class WriteSomeCurses(object):
 
         :return:
         """
-
+@initialAuth
+def test():
+    print("Well, fuck!")
 
 @initialAuth
 def printfriends(number: object) -> object:
