@@ -3,8 +3,8 @@
 import tweepy
 
 def hokum():
-	auth = tweepy.OAuthHandler('yf3KFfusQ3JiKsNKJI9cFjjgd', 'yTE2UBsXqgWB8kzTFsyswXVBNeRHJ3Ti0b3kxX1fEFsq9LfhLM')
-	return auth
+    auth = tweepy.OAuthHandler('yf3KFfusQ3JiKsNKJI9cFjjgd', 'yTE2UBsXqgWB8kzTFsyswXVBNeRHJ3Ti0b3kxX1fEFsq9LfhLM')
+    return auth
 
 def main():
     pass

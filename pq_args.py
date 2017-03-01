@@ -68,7 +68,6 @@ def argumentsParsing():
 
     if len(sys.argv) == 1:
         print(helpText.help_text())
-        #parser.print_help()
         sys.exit(0)
 
     else:
