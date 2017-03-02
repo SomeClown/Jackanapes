@@ -20,12 +20,13 @@ def initialAuth(original: object) -> object:
         globalVars.auth = derp.hokum()
         globalVars.api = tweepy.API(globalVars.auth)
         globalVars.user = globalVars.api.get_user('SomeClown')
+        home = os.path.expanduser("~")
+        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
+
         # Check to see if config file with credentials exists
         # if it does, load our keys from the file and pass them to the
         # auth.set_access_token() method
         try:
-            home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
             with open(config_file, 'r') as inFile:
                 access_token = inFile.readline().strip()
                 access_token_secret = inFile.readline().strip()

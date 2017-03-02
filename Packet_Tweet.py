@@ -10,7 +10,6 @@ import os
 import re
 import globalVars
 import sys
-import itertools
 
 from authorization import initialAuth
 
@@ -45,9 +44,64 @@ class WriteSomeCurses(object):
 
         :return:
         """
+
+
+class Streamer(tweepy.StreamListener):
+    def on_status(self, status):
+
+        """
+
+        :param status:
+        """
+        globalVars.screen.nodelay(1)
+        c = globalVars.screen.getch()
+        # TODO: Pull status.text into named str, regex for @handle and #hashtag
+        #try:
+        globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
+        globalVars.screen.addstr(str(': ' + status.text + '\n'))
+        globalVars.screen.refresh()  # Refresh screen now that strings added
+        if c == ord('q'):
+            Cleanup(0)
+        """
+        except curses.error:
+            Cleanup(1)
+        except BaseException as e:
+            Cleanup(1)
+            print('failed on_status, ', str(e))
+            time.sleep(5)
+        """
+
+
+        """
+    @staticmethod
+    def on__error(status):
+
+
+        :param status:
+
+        Cleanup(1)
+        print(status)
+        """
+
+    """
+    # This is consuming everything
+    # including the session opening friends list
+    def on_data(self, data):
+        #convert tweepy object to raw json/dictionary
+        json_data = json.loads(data)
+
+        tweetText = json_data['friends']
+        print(tweetText)
+
+        #Pretty print this to the screen
+        print(json.dumps(json_data, indent=4, sort_keys=True))
+    """
+
+
 @initialAuth
 def test():
     print("Well, fuck!")
+
 
 @initialAuth
 def printfriends(number: object) -> object:
@@ -81,8 +135,6 @@ def printfriends(number: object) -> object:
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-
-    return None
 
 
 @initialAuth
@@ -181,6 +233,7 @@ def comparefollowers(foo):
         print(e)
     return None
 
+
 @initialAuth
 def printtimeline(number):
     """
@@ -209,7 +262,6 @@ def printtimeline(number):
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 @initialAuth
@@ -239,7 +291,6 @@ def printmentions(number):
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 @initialAuth
@@ -273,7 +324,6 @@ def print_retweets(number):
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 @initialAuth
@@ -335,7 +385,6 @@ def print_my_info():
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 @initialAuth
@@ -396,7 +445,6 @@ def print_not_me(data):
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 @initialAuth
@@ -423,7 +471,6 @@ def termsearch(term):
             key = globalVars.screen.getch()
             if key == ord('q'):
                 Cleanup(0)
-    return None
 
 
 def Cleanup(exitCode: object) -> object:
@@ -439,58 +486,6 @@ def Cleanup(exitCode: object) -> object:
         sys.exit(exitCode)
     else:
         sys.exit(exitCode)
-
-
-class Streamer(tweepy.StreamListener):
-    def on_status(self, status):
-
-        """
-
-        :param status:
-        """
-        globalVars.screen.nodelay(1)
-        c = globalVars.screen.getch()
-        # TODO: Pull status.text into named str, regex for @handle and #hashtag
-        #try:
-        globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
-        globalVars.screen.addstr(str(': ' + status.text + '\n'))
-        globalVars.screen.refresh()  # Refresh screen now that strings added
-        if c == ord('q'):
-            Cleanup(0)
-        """
-        except curses.error:
-            Cleanup(1)
-        except BaseException as e:
-            Cleanup(1)
-            print('failed on_status, ', str(e))
-            time.sleep(5)
-        """
-
-
-        """
-    @staticmethod
-    def on__error(status):
-
-
-        :param status:
-
-        Cleanup(1)
-        print(status)
-        """
-
-    """
-    # This is consuming everything
-    # including the session opening friends list
-    def on_data(self, data):
-        #convert tweepy object to raw json/dictionary
-        json_data = json.loads(data)
-
-        tweetText = json_data['friends']
-        print(tweetText)
-
-        #Pretty print this to the screen
-        print(json.dumps(json_data, indent=4, sort_keys=True))
-    """
 
 
 @initialAuth
@@ -568,6 +563,7 @@ def status_update(text):
         globalVars.api.update_status(status=text)
         print('\nStatus "{}" updated successfully\n'.format(text))
     return None
+
 
 def main():
     pass
