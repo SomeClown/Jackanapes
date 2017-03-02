@@ -99,42 +99,42 @@ class Streamer(tweepy.StreamListener):
 
 
 @initialAuth
-def test():
-    print("Well, fuck!")
+class tweetArguments():
 
+    def __init__(self, number=0):
+        self.number = number
 
-@initialAuth
-def printfriends(number: object) -> object:
-    """
+    def printfriends(self, number: object) -> object:
+        """
 
-    :rtype: object
-    """
-    try:
-        globalVars.screen.nodelay(True)
-        globalVars.screen.addstr('\n')
-        globalVars.screen.addstr('-------------------------------------------------------' + '\n')
-        globalVars.screen.addstr(str(globalVars.user.screen_name) + '\n')
-        globalVars.screen.addstr('-------------------------------------------------------')
-        globalVars.screen.addstr('\n')
-        globalVars.screen.addstr('Friends Count: ' + str(globalVars.user.followers_count) + '\n')
-        if number == 0:
-            return
-        else:
-            for friend in globalVars.user.friends(count=number):
-                globalVars.screen.addstr('\t' + friend.screen_name + '\n')
-        globalVars.screen.addstr('\n')
-        globalVars.screen.addstr('-------------------------------------------------------')
-        globalVars.screen.addstr('\n')
-        globalVars.screen.refresh()  # Refresh screen now that strings added
-    except curses.error:
-        Cleanup(1)
+        :rtype: object
+        """
+        try:
+            globalVars.screen.nodelay(True)
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr('-------------------------------------------------------' + '\n')
+            globalVars.screen.addstr(str(globalVars.user.screen_name) + '\n')
+            globalVars.screen.addstr('-------------------------------------------------------')
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr('Friends Count: ' + str(globalVars.user.followers_count) + '\n')
+            if number == 0:
+                return
+            else:
+                for friend in globalVars.user.friends(count=number):
+                    globalVars.screen.addstr('\t' + friend.screen_name + '\n')
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr('-------------------------------------------------------')
+            globalVars.screen.addstr('\n')
+            globalVars.screen.refresh()  # Refresh screen now that strings added
+        except curses.error:
+            Cleanup(1)
 
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
 
 
 @initialAuth

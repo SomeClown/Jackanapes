@@ -152,7 +152,7 @@ def arglebarg(command_args):
     elif command_args.numFriends:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import printfriends
+            from Packet_Tweet import tweetArguments
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -160,7 +160,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            printfriends(command_args.numFriends[0])
+            foo = tweetArguments()
+            foo.printfriends(command_args.numFriends[0])
         except SystemExit:
             curses.endwin()
             raise
