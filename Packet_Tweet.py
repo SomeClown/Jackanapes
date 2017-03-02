@@ -10,22 +10,11 @@ import os
 import re
 import globalVars
 import sys
-
 from authorization import initialAuth
-
 from derp import *
 
 
-def _mkdir_recursive(self, path):
-    sub_path = os.path.dirname(path)
-    if not os.path.exists(sub_path):
-        self._mkdir_recursive(sub_path)
-        if not os.path.exists(path):
-            os.mkdir(path)
-
-
 class WriteSomeCurses(object):
-
     def __init__(self, stringstuff="nothing here"):
         self.stringstuff = stringstuff
 
@@ -62,49 +51,23 @@ class Streamer(tweepy.StreamListener):
         globalVars.screen.refresh()  # Refresh screen now that strings added
         if c == ord('q'):
             Cleanup(0)
-        """
-        except curses.error:
-            Cleanup(1)
-        except BaseException as e:
-            Cleanup(1)
-            print('failed on_status, ', str(e))
-            time.sleep(5)
-        """
-
-
-        """
-    @staticmethod
-    def on__error(status):
-
-
-        :param status:
-
-        Cleanup(1)
-        print(status)
-        """
-
-    """
-    # This is consuming everything
-    # including the session opening friends list
-    def on_data(self, data):
-        #convert tweepy object to raw json/dictionary
-        json_data = json.loads(data)
-
-        tweetText = json_data['friends']
-        print(tweetText)
-
-        #Pretty print this to the screen
-        print(json.dumps(json_data, indent=4, sort_keys=True))
-    """
 
 
 @initialAuth
-class tweetArguments():
+class TweetArguments:
 
     def __init__(self, number=0):
         self.number = number
 
-    def printfriends(self, number: object) -> object:
+    def _mkdir_recursive(self, path):
+        sub_path = os.path.dirname(path)
+        if not os.path.exists(sub_path):
+            self._mkdir_recursive(sub_path)
+            if not os.path.exists(path):
+                os.mkdir(path)
+
+    @staticmethod
+    def printfriends(number: object) -> object:
         """
 
         :rtype: object
@@ -136,70 +99,68 @@ class tweetArguments():
                 if key == ord('q'):
                     Cleanup(0)
 
+    @staticmethod
+    def save_followers(my_screen_name: object) -> object:
+        """
+        save followers list to a file for later use
 
-@initialAuth
-def savefollowers(my_screen_name: object) -> object:
-    """
-    save followers list to a file for later use
-
-    :param screen_name:
-    :return:
-    """
-    followers_count = globalVars.user.followers_count
-    myfollowers = []
-    try:
-        cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
-                               wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
-                               skip_status=True, include_user_entities=False, count=200)
-        print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-        print('\n Getting results and writing file now.')
-        print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
-        home = os.path.expanduser("~")
-        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
-        with open(config_file, 'w') as f:
-            for page in cursor.pages():
-                for item in page:
-                    myfollowers.append(item)
-            f.write('\n'.join(map(str, myfollowers)))
-    except tweepy.RateLimitError:
-        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
-    except BaseException as e:
-        print(e)
-    return None
+        :param my_screen_name:
+        :return:
+        """
+        followers_count = globalVars.user.followers_count
+        myfollowers = []
+        try:
+            cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
+                                   wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
+                                   skip_status=True, include_user_entities=False, count=200)
+            print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
+            print('\n Getting results and writing file now.')
+            print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+            home = os.path.expanduser("~")
+            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+            with open(config_file, 'w') as f:
+                for page in cursor.pages():
+                    for item in page:
+                        myfollowers.append(item)
+                f.write('\n'.join(map(str, myfollowers)))
+        except tweepy.RateLimitError:
+            print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+        except BaseException as e:
+            print(e)
+        return None
 
 
-@initialAuth
-def savefriends(my_screen_name: object) -> object:
-    """
-    save friends list to a file for later use
+    @staticmethod
+    def savefriends(my_screen_name: object) -> object:
+        """
+        save friends list to a file for later use
 
-    :param screen_name:
-    :return:
-    """
-    friends_count = globalVars.user.friends_count
-    myfriends = []
-    index = 0
-    try:
-        cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
-                               wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
-                               skip_status=True, include_user_entities=False, count=200)
-        print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
-        print('\n Getting results and writing file now.')
-        print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 results per 15 minutes.')
-        home = os.path.expanduser("~")
-        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
-        with open(config_file, 'w') as f:
-            for page in cursor.pages():
-                for item in page:
-                    myfriends.append(item.id)
-            f.write('\n'.join(map(str, myfriends)))
-            print(len(myfriends))
+        :param screen_name:
+        :return:
+        """
+        friends_count = globalVars.user.friends_count
+        myfriends = []
+        try:
+            cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
+                                   wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
+                                   skip_status=True, include_user_entities=False, count=200)
+            print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
+            print('\n Getting results and writing file now.')
+            print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+            home = os.path.expanduser("~")
+            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
+            with open(config_file, 'w') as f:
+                for page in cursor.pages():
+                    for item in page:
+                        myfriends.append(item.id)
+                f.write('\n'.join(map(str, myfriends)))
+                print(len(myfriends))
 
-    except tweepy.RateLimitError:
-        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
-    except BaseException as e:
-        print(e)
-    return None
+        except tweepy.RateLimitError:
+            print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+        except BaseException as e:
+            print(e)
+        return None
 
 
 @initialAuth
