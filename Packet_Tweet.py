@@ -129,7 +129,6 @@ class TweetArguments:
             print(e)
         return None
 
-
     @staticmethod
     def savefriends(my_screen_name: object) -> object:
         """
@@ -162,250 +161,244 @@ class TweetArguments:
             print(e)
         return None
 
+    @staticmethod
+    def comparefollowers(empty_foo):
 
-@initialAuth
-def comparefollowers(foo):
+        friendslist = []
+        followerlist = []
+        baddieslist = []
+        index = 0
 
-    friendslist = []
-    followerlist = []
-    baddieslist = []
-    index = 0
+        try:
+            home = os.path.expanduser("~")
+            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.baddies')
+            friends_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
+            followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+            with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
+                for i in followers:
+                    followerlist.append(i)
+                for j in friends:
+                    friendslist.append(j)
+            with open(config_file, 'w') as baddies:
+                for item in friendslist:
+                    if item not in followerlist:
+                        baddieslist.append(item)
+                        print(index, item)
+                        index += 1
+                baddies.write(''.join(map(str, baddieslist)))
+        except tweepy.RateLimitError:
+            print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
+        except BaseException as e:
+            print(e)
+        return None
 
-    try:
-        home = os.path.expanduser("~")
-        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.baddies')
-        friends_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
-        followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
-        with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
-            for i in followers:
-                followerlist.append(i)
-            for j in friends:
-                friendslist.append(j)
-        with open(config_file, 'w') as baddies:
-            for item in friendslist:
-                if item not in followerlist:
-                    baddieslist.append(item)
-                    print(index, item)
-                    index += 1
-            baddies.write(''.join(map(str, baddieslist)))
-    except tweepy.RateLimitError:
-        print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
-    except BaseException as e:
-        print(e)
-    return None
+    @staticmethod
+    def printtimeline(number):
+        """
+        print user's timeline
 
+        :param number:
+        :return:
+        """
+        public_tweets = globalVars.api.home_timeline(count=number)
+        try:
+            globalVars.screen.addstr('\n')
+            if number == 0:
+                return
+            else:
+                for tweet in public_tweets:
+                    globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
+                    globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
+                globalVars.screen.refresh()  # Refresh screen now that strings added
 
-@initialAuth
-def printtimeline(number):
-    """
-    print user's timeline
-
-    :param number:
-    :return:
-    """
-    public_tweets = globalVars.api.home_timeline(count=number)
-    try:
-        globalVars.screen.addstr('\n')
-        if number == 0:
-            return
-        else:
-            for tweet in public_tweets:
-                globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
-                globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
-            globalVars.screen.refresh()  # Refresh screen now that strings added
-
-    except curses.error:
-        Cleanup(1)
-
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
-
-
-@initialAuth
-def printmentions(number):
-    """
-    print user's mentions
-
-    :param number:
-    :return:
-    """
-    myMentions = globalVars.api.mentions_timeline(count=number)
-    try:
-        globalVars.screen.addstr('\n')
-        if number == 0:
-            return
-        else:
-            for mention in myMentions:
-                globalVars.screen.addstr(str(mention.user.name), curses.color_pair(1))
-                globalVars.screen.addstr(str(': ' + mention.text + '\n'))
-            globalVars.screen.refresh()
-    except curses.error:
-        Cleanup(1)
-
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
-
-
-@initialAuth
-def print_retweets(number):
-    # Print user's tweets that others have retweeted
-    """
-
-    :param number:
-    :return:
-    """
-    otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
-    try:
-        globalVars.screen.addstr('\n')
-        if number == 0:
+        except curses.error:
             Cleanup(1)
-            return
-        else:
-            for retweets in otherRetweets:
-                # idName = globalVars.api.get_user(retweets.id_str)
-                # globalVars.screen.addstr(str(idName.screen_name))
-                globalVars.screen.addstr(str(retweets.id_str), curses.color_pair(1))
-                globalVars.screen.addstr(str(': ' + retweets.text + '\n'))
+
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
+
+    @staticmethod
+    def printmentions(number):
+        """
+        print user's mentions
+
+        :param number:
+        :return:
+        """
+        myMentions = globalVars.api.mentions_timeline(count=number)
+        try:
+            globalVars.screen.addstr('\n')
+            if number == 0:
+                return
+            else:
+                for mention in myMentions:
+                    globalVars.screen.addstr(str(mention.user.name), curses.color_pair(1))
+                    globalVars.screen.addstr(str(': ' + mention.text + '\n'))
+                globalVars.screen.refresh()
+        except curses.error:
+            Cleanup(1)
+
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
+
+    @staticmethod
+    def print_retweets(number):
+        # Print user's tweets that others have retweeted
+        """
+
+        :param number:
+        :return:
+        """
+        otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
+        try:
+            globalVars.screen.addstr('\n')
+            if number == 0:
+                Cleanup(1)
+                return
+            else:
+                for retweets in otherRetweets:
+                    # idName = globalVars.api.get_user(retweets.id_str)
+                    # globalVars.screen.addstr(str(idName.screen_name))
+                    globalVars.screen.addstr(str(retweets.id_str), curses.color_pair(1))
+                    globalVars.screen.addstr(str(': ' + retweets.text + '\n'))
+                globalVars.screen.refresh()
+        except curses.error:
+            # import pdb; pdb.set_trace()
+            Cleanup(1)
+
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
+
+    @staticmethod
+    def print_my_info():
+        # Print information about me
+        """
+
+        :return:
+        """
+        myInfo = globalVars.api.me()
+        try:
+            # Format and print handle, username, and user ID
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr(str('@'), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.screen_name), curses.color_pair(1))
+            globalVars.screen.addstr(str(' (') + str(myInfo.name), curses.color_pair(2))
+            globalVars.screen.addstr(str('/') + str(myInfo.id_str), curses.color_pair(2))
+            globalVars.screen.addstr(str(')'))
+
+            # Format and print created date for user
+            globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.created_at), curses.color_pair(2))
+
+            # Format and print followers count
+            globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.followers_count), curses.color_pair(2))
+
+            # Format and print number of tweets
+            globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.statuses_count), curses.color_pair(2))
+
+            # Format and print user's reported location
+            globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.location), curses.color_pair(2))
+
+            # Format and print description from user profile
+            globalVars.screen.addstr('\n' + json.dumps(myInfo.description))
+            globalVars.screen.addstr('\n')
+
+            # Format and print user's URL, if present
+            globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.url))
+
+            # Format and print link to profile picture
+            globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(myInfo.profile_image_url_https))
+            globalVars.screen.addstr(str('\n'))
+
+            # Add line space and clean up
+            globalVars.screen.addstr('\n')
             globalVars.screen.refresh()
-    except curses.error:
-        # import pdb; pdb.set_trace()
-        Cleanup(1)
 
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
+        except curses.error:
+            Cleanup(1)
 
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
 
-@initialAuth
-def print_my_info():
-    # Print information about me
-    """
+    @staticmethod
+    def print_not_me(data):
+        # Print information on another user
+        """
 
-    :return:
-    """
-    myInfo = globalVars.api.me()
-    try:
-        # Format and print handle, username, and user ID
-        globalVars.screen.addstr('\n')
-        globalVars.screen.addstr(str('@'), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.screen_name), curses.color_pair(1))
-        globalVars.screen.addstr(str(' (') + str(myInfo.name), curses.color_pair(2))
-        globalVars.screen.addstr(str('/') + str(myInfo.id_str), curses.color_pair(2))
-        globalVars.screen.addstr(str(')'))
+        :param data:
+        :return:
+        """
+        notMe = globalVars.api.get_user(screen_name=data)
+        try:
 
-        # Format and print created date for user
-        globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.created_at), curses.color_pair(2))
+            # Format and print handle, username, and user ID
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr(str('@'), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.screen_name), curses.color_pair(1))
+            globalVars.screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str
+                                         + ')'))
 
-        # Format and print followers count
-        globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.followers_count), curses.color_pair(2))
+            # Format and print created date for user
+            globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.created_at))
 
-        # Format and print number of tweets
-        globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.statuses_count), curses.color_pair(2))
+            # Format and print followers count
+            globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.followers_count))
 
-        # Format and print user's reported location
-        globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.location), curses.color_pair(2))
+            # Format and print number of tweets
+            globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.statuses_count))
 
-        # Format and print description from user profile
-        globalVars.screen.addstr('\n' + json.dumps(myInfo.description))
-        globalVars.screen.addstr('\n')
+            # Format and print user's reported location
+            globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.location))
 
-        # Format and print user's URL, if present
-        globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.url))
+            # Format and print description from user profile
+            globalVars.screen.addstr('\n' + json.dumps(notMe.description) + '\n')
 
-        # Format and print link to profile picture
-        globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(myInfo.profile_image_url_https))
-        globalVars.screen.addstr(str('\n'))
+            # Format and print user's URL, if present
+            globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.url))
 
-        # Add line space and clean up
-        globalVars.screen.addstr('\n')
-        globalVars.screen.refresh()
+            # Format and print link to profile picture
+            globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
+            globalVars.screen.addstr(str(notMe.profile_image_url_https) + '\n')
 
-    except curses.error:
-        Cleanup(1)
+            # Add line space and clean up
+            globalVars.screen.addstr('\n')
+            globalVars.screen.refresh()
 
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
+        except curses.error:
+            Cleanup(1)
 
-
-@initialAuth
-def print_not_me(data):
-    # Print information on another user
-    """
-
-    :param data:
-    :return:
-    """
-    notMe = globalVars.api.get_user(screen_name=data)
-    try:
-
-        # Format and print handle, username, and user ID
-        globalVars.screen.addstr('\n')
-        globalVars.screen.addstr(str('@'), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.screen_name), curses.color_pair(1))
-        globalVars.screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str
-                                     + ')'))
-
-        # Format and print created date for user
-        globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.created_at))
-
-        # Format and print followers count
-        globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.followers_count))
-
-        # Format and print number of tweets
-        globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.statuses_count))
-
-        # Format and print user's reported location
-        globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.location))
-
-        # Format and print description from user profile
-        globalVars.screen.addstr('\n' + json.dumps(notMe.description) + '\n')
-
-        # Format and print user's URL, if present
-        globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.url))
-
-        # Format and print link to profile picture
-        globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
-        globalVars.screen.addstr(str(notMe.profile_image_url_https) + '\n')
-
-        # Add line space and clean up
-        globalVars.screen.addstr('\n')
-        globalVars.screen.refresh()
-
-    except curses.error:
-        Cleanup(1)
-
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
 
 
 @initialAuth

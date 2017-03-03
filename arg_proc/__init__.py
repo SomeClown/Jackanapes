@@ -26,10 +26,10 @@ def arglebarg(command_args):
     :rtype: object
 
     """
-    print(command_args)
+    from Packet_Tweet import TweetArguments
+
     if command_args.followers:
         try:
-            from Packet_Tweet import TweetArguments
             my_tweet_args = TweetArguments()
             my_tweet_args.save_followers(command_args.followers[0])
         except SystemExit:
@@ -40,7 +40,6 @@ def arglebarg(command_args):
 
     if command_args.friends:
         try:
-            from Packet_Tweet import TweetArguments
             my_tweet_args = TweetArguments()
             my_tweet_args.savefriends(command_args.friends[0])
         except SystemExit:
@@ -50,8 +49,9 @@ def arglebarg(command_args):
 
     if command_args.baddies:
         try:
-            from Packet_Tweet import comparefollowers
-            comparefollowers(command_args.baddies[0])
+            #from Packet_Tweet import comparefollowers
+            my_tweet_args = TweetArguments()
+            my_tweet_args.comparefollowers(command_args)
         except SystemExit:
             raise
         except KeyboardInterrupt:
@@ -61,7 +61,7 @@ def arglebarg(command_args):
     elif command_args.tweets_num:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import printtimeline
+            #from Packet_Tweet import printtimeline
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -69,7 +69,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            printtimeline(command_args.tweets_num[0])
+            my_tweet_args = TweetArguments()
+            my_tweet_args.printtimeline(command_args.tweets_num[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -81,7 +82,6 @@ def arglebarg(command_args):
     elif command_args.userMentions:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import printmentions
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -89,7 +89,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            printmentions(command_args.userMentions[0])
+            my_tweet_args = TweetArguments()
+            my_tweet_args.printmentions(command_args.userMentions[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -155,7 +156,6 @@ def arglebarg(command_args):
     elif command_args.numFriends:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import TweetArguments
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -164,7 +164,7 @@ def arglebarg(command_args):
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             my_tweet_args = TweetArguments()
-            my_tweet_args.printfriends(command_args)
+            my_tweet_args.printfriends(command_args.numFriends[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -188,7 +188,6 @@ def arglebarg(command_args):
     elif command_args.myInfo:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import print_my_info
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -199,7 +198,8 @@ def arglebarg(command_args):
             curses.init_pair(2, curses.COLOR_YELLOW, -1)
             curses.init_pair(3, curses.COLOR_BLUE, -1)
             curses.init_pair(5, curses.COLOR_MAGENTA, -1)
-            print_my_info()
+            my_tweet_args = TweetArguments()
+            my_tweet_args.print_my_info()
         except SystemExit:
             curses.endwin()
             raise
@@ -210,7 +210,6 @@ def arglebarg(command_args):
     elif command_args.notMe:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import print_not_me
             globalVars.screen.scrollok(True)
             curses.noecho()
             curses.cbreak()
@@ -218,7 +217,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            print_not_me(command_args.notMe[0])
+            my_tweet_args = TweetArguments()
+            my_tweet_args.print_not_me(command_args.notMe[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -229,7 +229,6 @@ def arglebarg(command_args):
     elif command_args.retweets:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import print_retweets
             globalVars.screen.scrollok(True)
             curses.noecho()
             curses.cbreak()
@@ -237,7 +236,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            print_retweets(command_args.retweets[0])
+            my_tweet_args = TweetArguments()
+            my_tweet_args.print_retweets(command_args.retweets[0])
         except SystemExit:
             curses.endwin()
             raise
