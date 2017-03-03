@@ -425,6 +425,80 @@ class TweetArguments:
                 if key == ord('q'):
                     Cleanup(0)
 
+    @staticmethod
+    def direct_send(user, msg):
+        """
+
+        :param user:
+        :param msg:
+        :return:
+        """
+        name_check = re.compile(r'(@)+')
+        name_result = name_check.search(user)
+
+        if len(msg) >= 140:
+            print('Tweets must be 140 characters or less')
+        elif name_result is None:
+            print('Incorrect username format (must include @)')
+        else:
+            globalVars.api.send_direct_message(screen_name=user, text=msg)
+            print('\nMessage "{}" sent to {} successfully\n'.format(msg, user))
+        return None
+
+    @staticmethod
+    def status_update(text):
+        """
+
+        :param text:
+        :return:
+        """
+        if len(text) >= 140:
+            print('Tweets must be 140 characters or less')
+        else:
+            globalVars.api.update_status(status=text)
+            print('\nStatus "{}" updated successfully\n'.format(text))
+        return None
+
+    @staticmethod
+    def get_stream() -> object:
+        """
+
+        """
+        terenStream = tweepy.Stream(globalVars.auth, Streamer())
+        terenStream.userstream()
+
+    @staticmethod
+    def get_follow_stream(user):
+        """
+
+        :param user:
+        """
+        terenStream = tweepy.Stream(globalVars.auth, Streamer())
+        get_user = globalVars.api.get_user(user)
+        user_id = get_user.id
+        userID = str(user_id)
+        if userID != '17028130':
+            terenStream.filter(follow=[userID])
+        else:
+            terenStream.userstream()
+
+    @staticmethod
+    def get_stream_search(searchHash):
+        """
+
+        :param searchHash:
+        """
+        teren_stream = tweepy.Stream(globalVars.auth, Streamer())
+        str1 = ''.join(searchHash)
+        try:
+            teren_stream.filter(track=[str1])
+        except curses.error:
+            Cleanup(1)
+        #except BaseException as e:
+        #    Cleanup(1)
+        #    print('failed on_status, ', str(e))
+        #    time.sleep(5)
+
 
 def Cleanup(exitCode: object) -> object:
     """
@@ -441,81 +515,6 @@ def Cleanup(exitCode: object) -> object:
         sys.exit(exitCode)
 
 
-@initialAuth
-def get_stream() -> object:
-    """
-
-    """
-    terenStream = tweepy.Stream(globalVars.auth, Streamer())
-    terenStream.userstream()
-
-
-@initialAuth
-def get_follow_stream(user):
-    """
-
-    :param user:
-    """
-    terenStream = tweepy.Stream(globalVars.auth, Streamer())
-    userID = str(user)
-    if userID != '17028130':
-        terenStream.filter(follow=[userID])
-    else:
-        terenStream.userstream()
-
-
-@initialAuth
-def get_stream_search(searchHash):
-    """
-
-    :param searchHash:
-    """
-    teren_stream = tweepy.Stream(globalVars.auth, Streamer())
-    str1 = ''.join(searchHash)
-    try:
-        teren_stream.filter(track=[str1])
-    except curses.error:
-        Cleanup(1)
-    #except BaseException as e:
-    #    Cleanup(1)
-    #    print('failed on_status, ', str(e))
-    #    time.sleep(5)
-
-
-@initialAuth
-def direct_send(user, msg):
-    """
-
-    :param user:
-    :param msg:
-    :return:
-    """
-    name_check = re.compile(r'(@)+')
-    name_result = name_check.search(user)
-
-    if len(msg) >= 140:
-        print('Tweets must be 140 characters or less')
-    elif name_result is None:
-        print('Incorrect username format (must include @)')
-    else:
-        globalVars.api.send_direct_message(screen_name=user, text=msg)
-        print('\nMessage "{}" sent to {} successfully\n'.format(msg, user))
-    return None
-
-
-@initialAuth
-def status_update(text):
-    """
-
-    :param text:
-    :return:
-    """
-    if len(text) >= 140:
-        print('Tweets must be 140 characters or less')
-    else:
-        globalVars.api.update_status(status=text)
-        print('\nStatus "{}" updated successfully\n'.format(text))
-    return None
 
 
 def main():

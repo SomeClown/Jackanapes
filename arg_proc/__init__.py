@@ -37,7 +37,6 @@ def arglebarg(command_args):
         except KeyboardInterrupt:
             raise
 
-
     if command_args.friends:
         try:
             my_tweet_args = TweetArguments()
@@ -103,7 +102,6 @@ def arglebarg(command_args):
     elif command_args.streamUserSearch:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import get_stream
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -112,12 +110,17 @@ def arglebarg(command_args):
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             if 'all' in command_args.streamUserSearch:
-                Packet_Tweet.get_stream()
+                my_tweet_args = TweetArguments()
+                my_tweet_args.get_stream()
             else:
                 screen_name = command_args.streamUserSearch[0]
-                get_user = globalVars.api.get_user(screen_name)
-                user_id = get_user.id
-                get_follow_stream(user_id)
+                #get_user = globalVars.api.get_user(screen_name)
+                #user_id = get_user.id
+                my_tweet_args = TweetArguments()
+                my_tweet_args.get_follow_stream(screen_name)
+
+
+
         except tweepy.TweepError as e:
             curses.endwin()
             print(e.response)  # This works
@@ -132,7 +135,6 @@ def arglebarg(command_args):
     elif command_args.search:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import get_stream_search
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -141,7 +143,8 @@ def arglebarg(command_args):
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             searchTerm = command_args.search
-            get_stream_search(searchTerm)
+            my_tweet_args = TweetArguments()
+            my_tweet_args.get_stream_search(searchTerm)
         except tweepy.TweepError:
             curses.endwin()
             print(tweepy.TweepError)
@@ -174,16 +177,16 @@ def arglebarg(command_args):
 
     # send a direct message
     elif command_args.directMessage:
-        from Packet_Tweet import direct_send
         userDirect = command_args.directMessage[0]
         msgDirect = command_args.directMessage[1]
-        direct_send(userDirect, msgDirect)
+        my_tweet_args = TweetArguments()
+        my_tweet_args.direct_send(userDirect, msgDirect)
 
     # update status
     elif command_args.status_update:
-        from Packet_Tweet import status_update
         msg_status_update = command_args.status_update[0]
-        status_update(msg_status_update)
+        my_tweet_args = TweetArguments()
+        my_tweet_args.status_update(msg_status_update)
 
     elif command_args.myInfo:
         globalVars.screen = curses.initscr()
