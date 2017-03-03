@@ -21,7 +21,7 @@
         directory, read configuration from file, etc.)
 - [ ] Add functionality to allow streaming in background, wait for keystrokes, and exit or change stream conditions
 
-# Known bugs list
+## Known bugs list
 
 - [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. No obvious errors
 - [ ] comparefollowers method requires argument which is not used. Suspect this is coming from argparse configuration
