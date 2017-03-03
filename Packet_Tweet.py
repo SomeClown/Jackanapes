@@ -400,31 +400,30 @@ class TweetArguments:
                 if key == ord('q'):
                     Cleanup(0)
 
+    @staticmethod
+    def termsearch(term):
+        """
 
-@initialAuth
-def termsearch(term):
-    """
+        :param term:
+        :return:
+        """
+        try:
+            search = str(term[0])
+            count = int(term[1])
+            for tweet in tweepy.Cursor(globalVars.api.search, q=search).items(count):
+                globalVars.screen.addstr(str(tweet.created_at) + ': ')
+                globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
+                globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
+                globalVars.screen.refresh()  # Refresh screen now that strings added
 
-    :param term:
-    :return:
-    """
-    try:
-        search = str(term[0])
-        count = int(term[1])
-        for tweet in tweepy.Cursor(globalVars.api.search, q=search).items(count):
-            globalVars.screen.addstr(str(tweet.created_at) + ': ')
-            globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
-            globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
-            globalVars.screen.refresh()  # Refresh screen now that strings added
-
-    except curses.error:
-        Cleanup(1)
-    finally:
-        globalVars.screen.addstr('\n Press q to exit program...')
-        while True:
-            key = globalVars.screen.getch()
-            if key == ord('q'):
-                Cleanup(0)
+        except curses.error:
+            Cleanup(1)
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    Cleanup(0)
 
 
 def Cleanup(exitCode: object) -> object:

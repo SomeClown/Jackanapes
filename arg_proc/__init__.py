@@ -248,7 +248,6 @@ def arglebarg(command_args):
     elif command_args.term:
         globalVars.screen = curses.initscr()
         try:
-            from Packet_Tweet import termsearch
             globalVars.screen.scrollok(True)
             curses.noecho()
             curses.cbreak()
@@ -256,7 +255,8 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            term_search(command_args.term)
+            my_tweet_args = TweetArguments()
+            my_tweet_args.termsearch(command_args.term)
         except SystemExit:
             curses.endwin()
             raise
