@@ -10,8 +10,6 @@ import globalVars
 import sys
 from authorization import initialAuth
 from derp import *
-import pyprind
-import time
 
 __author__ = 'SomeClown'
 
@@ -29,7 +27,7 @@ class Streamer(tweepy.StreamListener):
         globalVars.screen.addstr(str(': ' + status.text + '\n'))
         globalVars.screen.refresh()  # Refresh screen now that strings added
         if c == ord('q'):
-            Cleanup(0)
+            cleanup(0)
 
 
 @initialAuth
@@ -69,14 +67,14 @@ class TweetArguments:
             globalVars.screen.addstr('\n')
             globalVars.screen.refresh()  # Refresh screen now that strings added
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def save_followers(my_screen_name: object) -> object:
@@ -88,8 +86,6 @@ class TweetArguments:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
-        n = 1
-        bar = pyprind.ProgBar(n)
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -98,13 +94,11 @@ class TweetArguments:
             print('\n Getting results and writing file now.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
-            for _ in range(n):
-                with open(config_file, 'w') as f:
-                    for page in cursor.pages():
-                        for item in page:
-                            myfollowers.append(item)
-                    f.write('\n'.join(map(str, myfollowers)))
-                    bar.update()
+            with open(config_file, 'w') as f:
+                for page in cursor.pages():
+                    for item in page:
+                        myfollowers.append(item)
+                f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
@@ -121,6 +115,7 @@ class TweetArguments:
         """
         friends_count = globalVars.user.friends_count
         myfriends = []
+        n = .01
         try:
             cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -136,7 +131,6 @@ class TweetArguments:
                     for item in page:
                         myfriends.append(str(item.id) + ',' + item.screen_name)
                 f.write('\n'.join(map(str, myfriends)))
-
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
@@ -194,14 +188,14 @@ class TweetArguments:
                 globalVars.screen.refresh()  # Refresh screen now that strings added
 
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def printmentions(number):
@@ -222,14 +216,14 @@ class TweetArguments:
                     globalVars.screen.addstr(str(': ' + mention.text + '\n'))
                 globalVars.screen.refresh()
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def print_retweets(number):
@@ -243,7 +237,7 @@ class TweetArguments:
         try:
             globalVars.screen.addstr('\n')
             if number == 0:
-                Cleanup(1)
+                cleanup(1)
                 return
             else:
                 for retweets in otherRetweets:
@@ -254,14 +248,14 @@ class TweetArguments:
                 globalVars.screen.refresh()
         except curses.error:
             # import pdb; pdb.set_trace()
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def print_my_info():
@@ -314,14 +308,14 @@ class TweetArguments:
             globalVars.screen.refresh()
 
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def print_not_me(data):
@@ -373,14 +367,14 @@ class TweetArguments:
             globalVars.screen.refresh()
 
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
 
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def termsearch(term):
@@ -399,13 +393,13 @@ class TweetArguments:
                 globalVars.screen.refresh()  # Refresh screen now that strings added
 
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
-                    Cleanup(0)
+                    cleanup(0)
 
     @staticmethod
     def direct_send(user, msg):
@@ -475,27 +469,49 @@ class TweetArguments:
         try:
             teren_stream.filter(track=[str1])
         except curses.error:
-            Cleanup(1)
+            cleanup(1)
         #except BaseException as e:
-        #    Cleanup(1)
+        #    cleanup(1)
         #    print('failed on_status, ', str(e))
         #    time.sleep(5)
 
 
-def Cleanup(exitCode: object) -> object:
+def cleanup(exit_code):
     """
 
-    :param exitCode:
+    :param exit_code:
     """
     curses.echo()
     curses.nocbreak()
     curses.endwin()
-    if exitCode == 1:
+    if exit_code == 1:
         print('Egads, it looks like we shit the bed...')
-        sys.exit(exitCode)
+        sys.exit(exit_code)
     else:
-        sys.exit(exitCode)
+        sys.exit(exit_code)
 
+
+class OutputTweetObject:
+    """
+
+    prototype for an output class which would take in a tweet
+    and output it in a certain format. Goal is to eliminate
+    redundant print and file-save code
+    """
+
+    def __init__(self, item_type, filename='', text):
+        self.item_type = item_type
+        self.filename = filename
+        self.text = text
+
+    def regular_text(self):
+        pass
+
+    def curses_text(self):
+        pass
+
+    def file_storage(self):
+        pass
 
 
 

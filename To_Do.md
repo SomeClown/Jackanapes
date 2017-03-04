@@ -25,9 +25,17 @@
 - [ ] Find user in friends list (direct search, and regex)
 - [ ] Find user in followers list (direct search, and regex)
 - [ ] Mute user
+- [ ] Block user
+- [ ] Unblock user
+- [ ] Show blocks
 - [ ] Un-mute user
 - [ ] Add threading to time line search, streaming APIs, etc.
 - [ ] Show direct messages to authenticated user
+- [ ] Show direct messages sent by authenticated user
+- [ ] Get account settings
+- [ ] Configure account settings
+- [ ] Update status with media
+- [ ] Update status with media and status text
 - [ ] User manipulation based on metrics
     - [ ] Function to create list of users who I follow but who don't follow me back
     - [ ] Function to create list of users who I follow but who have less than <n> followers themselves
@@ -36,13 +44,14 @@
     - [ ] Create logging function to track all activity above, along with "roll-back" option of some sort
 - [ ] Abstract all areas where username and path are hardcoded
     - [ ] Remove '@someclown' from code, replace with function to select user
-    - [ ] Cleanup path objects, abstract for any user
+    - [ ] cleanup path objects, abstract for any user
     - [ ] Allow user selection at startup
 - [ ] Change/add/fix argparse functionality to allow for multiple arguments/flags for same command (in other words,
         maybe I'd like to use "--follow" and allow file storage with a switch, or printout with another switch.
         There are several places in the code where I'd like to have this... allows better reuse of code.
         Example: "pq.py --follow <username> -print <filename> -sort <sort_method>"
 - [ ] Write output class and methods with regular print, curses print, file storage as input methods to class
+- [ ] Eliminate redundant code, calls to classes, methods, etc. ]
 
 ## Known bugs list
 
