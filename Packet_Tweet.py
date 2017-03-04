@@ -94,17 +94,17 @@ class TweetArguments:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=5000)
-            #print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-            #print('\n Getting results and writing file now.')
+            print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
+            print('\n Getting results and writing file now.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
-            with open(config_file, 'w') as f:
-                for page in cursor.pages():
-                    for item in page:
-                        myfollowers.append(item)
-                    time.sleep(n)
+            for _ in range(n):
+                with open(config_file, 'w') as f:
+                    for page in cursor.pages():
+                        for item in page:
+                            myfollowers.append(item)
+                    f.write('\n'.join(map(str, myfollowers)))
                     bar.update()
-                f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
