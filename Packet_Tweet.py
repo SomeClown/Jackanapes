@@ -110,7 +110,7 @@ class TweetArguments:
         """
         save friends list to a file for later use
 
-        :param screen_name:
+        :param my_screen_name:
         :return:
         """
         friends_count = globalVars.user.friends_count
@@ -470,10 +470,6 @@ class TweetArguments:
             teren_stream.filter(track=[str1])
         except curses.error:
             cleanup(1)
-        #except BaseException as e:
-        #    cleanup(1)
-        #    print('failed on_status, ', str(e))
-        #    time.sleep(5)
 
 
 def cleanup(exit_code):
@@ -491,17 +487,19 @@ def cleanup(exit_code):
         sys.exit(exit_code)
 
 
-class OutputTweetObject:
+class DisplayTweet(object):
     """
 
     prototype for an output class which would take in a tweet
     and output it in a certain format. Goal is to eliminate
-    redundant print and file-save code
+    redundant code
+
+        item_type = what type of display should this be: standard text, or curses
+        tweet_text = text of whatever is to be displayed
     """
 
-    def __init__(self, item_type, tweet_text, filename):
+    def __init__(self, item_type, tweet_text):
         self.item_type = item_type
-        self.filename = filename
         self.tweet_text = tweet_text
 
     def regular_text(self):
@@ -510,9 +508,45 @@ class OutputTweetObject:
     def curses_text(self):
         pass
 
-    def file_storage(self):
+
+class SaveTweet(object):
+    """
+
+    prototype for a save class to store various aspects of tweets
+    in a variety of different files depending on type and need
+
+        filename = file to save object data into
+    """
+
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+
+class CreateUpdate(object):
+    """
+
+    prototype class for all update type tweet events: direct send,
+    status update, replies, etc. Only those things which send something
+    from the logged in user go here
+
+        tweet_text = text of whatever user is putting out there
+        flag = type of update: direct, reply, status
+        media = filename of media to include with update (optional)
+    """
+
+    def __init__(self, tweet_text, flag, media=''):
+        self.tweet_text = tweet_text
+        self.flag = flag
+        self.media = media
+
+    def direct_update(self):
         pass
 
+    def status_update(self):
+        pass
+
+    def reply(self):
+        pass
 
 
 def main():
