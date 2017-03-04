@@ -87,30 +87,27 @@ class TweetArguments:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
-        n = 1000000
+        n = 1
         bar = pyprind.ProgBar(n)
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
-                                   skip_status=True, include_user_entities=False, count=200)
+                                   skip_status=True, include_user_entities=False, count=5000)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
             print('\n Getting results and writing file now.')
-            print('\n More than 3000 followers will take time as the Twitter '
-                  'API limits us to 3000 results per 15 minutes.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(config_file, 'w') as f:
-                for _ in range(n):
-                    for page in cursor.pages():
-                        for item in page:
+                for page in cursor.pages():
+                    for item in page:
+                        for _ in range(n):
                             myfollowers.append(item)
-                bar.update()
+                        bar.update()
                 f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
             print(e)
-
         return None
 
     @staticmethod
@@ -129,15 +126,15 @@ class TweetArguments:
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
             print('\n Getting results and writing file now.')
-            print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+            print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 '
+                  'results per 15 minutes.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        myfriends.append(item.id)
+                        myfriends.append(str(item.id) + ',' + item.screen_name)
                 f.write('\n'.join(map(str, myfriends)))
-                print(len(myfriends))
 
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
