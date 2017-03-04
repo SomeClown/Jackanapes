@@ -499,10 +499,10 @@ class OutputTweetObject:
     redundant print and file-save code
     """
 
-    def __init__(self, item_type, filename='', text):
+    def __init__(self, item_type, tweet_text, filename):
         self.item_type = item_type
         self.filename = filename
-        self.text = text
+        self.tweet_text = tweet_text
 
     def regular_text(self):
         pass
