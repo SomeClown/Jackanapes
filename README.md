@@ -6,6 +6,17 @@ some amount of time, bulk removal, add, etc. A secondary goal of this project is
 from the Twitter API via a traditional Unix interface, or at least to implement all useful mainstream functions,
 where they make sense.
 
+The to do list is growing by the day, as is the bugs list. I welcome all suggestions for features and/or improvements
+to the program, as I want this to be as functional and stable as possible. One area where I could really use some
+help is in developing tests and improving stability. I'd like to build a comprehensive test suite for each and every
+class, function, etc. in the application. I'd also like robust logging and graceful crash recovery. I've come a long
+way since my initial commit, but it's not even close to where I feel comfortable with where I am in the development
+cycle.
+
+While I personally use this application already, mostly for just streaming and searching my feed, I don't expect
+anyone else to do the same. My only hope is that I get enough functionality built in that this application becomes
+a useful utility for manipulating various aspects of an account in a way that is useful, free, and intuitive.
+
 #### Command line Twitter (and stuff) client - For questions contact @SomeClown
 
 usage: [program name] [options]
