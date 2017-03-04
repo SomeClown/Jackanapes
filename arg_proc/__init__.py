@@ -1,10 +1,11 @@
 #!/usr/local/bin/python3
 
-__author__ = 'SomeClown'
-
 import curses
 import tweepy
 import globalVars
+
+__author__ = 'SomeClown'
+
 
 """
 
@@ -26,11 +27,12 @@ def arglebarg(command_args):
     :rtype: object
 
     """
+
     from Packet_Tweet import TweetArguments
+    my_tweet_args = TweetArguments()
 
     if command_args.followers:
         try:
-            my_tweet_args = TweetArguments()
             my_tweet_args.save_followers(command_args.followers[0])
         except SystemExit:
             raise
@@ -39,7 +41,6 @@ def arglebarg(command_args):
 
     if command_args.friends:
         try:
-            my_tweet_args = TweetArguments()
             my_tweet_args.savefriends(command_args.friends[0])
         except SystemExit:
             raise
@@ -48,8 +49,6 @@ def arglebarg(command_args):
 
     if command_args.baddies:
         try:
-            #from Packet_Tweet import comparefollowers
-            my_tweet_args = TweetArguments()
             my_tweet_args.comparefollowers(command_args)
         except SystemExit:
             raise
@@ -60,7 +59,6 @@ def arglebarg(command_args):
     elif command_args.tweets_num:
         globalVars.screen = curses.initscr()
         try:
-            #from Packet_Tweet import printtimeline
             globalVars.screen.scrollok(True)
             curses.noecho()  # Keeps key presses from echoing to screen
             curses.cbreak()  # Takes input away
@@ -68,7 +66,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args = TweetArguments()
             my_tweet_args.printtimeline(command_args.tweets_num[0])
         except SystemExit:
             curses.endwin()
@@ -88,7 +85,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args = TweetArguments()
             my_tweet_args.printmentions(command_args.userMentions[0])
         except SystemExit:
             curses.endwin()
@@ -110,17 +106,10 @@ def arglebarg(command_args):
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             if 'all' in command_args.streamUserSearch:
-                my_tweet_args = TweetArguments()
                 my_tweet_args.get_stream()
             else:
                 screen_name = command_args.streamUserSearch[0]
-                #get_user = globalVars.api.get_user(screen_name)
-                #user_id = get_user.id
-                my_tweet_args = TweetArguments()
                 my_tweet_args.get_follow_stream(screen_name)
-
-
-
         except tweepy.TweepError as e:
             curses.endwin()
             print(e.response)  # This works
@@ -143,7 +132,6 @@ def arglebarg(command_args):
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
             searchTerm = command_args.search
-            my_tweet_args = TweetArguments()
             my_tweet_args.get_stream_search(searchTerm)
         except tweepy.TweepError:
             curses.endwin()
@@ -166,7 +154,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args = TweetArguments()
             my_tweet_args.printfriends(command_args.numFriends[0])
         except SystemExit:
             curses.endwin()
@@ -179,13 +166,11 @@ def arglebarg(command_args):
     elif command_args.directMessage:
         userDirect = command_args.directMessage[0]
         msgDirect = command_args.directMessage[1]
-        my_tweet_args = TweetArguments()
         my_tweet_args.direct_send(userDirect, msgDirect)
 
     # update status
     elif command_args.status_update:
         msg_status_update = command_args.status_update[0]
-        my_tweet_args = TweetArguments()
         my_tweet_args.status_update(msg_status_update)
 
     elif command_args.myInfo:
@@ -201,7 +186,6 @@ def arglebarg(command_args):
             curses.init_pair(2, curses.COLOR_YELLOW, -1)
             curses.init_pair(3, curses.COLOR_BLUE, -1)
             curses.init_pair(5, curses.COLOR_MAGENTA, -1)
-            my_tweet_args = TweetArguments()
             my_tweet_args.print_my_info()
         except SystemExit:
             curses.endwin()
@@ -220,7 +204,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            my_tweet_args = TweetArguments()
             my_tweet_args.print_not_me(command_args.notMe[0])
         except SystemExit:
             curses.endwin()
@@ -239,7 +222,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            my_tweet_args = TweetArguments()
             my_tweet_args.print_retweets(command_args.retweets[0])
         except SystemExit:
             curses.endwin()
@@ -258,7 +240,6 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            my_tweet_args = TweetArguments()
             my_tweet_args.termsearch(command_args.term)
         except SystemExit:
             curses.endwin()
@@ -271,7 +252,6 @@ def arglebarg(command_args):
     else:
         return
 
-        # return(command_args)
 
 def main():
     pass

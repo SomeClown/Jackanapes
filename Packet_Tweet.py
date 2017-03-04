@@ -2,8 +2,6 @@
 # Command line twitter client in the style of traditional unix shell commands
 # Extensible so it can run as a bot, or be integrated into another application
 
-__author__ = 'SomeClown'
-
 import curses.textpad
 import json
 import os
@@ -12,32 +10,13 @@ import globalVars
 import sys
 from authorization import initialAuth
 from derp import *
+import pyprind
 
-
-class WriteSomeCurses(object):
-    def __init__(self, stringstuff="nothing here"):
-        self.stringstuff = stringstuff
-
-    def writeapi(self):
-        """
-
-        fill in more here later
-
-        :return:
-        """
-
-    def writestreaming(self):
-        """
-
-        fill in more here later
-
-        :return:
-        """
+__author__ = 'SomeClown'
 
 
 class Streamer(tweepy.StreamListener):
     def on_status(self, status):
-
         """
 
         :param status:
@@ -45,7 +24,6 @@ class Streamer(tweepy.StreamListener):
         globalVars.screen.nodelay(1)
         c = globalVars.screen.getch()
         # TODO: Pull status.text into named str, regex for @handle and #hashtag
-        #try:
         globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
         globalVars.screen.addstr(str(': ' + status.text + '\n'))
         globalVars.screen.refresh()  # Refresh screen now that strings added
@@ -109,6 +87,8 @@ class TweetArguments:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
+        n = 1000000
+        bar = pyprind.ProgBar(n)
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -119,14 +99,17 @@ class TweetArguments:
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(config_file, 'w') as f:
-                for page in cursor.pages():
-                    for item in page:
-                        myfollowers.append(item)
+                for _ in range(n):
+                    for page in cursor.pages():
+                        for item in page:
+                            myfollowers.append(item)
+                bar.update()
                 f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
             print(e)
+
         return None
 
     @staticmethod

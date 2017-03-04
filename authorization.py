@@ -1,13 +1,14 @@
 #!/usr/local/bin/python3
 
-__author__ = 'SomeClown'
-
 import os
 import derp
 import globalVars
 import tweepy
 from functools import wraps
 from log_wrapper import logging_wrapper
+
+__author__ = 'SomeClown'
+
 
 @logging_wrapper
 def initialAuth(original: object) -> object:
