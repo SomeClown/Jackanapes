@@ -1,5 +1,10 @@
 ### Command Line Twitter Client #
-#### The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface. ##
+The primary goal of this project is to implement what I like to call "utility" functionality. In other
+words, that functionality usually missing from mainstream clients, relegated to the realm of web-based for profit
+applications. Functionality like comparing followers to friends, or how may users follow me but have not posted in
+some amount of time, bulk removal, add, etc. A secondary goal of this project is to implement all functionality
+from the Twitter API via a traditional Unix interface, or at least to implement all useful mainstream functions,
+where they make sense.
 
 #### Command line Twitter (and stuff) client - For questions contact @SomeClown
 
