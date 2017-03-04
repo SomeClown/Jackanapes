@@ -7,7 +7,7 @@ def hokum():
     return auth
 
 def main():
-    pass
+    print('\nShould be run as module only\n')
 if __name__ == '__main__':
     main()
 else:
