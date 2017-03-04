@@ -149,7 +149,7 @@ class TweetArguments:
         return None
 
     @staticmethod
-    def comparefollowers(empty_foo):
+    def comparefollowers():
 
         friendslist = []
         followerlist = []
@@ -165,7 +165,8 @@ class TweetArguments:
                 for i in followers:
                     followerlist.append(i)
                 for j in friends:
-                    friendslist.append(j)
+                    friend_id = j.split(',')
+                    friendslist.append(friend_id[0] + '\n')
             with open(config_file, 'w') as baddies:
                 for item in friendslist:
                     if item not in followerlist:

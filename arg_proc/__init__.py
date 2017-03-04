@@ -49,7 +49,7 @@ def arglebarg(command_args):
 
     if command_args.baddies:
         try:
-            my_tweet_args.comparefollowers(command_args)
+            my_tweet_args.comparefollowers()
         except SystemExit:
             raise
         except KeyboardInterrupt:

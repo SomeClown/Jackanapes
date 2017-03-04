@@ -61,7 +61,7 @@ def argumentsParsing():
     parser.add_argument('--friends', metavar='', action='store', nargs=1, type=str, dest='friends',
                         help=argparse.SUPPRESS)
 
-    parser.add_argument('--compare', action='store', nargs=1, metavar='', dest='baddies',
+    parser.add_argument('--compare', action='store_true', dest='baddies',
                         help=argparse.SUPPRESS)
 
     parser.add_argument('-v', '--verbose', action='store_true', help=argparse.SUPPRESS)
