@@ -95,7 +95,8 @@ class TweetArguments:
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
             print('\n Getting results and writing file now.')
-            print('\n More than 3000 followers will take time as the Twitter API limits us to 3000 results per 15 minutes.')
+            print('\n More than 3000 followers will take time as the Twitter '
+                  'API limits us to 3000 results per 15 minutes.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(config_file, 'w') as f:
