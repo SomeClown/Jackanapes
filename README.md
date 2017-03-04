@@ -10,21 +10,25 @@ where they make sense.
 
 usage: [program name] [options]
 
-optional arguments:
+	optional arguments:
 
-	-h, --help      show this help message and exit
-	-t, --tweets    Get 'n' number of recent tweets from main feed
-	-s, --stream    Stream full user feed, or feed mentioning <user>
-	-e, --search    stream the global twitter feed by search term
-	-f, --friends   print list of friends
-	-d, --direct	send a direct message
-	-S, --status    update twitter status
-	-m, --mentions  get mentions from logged in user's timeline
-	-M, --me        Get information about me
-	-n, --notme     Get information about someone other than me
-	-r, --retweets  Get retweets of me by others
-	-V, --version   show program's version number and exit
-	-v, --verbose   verbose flag
+        -h, --help      show this help message and exit
+            --friends   Get a list of all friends of specified user and dump to file
+            --followers Get a list of all followers of specified user and dump to file
+            --compare   Compare friends and followers to see who you follow and are not followed back
+        -t              Get 'n' number of recent tweets from main feed <num>
+        -s              Stream full user feed, or feed mentioning <user>
+        -e              stream the global twitter feed by search term <search term>
+        -f              print list of friends <num>
+        -d              send a direct message <@user> <text>
+        -S              update twitter status <text>
+        -m              get mentions from logged in user's timeline <num>
+        -M              Get information about me
+        -n              Get information about someone other than me <@user>
+        -r              Get retweets of me by others <num>
+        -T              search logged in user's timeline for <phrase> <num>
+            --version   show program's version number and exit
+        -v, --verbose   verbose flag
 ```
 Operator                                Finds tweets…
 
