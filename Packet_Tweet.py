@@ -528,10 +528,12 @@ class SaveTweet(object):
     in a variety of different files depending on type and need
 
         filename = file to save object data into
+        file_contents = whatever text or data we're storing to file
     """
 
-    def __init__(self, file_name):
+    def __init__(self, file_name, file_contents):
         self.file_name = file_name
+        self.file_contents = file_contents
 
 
 class CreateUpdate(object):
