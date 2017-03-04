@@ -10,6 +10,8 @@ import globalVars
 import sys
 from authorization import initialAuth
 from derp import *
+import progressbar
+import time
 
 __author__ = 'SomeClown'
 
@@ -86,6 +88,8 @@ class TweetArguments:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
+        bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
+        i = 0
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -97,6 +101,9 @@ class TweetArguments:
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
+                        i = +i
+                        time.sleep(0.001)
+                        bar.update(i)
                         myfollowers.append(item)
                 f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
@@ -115,7 +122,8 @@ class TweetArguments:
         """
         friends_count = globalVars.user.friends_count
         myfriends = []
-        n = .01
+        bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
+        i = 0
         try:
             cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -129,6 +137,9 @@ class TweetArguments:
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
+                        i = +i
+                        time.sleep(0.001)
+                        bar.update(i)
                         myfriends.append(str(item.id) + ',' + item.screen_name)
                 f.write('\n'.join(map(str, myfriends)))
         except tweepy.RateLimitError:
