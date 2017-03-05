@@ -158,7 +158,7 @@ class TweetArguments:
 
         try:
             home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.baddies')
+            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.no_follow')
             friends_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
             followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
