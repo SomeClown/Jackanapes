@@ -1,0 +1,33 @@
+# Master Packet_Tweet (PQ) configuration file
+#
+# Edit and put into personal configuration directory
+
+# Twitter user to run as
+user : ~
+
+# Home directory for all configuration files, logs, etc.
+# Default directory should be ~/.packetqueue/<username>
+home : ~/.packetqueue
+
+# oauth tokens
+access_token            : ~
+access_token_secret     : ~
+consumer_token          : ~
+consumer_token_secret   : ~
+
+# Friends file. This is the file we store the raw user_ids
+# of all users we have a friendship with.
+# Default is ~/.packetqueue/<username>/.friends
+friend_file     : .friends 
+
+# Followers file. This is the file we store the raw user_ids
+# of all users who follow us.
+# Default is ~/.packetqueue/<username>/.followers
+followers:      : .followers
+
+# File for storage of all users we are friends with who
+# do not follow us back.
+# Default is ~/.packetqueue/<username>/.no_follow
+no_follow       : .no_follow
+
+
