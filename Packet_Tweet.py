@@ -12,6 +12,7 @@ from authorization import initialAuth
 from derp import *
 import progressbar
 import time
+from utilities import progress_bar_wrapper
 
 __author__ = 'SomeClown'
 
@@ -79,6 +80,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
+    @progress_bar_wrapper
     def save_followers(my_screen_name: object) -> object:
         """
         save followers list to a file for later use
@@ -88,22 +90,16 @@ class TweetArguments:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
-        bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
-        i = 0
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=5000)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-            print('\n Getting results and writing file now.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        i = +i
-                        time.sleep(0.001)
-                        bar.update(i)
                         myfollowers.append(item)
                 f.write('\n'.join(map(str, myfollowers)))
         except tweepy.RateLimitError:
@@ -113,6 +109,7 @@ class TweetArguments:
         return None
 
     @staticmethod
+    @progress_bar_wrapper
     def savefriends(my_screen_name: object) -> object:
         """
         save friends list to a file for later use
@@ -122,24 +119,16 @@ class TweetArguments:
         """
         friends_count = globalVars.user.friends_count
         myfriends = []
-        bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
-        i = 0
         try:
             cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
-            print('\n Getting results and writing file now.')
-            print('\n More than 3000 friends will take time as the Twitter API limits us to 3000 '
-                  'results per 15 minutes.')
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        i = +i
-                        time.sleep(0.001)
-                        bar.update(i)
                         myfriends.append(str(item.id) + ',' + item.screen_name)
                 f.write('\n'.join(map(str, myfriends)))
         except tweepy.RateLimitError:
@@ -149,6 +138,7 @@ class TweetArguments:
         return None
 
     @staticmethod
+    @progress_bar_wrapper
     def comparefollowers():
 
         friendslist = []
@@ -171,7 +161,6 @@ class TweetArguments:
                 for item in friendslist:
                     if item not in followerlist:
                         baddieslist.append(item)
-                        print(index, item)
                         index += 1
                 baddies.write(''.join(map(str, baddieslist)))
         except tweepy.RateLimitError:

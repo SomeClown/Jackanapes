@@ -5,7 +5,7 @@ import derp
 import globalVars
 import tweepy
 from functools import wraps
-from log_wrapper import logging_wrapper
+from utilities import logging_wrapper
 
 __author__ = 'SomeClown'
 
