@@ -41,7 +41,7 @@ def arglebarg(command_args):
 
     if command_args.friends:
         try:
-            my_tweet_args.savefriends(command_args.friends[0])
+            my_tweet_args.save_friends(command_args.friends[0])
         except SystemExit:
             raise
         except KeyboardInterrupt:
@@ -49,7 +49,7 @@ def arglebarg(command_args):
 
     if command_args.baddies:
         try:
-            my_tweet_args.comparefollowers()
+            my_tweet_args.compare_followers()
         except SystemExit:
             raise
         except KeyboardInterrupt:
@@ -66,7 +66,7 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args.printtimeline(command_args.tweets_num[0])
+            my_tweet_args.print_timeline(command_args.tweets_num[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -85,7 +85,7 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args.printmentions(command_args.userMentions[0])
+            my_tweet_args.print_mentions(command_args.userMentions[0])
         except SystemExit:
             curses.endwin()
             raise
@@ -240,7 +240,7 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)
-            my_tweet_args.termsearch(command_args.term)
+            my_tweet_args.term_search(command_args.term)
         except SystemExit:
             curses.endwin()
             raise

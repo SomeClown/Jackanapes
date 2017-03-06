@@ -10,8 +10,6 @@ import globalVars
 import sys
 from authorization import initial_auth
 from derp import *
-import progressbar
-import time
 from utilities import progress_bar_wrapper
 
 __author__ = 'SomeClown'
@@ -110,7 +108,7 @@ class TweetArguments:
 
     @staticmethod
     @progress_bar_wrapper
-    def savefriends(my_screen_name: object) -> object:
+    def save_friends(my_screen_name: object) -> object:
         """
         save friends list to a file for later use
 
@@ -139,7 +137,7 @@ class TweetArguments:
 
     @staticmethod
     @progress_bar_wrapper
-    def comparefollowers():
+    def compare_followers():
 
         friendslist = []
         followerlist = []
@@ -170,7 +168,7 @@ class TweetArguments:
         return None
 
     @staticmethod
-    def printtimeline(number):
+    def print_timeline(number):
         """
         print user's timeline
 
@@ -199,7 +197,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def printmentions(number):
+    def print_mentions(number):
         """
         print user's mentions
 
@@ -378,7 +376,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def termsearch(term):
+    def term_search(term):
         """
 
         :param term:
