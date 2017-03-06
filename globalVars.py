@@ -16,6 +16,17 @@ global color_purple
 global color_cyan
 global color_white
 
+global access_token
+global access_token_secret
+global consumer_token
+global consumer_token_secret
+global user
+global home
+global followers
+global friends_file
+global no_follow
+
+
 """
  Set our color vars to the appropriate ansi escape codes
 

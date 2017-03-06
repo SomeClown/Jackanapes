@@ -1,5 +1,9 @@
 #!/usr/local/bin/python3
 
+
+import arg_proc
+import pq_args
+
 __author__ = 'SomeClown'
 
 """
@@ -7,10 +11,6 @@ Command Line Twitter Client
 The goal of this project is to implement all functionality from the Twitter API via a traditional Unix interface.
 Command line Twitter (and stuff) client - For questions contact @SomeClown
 """
-
-import arg_proc
-import pq_args
-#from log_wrapper import logging_wrapper
 
 
 def main() -> object:

@@ -8,7 +8,7 @@ import os
 import re
 import globalVars
 import sys
-from authorization import initialAuth
+from authorization import initial_auth
 from derp import *
 import progressbar
 import time
@@ -33,7 +33,7 @@ class Streamer(tweepy.StreamListener):
             cleanup(0)
 
 
-@initialAuth
+@initial_auth
 class TweetArguments:
 
     def __init__(self, number=0):

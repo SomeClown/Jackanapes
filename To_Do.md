@@ -55,6 +55,7 @@
 
 ## Known bugs list
 
-- [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. No obvious errors
+- [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. In functions which
+        utilize curses for printing this sometimes results in an incomplete reverting of the terminal
 - [ ] comparefollowers method requires argument which is not used. Suspect this is coming from argparse configuration
 - [ ] Progress bar runs as function wrapper, but it executes prior to the original function finishing

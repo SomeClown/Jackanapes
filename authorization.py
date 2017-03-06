@@ -6,16 +6,33 @@ import globalVars
 import tweepy
 from functools import wraps
 from utilities import logging_wrapper
+import yaml
 
 __author__ = 'SomeClown'
 
 
+def set_config():
+
+    # Load and assign key variables from yaml configuration file
+    my_config_file = open('config.yml')
+    settings = yaml.load(my_config_file)
+    globalVars.access_token = settings['access_token']
+    globalVars.access_token_secret = settings['access_token_secret']
+    globalVars.consumer_token = settings['consumer_token']
+    globalVars.consumer_token_secret = settings['consumer_token_secret']
+    globalVars.user = settings['user']
+    globalVars.home = settings['home']
+    globalVars.followers = settings['followers']
+    globalVars.friend_file = settings['friend_file']
+    globalVars.no_follow = settings['no_follow']
+
+
 @logging_wrapper
-def initialAuth(original: object) -> object:
+def initial_auth(original: object) -> object:
     """
-    	:type original: object
-    	:rtype: object
-    	"""
+    :type original: object
+    :rtype: object
+    """
     @wraps(original)
     def wrapper(*args, **kwargs):
         globalVars.auth = derp.hokum()
@@ -23,6 +40,7 @@ def initialAuth(original: object) -> object:
         globalVars.user = globalVars.api.get_user('SomeClown')
         home = os.path.expanduser("~")
         config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
+        set_config()
 
         # Check to see if config file with credentials exists
         # if it does, load our keys from the file and pass them to the
@@ -60,7 +78,7 @@ def initialAuth(original: object) -> object:
 
                 # Write all of this good authentication stuff to a file
                 # so we don't have to do it everytime we run the program
-                #TODO: Change this to use os.mkdirs() so this is more concise
+                # TODO: Change this to use os.mkdirs() so this is more concise
                 home = ''
                 ifconfig_path = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
                 if not os.path.exists(home + '/.packetqueue/'):
@@ -74,7 +92,6 @@ def initialAuth(original: object) -> object:
                     outFile.write(access_token + '\n')  # function as a better way to store
                     outFile.write(access_token_secret + '\n')  # the data
 
-
             # Something is so horribly borked we're just going to say fuck it
             except tweepy.TweepError:
                 print('Error! Failed to get request token.')
@@ -83,6 +100,7 @@ def initialAuth(original: object) -> object:
 
     assert isinstance(wrapper, object)
     return wrapper
+
 
 def main():
     pass
