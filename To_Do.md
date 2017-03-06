@@ -57,3 +57,4 @@
 
 - [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. No obvious errors
 - [ ] comparefollowers method requires argument which is not used. Suspect this is coming from argparse configuration
+- [ ] Progress bar runs as function wrapper, but it executes prior to the original function finishing
