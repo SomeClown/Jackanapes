@@ -42,18 +42,15 @@ def initial_auth(original: object) -> object:
         home = os.path.expanduser("~")
         config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.packetqueue')
 
-        # Check to see if config file with credentials exists
-        # if it does, load our keys from the file and pass them to the
-        # auth.set_access_token() method
+        # Try to load with access token, if that doesn't work we must not have valid credentials
+        # and we begin the process to call out to Twitter and get new credentials assigned
         try:
             with open(config_file, 'r') as inFile:
-                #access_token = inFile.readline().strip()
-                #access_token_secret = inFile.readline().strip()
                 globalVars.auth.set_access_token(globalVars.access_token, globalVars.access_token_secret)
 
-        # If the file doesn't exist, notify user then move through granting access token process
+        # Move through granting access token process
         except IOError:
-            print('File .packetqueue doesn\'t exist... \n')
+            print('Invalid or missing credentials... \n')
 
             try:
                 redirect_url = globalVars.auth.get_authorization_url()
