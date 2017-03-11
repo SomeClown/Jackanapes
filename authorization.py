@@ -35,21 +35,21 @@ def initial_auth(original: object) -> object:
     """
     @wraps(original)
     def wrapper(*args, **kwargs):
-        globalVars.auth = derp.hokum()
-        globalVars.api = tweepy.API(globalVars.auth)
-        globalVars.user = globalVars.api.get_user('SomeClown')
-        home = os.path.expanduser("~")
-        config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
         set_config()
+        globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
+        globalVars.api = tweepy.API(globalVars.auth)
+        globalVars.user_id = globalVars.api.get_user(globalVars.user)
+        home = os.path.expanduser("~")
+        config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.packetqueue')
 
         # Check to see if config file with credentials exists
         # if it does, load our keys from the file and pass them to the
         # auth.set_access_token() method
         try:
             with open(config_file, 'r') as inFile:
-                access_token = inFile.readline().strip()
-                access_token_secret = inFile.readline().strip()
-                globalVars.auth.set_access_token(access_token, access_token_secret)
+                #access_token = inFile.readline().strip()
+                #access_token_secret = inFile.readline().strip()
+                globalVars.auth.set_access_token(globalVars.access_token, globalVars.access_token_secret)
 
         # If the file doesn't exist, notify user then move through granting access token process
         except IOError:

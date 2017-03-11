@@ -1,10 +1,10 @@
-user                    : ~
+user                    : someclown
 home                    : ~/.packetqueue
-access_token            : ~
-access_token_secret     : ~
-consumer_token          : ~
-consumer_token_secret   : ~
-friend_file             : .friends 
+access_token            : 17028130-hnll1e4LLQWra7aWJaT9ba5WRHgjnTqxOkeXej9mA
+access_token_secret     : VH3wF9VJAnApohAjdN253duqf1wpTO6UZydAIF0dHDY
+consumer_token          : yf3KFfusQ3JiKsNKJI9cFjjgd
+consumer_token_secret   : yTE2UBsXqgWB8kzTFsyswXVBNeRHJ3Ti0b3kxX1fEFsq9LfhLM
+friend_file             : .friends
 followers               : .followers
 no_follow               : .no_follow
 

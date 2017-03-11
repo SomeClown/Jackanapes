@@ -7,7 +7,17 @@ global screen
 global auth	# Lazy, fix later
 global api	# Much drunk, so wow
 global user
-global color_black 
+global user_id
+global access_token
+global access_token_secret
+global consumer_token
+global consumer_token_secret
+global home
+global followers
+global friends_file
+global no_follow
+
+global color_black
 global color_red
 global color_green
 global color_yellow
@@ -15,16 +25,6 @@ global color_blue
 global color_purple
 global color_cyan
 global color_white
-
-global access_token
-global access_token_secret
-global consumer_token
-global consumer_token_secret
-global user
-global home
-global followers
-global friends_file
-global no_follow
 
 
 """
