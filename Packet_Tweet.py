@@ -9,8 +9,8 @@ import re
 import globalVars
 import sys
 from authorization import initial_auth
-from derp import *
 from utilities import progress_bar_wrapper
+import tweepy
 
 __author__ = 'SomeClown'
 

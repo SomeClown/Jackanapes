@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 
 import os
-import derp
 import globalVars
 import tweepy
 from functools import wraps
@@ -45,8 +44,7 @@ def initial_auth(original: object) -> object:
         # Try to load with access token, if that doesn't work we must not have valid credentials
         # and we begin the process to call out to Twitter and get new credentials assigned
         try:
-            with open(config_file, 'r') as inFile:
-                globalVars.auth.set_access_token(globalVars.access_token, globalVars.access_token_secret)
+            globalVars.auth.set_access_token(globalVars.access_token, globalVars.access_token_secret)
 
         # Move through granting access token process
         except IOError:
