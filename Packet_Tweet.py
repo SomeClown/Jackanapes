@@ -45,7 +45,7 @@ class TweetArguments:
                 os.mkdir(path)
 
     @staticmethod
-    def printfriends(number: object) -> object:
+    def print_friends(number: object) -> object:
         """
 
         :rtype: object

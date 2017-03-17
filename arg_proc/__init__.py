@@ -154,7 +154,7 @@ def arglebarg(command_args):
             curses.start_color()
             curses.use_default_colors()
             curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
-            my_tweet_args.printfriends(command_args.numFriends[0])
+            my_tweet_args.print_friends(command_args.numFriends[0])
         except SystemExit:
             curses.endwin()
             raise
