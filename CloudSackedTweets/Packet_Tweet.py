@@ -31,6 +31,27 @@ class Streamer(tweepy.StreamListener):
             cleanup(0)
 
 
+def init_curses():
+    """
+    Setup curses for use in which ever function requires it. Call this as needed
+    """
+    globalVars.screen = curses.initscr()
+    try:
+        globalVars.screen.scrollok(True)
+        curses.noecho()  # Keeps key presses from echoing to screen
+        curses.cbreak()  # Takes input away
+        globalVars.screen.keypad(1)
+        curses.start_color()
+        curses.use_default_colors()
+        curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
+    except SystemExit:
+        curses.endwin()
+        raise
+    except KeyboardInterrupt:
+        curses.endwin()
+        raise
+
+
 @initial_auth
 class TweetArguments:
 
@@ -45,23 +66,36 @@ class TweetArguments:
                 os.mkdir(path)
 
     @staticmethod
-    def print_friends(number: object) -> object:
+    def print_friends(number):
         """
+        Print <number> of friends
 
-        :rtype: object
+        :param number:
+        :return:
+
+        print(globalVars.user)
+        print('\n')
+        print(globalVars.user_id)
+        print('\n')
+        print(globalVars.user_id.screen_name)
+        print('\n')
+        print(globalVars.user_id.followers_count)
+        for friend in globalVars.user_id.friends(count=number):
+            print('\t' + friend.screen_name + '\n')
+
         """
         try:
             globalVars.screen.nodelay(True)
             globalVars.screen.addstr('\n')
             globalVars.screen.addstr('-------------------------------------------------------' + '\n')
-            globalVars.screen.addstr(str(globalVars.user.screen_name) + '\n')
+            globalVars.screen.addstr(str(globalVars.user) + ' friends count: '
+                                     + str(globalVars.user_id.followers_count) + '\n')
             globalVars.screen.addstr('-------------------------------------------------------')
             globalVars.screen.addstr('\n')
-            globalVars.screen.addstr('Friends Count: ' + str(globalVars.user.followers_count) + '\n')
             if number == 0:
                 return
             else:
-                for friend in globalVars.user.friends(count=number):
+                for friend in globalVars.user_id.friends(count=number):
                     globalVars.screen.addstr('\t' + friend.screen_name + '\n')
             globalVars.screen.addstr('\n')
             globalVars.screen.addstr('-------------------------------------------------------')
@@ -69,7 +103,6 @@ class TweetArguments:
             globalVars.screen.refresh()  # Refresh screen now that strings added
         except curses.error:
             cleanup(1)
-
         finally:
             globalVars.screen.addstr('\n Press q to exit program...')
             while True:
