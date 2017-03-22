@@ -3,6 +3,7 @@
 
 import click
 import Packet_Tweet
+import globalVars
 
 
 __author__ = 'SomeClown'
@@ -97,10 +98,29 @@ def init_followers(number):
         print(e)
 
 
+@click.command(help='Stream user\'s twitter feed')
+@click.argument('user', default='@someclown')
+def init_stream(user):
+    try:
+        Packet_Tweet.init_curses()
+        user_stream = Packet_Tweet.TweetArguments()
+        user_stream.get_follow_stream(user)
+    except SystemExit:
+        curses.endwin()
+        raise
+    except KeyboardInterrupt:
+        curses.endwin()
+        raise
+    except BaseException as e:
+        curses.endwin()
+        print(e)
+
+
 cli.add_command(init_friend_list, 'friends')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
 cli.add_command(init_retweets, 'retweets')
 cli.add_command(init_followers, 'followers')
+cli.add_command(init_stream, 'stream')
 
 cli()
