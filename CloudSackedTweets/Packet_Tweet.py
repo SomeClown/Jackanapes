@@ -65,6 +65,8 @@ class TweetArguments:
             if not os.path.exists(path):
                 os.mkdir(path)
 
+    # TODO: Add globalVars.user_id.followers_count method to display followers
+
     @staticmethod
     def print_friends(number):
         """
@@ -89,7 +91,7 @@ class TweetArguments:
             globalVars.screen.addstr('\n')
             globalVars.screen.addstr('-------------------------------------------------------' + '\n')
             globalVars.screen.addstr(str(globalVars.user) + ' friends count: '
-                                     + str(globalVars.user_id.followers_count) + '\n')
+                                     + str(globalVars.user_id.friends_count) + '\n')
             globalVars.screen.addstr('-------------------------------------------------------')
             globalVars.screen.addstr('\n')
             if number == 0:
@@ -111,7 +113,39 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @progress_bar_wrapper
+    def show_followers(number):
+        """
+        Print <number> of followers
+
+        :param number:
+        """
+        try:
+            globalVars.screen.nodelay(True)
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr('-------------------------------------------------------' + '\n')
+            globalVars.screen.addstr(str(globalVars.user) + ' followers count: '
+                                     + str(globalVars.user_id.followers_count) + '\n')
+            globalVars.screen.addstr('-------------------------------------------------------')
+            globalVars.screen.addstr('\n')
+            if number == 0:
+                return
+            else:
+                for follower in globalVars.user_id.followers(count=number):
+                    globalVars.screen.addstr('\t' + follower.screen_name + '\n')
+            globalVars.screen.addstr('\n')
+            globalVars.screen.addstr('-------------------------------------------------------')
+            globalVars.screen.addstr('\n')
+            globalVars.screen.refresh()  # Refresh screen now that strings added
+        except curses.error:
+            cleanup(1)
+        finally:
+            globalVars.screen.addstr('\n Press q to exit program...')
+            while True:
+                key = globalVars.screen.getch()
+                if key == ord('q'):
+                    cleanup(0)
+
+    @staticmethod
     def save_followers(my_screen_name: object) -> object:
         """
         save followers list to a file for later use
@@ -140,7 +174,6 @@ class TweetArguments:
         return None
 
     @staticmethod
-    @progress_bar_wrapper
     def save_friends(my_screen_name: object) -> object:
         """
         save friends list to a file for later use
@@ -169,7 +202,6 @@ class TweetArguments:
         return None
 
     @staticmethod
-    @progress_bar_wrapper
     def compare_followers():
 
         friendslist = []

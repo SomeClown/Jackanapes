@@ -3,7 +3,7 @@
 from functools import wraps
 import logging
 import time
-import progressbar
+#import progressbar
 
 
 def logging_wrapper(original_function: object) -> object:

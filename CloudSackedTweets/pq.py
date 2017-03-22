@@ -22,7 +22,7 @@ def cli():
     """
 
 
-@click.command(help='Get \'n\' number of friends')
+@click.command(help='Get \'n\' list of friends')
 @click.argument('number', default=10)
 def init_friend_list(number):
     try:
@@ -82,9 +82,25 @@ def init_retweets(number):
         print(e)
 
 
+@click.command(help='Get \'n\' list of followers')
+@click.argument('number', default=10)
+def init_followers(number):
+    try:
+        Packet_Tweet.init_curses()
+        followers = Packet_Tweet.TweetArguments()
+        followers.show_followers(number)
+    except SystemExit:
+        raise
+    except KeyboardInterrupt:
+        raise
+    except BaseException as e:
+        print(e)
+
+
 cli.add_command(init_friend_list, 'friends')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
 cli.add_command(init_retweets, 'retweets')
+cli.add_command(init_followers, 'followers')
 
 cli()

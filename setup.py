@@ -1,21 +1,17 @@
-from setuptools import setup, find_packages
+from distutils.core import setup
 
 setup(
     name='CloudSackedTweets',
-    version='.01',
-    packages=find_packages(),
-    include_pacakge_date=True,
+    version='0.1a0',
+    packages=[''],
+    package_dir={'': 'CloudSackedTweets'},
     url='https://github.com/SomeClown/PQ',
     license='MIT',
     author='@someclown',
     author_email='teren@packetqueue.net',
-    description='Command line twitter utility',
-    install_requires=[
-        'Click',
-        'tweepy',
-        ],
-        entry_points='''
-        [console_scripts]
-        CloudSackedTweets=CloudSackedTweets.__init__:cli
-        ''',
-        )
+    description='twitter utilities client',
+    entry_points='''
+    [console_scripts]
+    CloudSackedTweets=pq:cli
+    ''',
+)

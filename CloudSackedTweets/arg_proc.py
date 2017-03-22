@@ -9,7 +9,7 @@ __author__ = 'SomeClown'
 
 """
 
-All of the logic for the program goes here. __init__.py.py calls pq_args which is where we set up
+All of the logic for the program goes here. pq.py.py calls pq_args which is where we set up
 the parser. The parser then passes back to this file the options selected, where the appropriate
 stanza is executed. The execution logic takes place in Packet_Tweet, where each function is also
 wrapped with the authorization function.
