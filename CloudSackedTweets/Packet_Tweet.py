@@ -469,6 +469,8 @@ class TweetArguments:
     def direct_send(user, msg):
         """
 
+        DEPRECATED NOW: Use CreateUpdate.direct_update going forward
+
         :param user:
         :param msg:
         :return:
@@ -500,12 +502,12 @@ class TweetArguments:
         return None
 
     @staticmethod
-    def get_stream() -> object:
+    def get_stream():
         """
 
         """
-        terenStream = tweepy.Stream(globalVars.auth, Streamer())
-        terenStream.userstream()
+        teren_stream = tweepy.Stream(globalVars.auth, Streamer())
+        teren_stream.userstream()
 
     @staticmethod
     def get_follow_stream(user):
@@ -513,23 +515,23 @@ class TweetArguments:
 
         :param user:
         """
-        terenStream = tweepy.Stream(globalVars.auth, Streamer())
+        teren_stream = tweepy.Stream(globalVars.auth, Streamer())
         get_user = globalVars.api.get_user(user)
         user_id = get_user.id
-        userID = str(user_id)
-        if userID != '17028130':
-            terenStream.filter(follow=[userID])
+        user_id = str(user_id)
+        if user_id != '17028130':
+            teren_stream.filter(follow=[user_id])
         else:
-            terenStream.userstream()
+            teren_stream.userstream()
 
     @staticmethod
-    def get_stream_search(searchHash):
+    def get_stream_search(search_hash):
         """
 
-        :param searchHash:
+        :param search_hash:
         """
         teren_stream = tweepy.Stream(globalVars.auth, Streamer())
-        str1 = ''.join(searchHash)
+        str1 = ''.join(search_hash)
         try:
             teren_stream.filter(track=[str1])
         except curses.error:
@@ -588,6 +590,7 @@ class SaveTweet(object):
         self.file_contents = file_contents
 
 
+@initial_auth
 class CreateUpdate(object):
     """
 
@@ -600,13 +603,25 @@ class CreateUpdate(object):
         media = filename of media to include with update (optional)
     """
 
-    def __init__(self, tweet_text, flag, media=''):
+    def __init__(self, user, tweet_text, flag='', media=''):
+        self.user = user
         self.tweet_text = tweet_text
         self.flag = flag
         self.media = media
 
-    def direct_update(self):
-        pass
+    @staticmethod
+    def direct_update(user, tweet_text):
+        name_check = re.compile(r'(@)+')
+        name_result = name_check.search(user)
+
+        if len(tweet_text) >= 140:
+            print('Tweets must be 140 characters or less')
+        elif name_result is None:
+            print('Incorrect username format (must include @)')
+        else:
+            globalVars.api.send_direct_message(screen_name=user, text=tweet_text)
+            print('\nMessage "{}" sent to {} successfully\n'.format(tweet_text, user))
+        return None
 
     def status_update(self):
         pass

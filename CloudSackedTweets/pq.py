@@ -116,11 +116,24 @@ def init_stream(user):
         print(e)
 
 
+@click.command(help='send status update')
+@click.argument('user')
+@click.argument('status', default='...forgot status...')
+def init_status(user, status):
+    try:
+        update = Packet_Tweet.CreateUpdate(user, status)
+        #update = Packet_Tweet.TweetArguments()
+        #update.direct_send(user, status)
+        update.direct_update(user, status)
+    except BaseException as e:
+        print(e)
+
 cli.add_command(init_friend_list, 'friends')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
 cli.add_command(init_retweets, 'retweets')
 cli.add_command(init_followers, 'followers')
 cli.add_command(init_stream, 'stream')
+cli.add_command(init_status, 'status')
 
 cli()

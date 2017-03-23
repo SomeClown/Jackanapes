@@ -34,6 +34,7 @@ def initial_auth(original: object) -> object:
     """
     @wraps(original)
     def wrapper(*args, **kwargs):
+        # TODO: Write test method to test for auth without constantly re-authing with twitter
         set_config()
         globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
         globalVars.api = tweepy.API(globalVars.auth)
