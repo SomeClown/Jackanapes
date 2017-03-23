@@ -106,27 +106,30 @@ def init_stream(user):
         user_stream = Packet_Tweet.TweetArguments()
         user_stream.get_follow_stream(user)
     except SystemExit:
-        curses.endwin()
         raise
     except KeyboardInterrupt:
-        curses.endwin()
         raise
     except BaseException as e:
-        curses.endwin()
         print(e)
 
 
 @click.command(help='send status update')
 @click.argument('user')
 @click.argument('status', default='...forgot status...')
-def init_status(user, status):
-    try:
-        update = Packet_Tweet.CreateUpdate(user, status)
-        #update = Packet_Tweet.TweetArguments()
-        #update.direct_send(user, status)
-        update.direct_update(user, status)
-    except BaseException as e:
-        print(e)
+@click.option('--direct', '-d', 'direct', is_flag=True, help='send direct message')
+def init_status(direct, user, status):
+    if direct is True:
+        try:
+            update = Packet_Tweet.CreateUpdate(user, status)
+            update.direct_update(user, status)
+        except BaseException as e:
+            print(e)
+    else:
+        try:
+            update = Packet_Tweet.CreateUpdate(user='', tweet_text=status)
+            update.status_update(status)
+        except BaseException as e:
+            print(e)
 
 cli.add_command(init_friend_list, 'friends')
 cli.add_command(init_time_line, 'tweets')

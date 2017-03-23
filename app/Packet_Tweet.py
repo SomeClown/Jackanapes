@@ -591,7 +591,7 @@ class SaveTweet(object):
 
 
 @initial_auth
-class CreateUpdate(object):
+class CreateUpdate:
     """
 
     prototype class for all update type tweet events: direct send,
@@ -623,8 +623,13 @@ class CreateUpdate(object):
             print('\nMessage "{}" sent to {} successfully\n'.format(tweet_text, user))
         return None
 
-    def status_update(self):
-        pass
+    @staticmethod
+    def status_update(tweet_text):
+        if len(tweet_text) >= 140:
+            print('Tweets must be 140 characters or less')
+        else:
+            globalVars.api.update_status(status=tweet_text)
+            print('\nStatus "{}" updated successfully\n'.format(tweet_text))
 
     def reply(self):
         pass
