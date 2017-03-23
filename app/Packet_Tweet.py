@@ -55,9 +55,6 @@ def init_curses():
 @initial_auth
 class TweetArguments:
 
-    def __init__(self, number=0):
-        self.number = number
-
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
         if not os.path.exists(sub_path):
@@ -491,6 +488,8 @@ class TweetArguments:
     def status_update(text):
         """
 
+        DEPRECATED NOW: Use CreateUpdate.update_status going forward
+
         :param text:
         :return:
         """
@@ -602,13 +601,12 @@ class CreateUpdate:
         flag = type of update: direct, reply, status
         media = filename of media to include with update (optional)
     """
-
-    def __init__(self, user, tweet_text, flag='', media=''):
+    """
+    def __init__(self, user, tweet_text, media=''):
         self.user = user
         self.tweet_text = tweet_text
-        self.flag = flag
         self.media = media
-
+    """
     @staticmethod
     def direct_update(user, tweet_text):
         name_check = re.compile(r'(@)+')

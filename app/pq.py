@@ -120,13 +120,13 @@ def init_stream(user):
 def init_status(direct, user, status):
     if direct is True:
         try:
-            update = Packet_Tweet.CreateUpdate(user, status)
+            update = Packet_Tweet.CreateUpdate()
             update.direct_update(user, status)
         except BaseException as e:
             print(e)
     else:
         try:
-            update = Packet_Tweet.CreateUpdate(user='', tweet_text=status)
+            update = Packet_Tweet.CreateUpdate()
             update.status_update(status)
         except BaseException as e:
             print(e)
