@@ -4,7 +4,7 @@ setup(
     name='CloudSackedTweets',
     version='0.1a0',
     packages=[''],
-    package_dir={'': 'CloudSackedTweets'},
+    package_dir={'': 'app'},
     url='https://github.com/SomeClown/PQ',
     license='MIT',
     author='@someclown',
