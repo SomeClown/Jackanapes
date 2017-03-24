@@ -43,7 +43,8 @@ def init_curses():
         globalVars.screen.keypad(1)
         curses.start_color()
         curses.use_default_colors()
-        curses.init_pair(1, curses.COLOR_RED, -1)  # Foreground Red/background transparent
+        curses.init_pair(1, curses.COLOR_RED, -1)       # Foreground Red/background transparent
+        curses.init_pair(2, curses.COLOR_YELLOW, -1)    # Foreground Yellow/background transparent
     except SystemExit:
         curses.endwin()
         raise
@@ -62,10 +63,8 @@ class TweetArguments:
             if not os.path.exists(path):
                 os.mkdir(path)
 
-    # TODO: Add globalVars.user_id.followers_count method to display followers
-
     @staticmethod
-    def print_friends(number):
+    def print_friends(number: int):
         """
         Print <number> of friends
 
@@ -110,7 +109,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def show_followers(number):
+    def show_followers(number: int):
         """
         Print <number> of followers
 
@@ -143,12 +142,11 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def save_followers(my_screen_name: object) -> object:
+    def save_followers(my_screen_name: str):
         """
         save followers list to a file for later use
 
         :param my_screen_name:
-        :return:
         """
         followers_count = globalVars.user.followers_count
         myfollowers = []
@@ -171,15 +169,14 @@ class TweetArguments:
         return None
 
     @staticmethod
-    def save_friends(my_screen_name: object) -> object:
+    def save_friends(my_screen_name: str):
         """
         save friends list to a file for later use
 
         :param my_screen_name:
-        :return:
         """
         friends_count = globalVars.user.friends_count
-        myfriends = []
+        my_friends = []
         try:
             cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -190,20 +187,22 @@ class TweetArguments:
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        myfriends.append(str(item.id) + ',' + item.screen_name)
-                f.write('\n'.join(map(str, myfriends)))
+                        my_friends.append(str(item.id) + ',' + item.screen_name)
+                f.write('\n'.join(map(str, my_friends)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
             print(e)
-        return None
 
     @staticmethod
     def compare_followers():
+        """
+        compare followers and friends list to see which friends don't follow back
 
-        friendslist = []
-        followerlist = []
-        baddieslist = []
+        """
+        friends_list = []
+        follower_list = []
+        baddies_list = []
         index = 0
 
         try:
@@ -213,24 +212,23 @@ class TweetArguments:
             followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
             with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
                 for i in followers:
-                    followerlist.append(i)
+                    follower_list.append(i)
                 for j in friends:
                     friend_id = j.split(',')
-                    friendslist.append(friend_id[0] + '\n')
+                    friends_list.append(friend_id[0] + '\n')
             with open(config_file, 'w') as baddies:
-                for item in friendslist:
-                    if item not in followerlist:
-                        baddieslist.append(item)
+                for item in friends_list:
+                    if item not in follower_list:
+                        baddies_list.append(item)
                         index += 1
-                baddies.write(''.join(map(str, baddieslist)))
+                baddies.write(''.join(map(str, baddies_list)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
             print(e)
-        return None
 
     @staticmethod
-    def print_timeline(number):
+    def print_timeline(number: int):
         """
         print user's timeline
 
@@ -259,20 +257,20 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def print_mentions(number):
+    def print_mentions(number: int):
         """
         print user's mentions
 
         :param number:
         :return:
         """
-        myMentions = globalVars.api.mentions_timeline(count=number)
+        my_mentions = globalVars.api.mentions_timeline(count=number)
         try:
             globalVars.screen.addstr('\n')
             if number == 0:
                 return
             else:
-                for mention in myMentions:
+                for mention in my_mentions:
                     globalVars.screen.addstr(str(mention.user.name), curses.color_pair(1))
                     globalVars.screen.addstr(str(': ' + mention.text + '\n'))
                 globalVars.screen.refresh()
@@ -287,21 +285,21 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def print_retweets(number):
+    def print_retweets(number: int):
         # Print user's tweets that others have retweeted
         """
 
         :param number:
         :return:
         """
-        otherRetweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
+        other_retweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
         try:
             globalVars.screen.addstr('\n')
             if number == 0:
                 cleanup(1)
                 return
             else:
-                for retweets in otherRetweets:
+                for retweets in other_retweets:
                     # idName = globalVars.api.get_user(retweets.id_str)
                     # globalVars.screen.addstr(str(idName.screen_name))
                     globalVars.screen.addstr(str(retweets.id_str), curses.color_pair(1))
@@ -319,49 +317,50 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def print_my_info():
-        # Print information about me
+    def show_my_info():
         """
+
+        Print information about me
 
         :return:
         """
-        myInfo = globalVars.api.me()
+        my_info = globalVars.api.me()
         try:
             # Format and print handle, username, and user ID
             globalVars.screen.addstr('\n')
             globalVars.screen.addstr(str('@'), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.screen_name), curses.color_pair(1))
-            globalVars.screen.addstr(str(' (') + str(myInfo.name), curses.color_pair(2))
-            globalVars.screen.addstr(str('/') + str(myInfo.id_str), curses.color_pair(2))
+            globalVars.screen.addstr(str(my_info.screen_name), curses.color_pair(1))
+            globalVars.screen.addstr(str(' (') + str(my_info.name), curses.color_pair(2))
+            globalVars.screen.addstr(str('/') + str(my_info.id_str), curses.color_pair(2))
             globalVars.screen.addstr(str(')'))
 
             # Format and print created date for user
             globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.created_at), curses.color_pair(2))
+            globalVars.screen.addstr(str(my_info.created_at), curses.color_pair(2))
 
             # Format and print followers count
             globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.followers_count), curses.color_pair(2))
+            globalVars.screen.addstr(str(my_info.followers_count), curses.color_pair(2))
 
             # Format and print number of tweets
             globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.statuses_count), curses.color_pair(2))
+            globalVars.screen.addstr(str(my_info.statuses_count), curses.color_pair(2))
 
             # Format and print user's reported location
             globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.location), curses.color_pair(2))
+            globalVars.screen.addstr(str(my_info.location), curses.color_pair(2))
 
             # Format and print description from user profile
-            globalVars.screen.addstr('\n' + json.dumps(myInfo.description))
+            globalVars.screen.addstr('\n' + json.dumps(my_info.description))
             globalVars.screen.addstr('\n')
 
             # Format and print user's URL, if present
             globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.url))
+            globalVars.screen.addstr(str(my_info.url))
 
             # Format and print link to profile picture
             globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(myInfo.profile_image_url_https))
+            globalVars.screen.addstr(str(my_info.profile_image_url_https))
             globalVars.screen.addstr(str('\n'))
 
             # Add line space and clean up
@@ -379,49 +378,50 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def print_not_me(data):
-        # Print information on another user
+    def show_not_me(data: str):
         """
+
+        Print information on another user
 
         :param data:
         :return:
         """
-        notMe = globalVars.api.get_user(screen_name=data)
+        not_me = globalVars.api.get_user(screen_name=data)
         try:
 
             # Format and print handle, username, and user ID
             globalVars.screen.addstr('\n')
             globalVars.screen.addstr(str('@'), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.screen_name), curses.color_pair(1))
-            globalVars.screen.addstr(str(' (' + notMe.name + '/' + notMe.id_str
+            globalVars.screen.addstr(str(not_me.screen_name), curses.color_pair(1))
+            globalVars.screen.addstr(str(' (' + not_me.name + '/' + not_me.id_str
                                          + ')'))
 
             # Format and print created date for user
             globalVars.screen.addstr(str('  User since: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.created_at))
+            globalVars.screen.addstr(str(not_me.created_at))
 
             # Format and print followers count
             globalVars.screen.addstr(str(' Followers: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.followers_count))
+            globalVars.screen.addstr(str(not_me.followers_count))
 
             # Format and print number of tweets
             globalVars.screen.addstr(str(' Tweets: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.statuses_count))
+            globalVars.screen.addstr(str(not_me.statuses_count))
 
             # Format and print user's reported location
             globalVars.screen.addstr(str(' Location: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.location))
+            globalVars.screen.addstr(str(not_me.location))
 
             # Format and print description from user profile
-            globalVars.screen.addstr('\n' + json.dumps(notMe.description) + '\n')
+            globalVars.screen.addstr('\n' + json.dumps(not_me.description) + '\n')
 
             # Format and print user's URL, if present
             globalVars.screen.addstr(str('URL: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.url))
+            globalVars.screen.addstr(str(not_me.url))
 
             # Format and print link to profile picture
             globalVars.screen.addstr(str(' Profile Picture: '), curses.color_pair(1))
-            globalVars.screen.addstr(str(notMe.profile_image_url_https) + '\n')
+            globalVars.screen.addstr(str(not_me.profile_image_url_https) + '\n')
 
             # Add line space and clean up
             globalVars.screen.addstr('\n')
@@ -452,7 +452,6 @@ class TweetArguments:
                 globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
                 globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
                 globalVars.screen.refresh()  # Refresh screen now that strings added
-
         except curses.error:
             cleanup(1)
         finally:
@@ -537,16 +536,18 @@ class TweetArguments:
             cleanup(1)
 
 
-def cleanup(exit_code):
+def cleanup(exit_code: object, error=''):
     """
 
     :param exit_code:
+    :param error:
     """
     curses.echo()
     curses.nocbreak()
     curses.endwin()
     if exit_code == 1:
         print('Egads, it looks like we shit the bed...')
+        print(error)
         sys.exit(exit_code)
     else:
         sys.exit(exit_code)
@@ -593,22 +594,17 @@ class SaveTweet(object):
 class CreateUpdate:
     """
 
-    prototype class for all update type tweet events: direct send,
-    status update, replies, etc. Only those things which send something
-    from the logged in user go here
+    class holder for various update methods
 
-        tweet_text = text of whatever user is putting out there
-        flag = type of update: direct, reply, status
-        media = filename of media to include with update (optional)
-    """
-    """
-    def __init__(self, user, tweet_text, media=''):
-        self.user = user
-        self.tweet_text = tweet_text
-        self.media = media
     """
     @staticmethod
-    def direct_update(user, tweet_text):
+    def direct_update(user: str, tweet_text: str):
+        """
+
+        :param user:
+        :param tweet_text:
+
+        """
         name_check = re.compile(r'(@)+')
         name_result = name_check.search(user)
 
@@ -622,7 +618,12 @@ class CreateUpdate:
         return None
 
     @staticmethod
-    def status_update(tweet_text):
+    def status_update(tweet_text: str):
+        """
+
+        :param tweet_text:
+
+        """
         if len(tweet_text) >= 140:
             print('Tweets must be 140 characters or less')
         else:

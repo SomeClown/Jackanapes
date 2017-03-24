@@ -99,7 +99,7 @@ def init_followers(number):
 
 
 @click.command(help='Stream user\'s twitter feed')
-@click.argument('user', default='@someclown')
+@click.argument('user', default='')
 def init_stream(user):
     try:
         Packet_Tweet.init_curses()
@@ -111,6 +111,27 @@ def init_stream(user):
         raise
     except BaseException as e:
         print(e)
+        Packet_Tweet.cleanup(1, e)
+
+
+@click.command(help='information on yourself or others')
+@click.option('-m', '--me', 'me', is_flag=True, help='me')
+@click.option('-n', '--not', 'not_me', help='Not Me')
+def init_info(me, not_me=''):
+    if me:
+        try:
+            Packet_Tweet.init_curses()
+            really_me = Packet_Tweet.TweetArguments()
+            really_me.show_my_info()
+        finally:
+            pass
+    if not_me:
+        try:
+            Packet_Tweet.init_curses()
+            really_not_me = Packet_Tweet.TweetArguments()
+            really_not_me.show_not_me(not_me)
+        finally:
+            pass
 
 
 @click.command(help='send status update')
@@ -138,5 +159,6 @@ cli.add_command(init_retweets, 'retweets')
 cli.add_command(init_followers, 'followers')
 cli.add_command(init_stream, 'stream')
 cli.add_command(init_status, 'status')
+cli.add_command(init_info, 'info')
 
 cli()
