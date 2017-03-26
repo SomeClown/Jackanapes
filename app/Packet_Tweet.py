@@ -148,7 +148,7 @@ class TweetArguments:
 
         :param my_screen_name:
         """
-        followers_count = globalVars.user.followers_count
+        followers_count = globalVars.user_id.followers_count
         save_followers = []
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
@@ -156,7 +156,7 @@ class TweetArguments:
                                    skip_status=True, include_user_entities=False, count=5000)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
             home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.followers')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
@@ -175,7 +175,7 @@ class TweetArguments:
 
         :param my_screen_name:
         """
-        friends_count = globalVars.user.friends_count
+        friends_count = globalVars.user_id.friends_count
         my_friends = []
         try:
             cursor = tweepy.Cursor(globalVars.api.friends, screen_name=my_screen_name, cursor=-1,
@@ -183,7 +183,7 @@ class TweetArguments:
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
             home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
+            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
@@ -207,9 +207,9 @@ class TweetArguments:
 
         try:
             home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.no_follow')
-            friends_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.friends')
-            followers_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.followers')
+            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.no_follow')
+            friends_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.friends')
+            followers_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.followers')
             with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
                 for i in followers:
                     follower_list.append(i)

@@ -288,7 +288,9 @@ traffic ?                               containing “traffic” and asking a qu
 
 @click.command(options_metavar='[options]', short_help='save all friends to disk')
 @click.argument('user_username', metavar='[twitter user name]')
-def init_friends():
+def init_friends(user_username):
+    friends = Packet_Tweet.TweetArguments()
+    friends.save_friends(user_username)
     """ \b
     This will download all of your friends (the people you follow) and
     store the results by user_id in a file, by default called .friends
@@ -299,7 +301,9 @@ def init_friends():
 
 @click.command(options_metavar='[options]', short_help='save all followers to disk')
 @click.argument('user_username', metavar='[twitter user name]')
-def init_followers():
+def init_followers(user_username):
+    followers = Packet_Tweet.TweetArguments()
+    followers.save_followers(user_username)
     """ \b
     This will download all of your followers (the people following you) and
     store the results by user_id in a file, by default called .followers
@@ -310,13 +314,14 @@ def init_followers():
 
 @click.command(options_metavar='[options]', short_help='compare friends/followers and save to disk')
 def init_compare():
+    compare = Packet_Tweet.TweetArguments()
+    compare.compare_followers()
     """ \b
     This compares the followers and friends files to see whom you are following
     who do not follow back. The results of this comparison are stored by user_id
     in a file, by default called .no_follow and located in teh application
     directory for the user.
     """
-
     pass
 
 
