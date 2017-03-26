@@ -187,7 +187,7 @@ def init_status(direct, user, status):
 
 @click.command(options_metavar='[options]')
 @click.argument('search_term', metavar='[search term]')
-@click.argument('count', nargs=-1, metavar='[number of items]')
+@click.argument('count', nargs=1, required=False, metavar='[number of items]')
 @click.option('--static/--stream', default=True, help='Static or streaming search')
 def init_search_global(static, search_term, count=10):
     """ \b
@@ -246,7 +246,7 @@ traffic ?                               containing “traffic” and asking a qu
 
 @click.command(options_metavar='[options]')
 @click.argument('search_term', metavar='[search term]')
-@click.argument('count', nargs=-1, metavar='[number of items]')
+@click.argument('count', nargs=1, required=False, metavar='[number of items]')
 @click.option('--static/--stream', default=True, help='Static or streaming search')
 def init_search_local(static, search_term, count=10):
     """ \b
