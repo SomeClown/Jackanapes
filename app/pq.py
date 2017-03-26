@@ -285,6 +285,43 @@ traffic ?                               containing “traffic” and asking a qu
         """
     pass
 
+
+@click.command(options_metavar='[options]', short_help='save all friends to disk')
+@click.argument('user_username', metavar='[twitter user name]')
+def init_friends():
+    """ \b
+    This will download all of your friends (the people you follow) and
+    store the results by user_id in a file, by default called .friends
+    and located in the application directory for the user.
+    """
+    pass
+
+
+@click.command(options_metavar='[options]', short_help='save all followers to disk')
+@click.argument('user_username', metavar='[twitter user name]')
+def init_followers():
+    """ \b
+    This will download all of your followers (the people following you) and
+    store the results by user_id in a file, by default called .followers
+    and located in the application directory for the user.
+    """
+    pass
+
+
+@click.command(options_metavar='[options]', short_help='compare friends/followers and save to disk')
+def init_compare():
+    """ \b
+    This compares the followers and friends files to see whom you are following
+    who do not follow back. The results of this comparison are stored by user_id
+    in a file, by default called .no_follow and located in teh application
+    directory for the user.
+    """
+
+    pass
+
+
+
+
 cli.add_command(init_friend_list, 'friends')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
@@ -295,5 +332,8 @@ cli.add_command(init_status, 'status')
 cli.add_command(init_info, 'info')
 cli.add_command(init_search_global, 'sg')
 cli.add_command(init_search_local, 'sl')
+cli.add_command(init_friends, 'friends')
+cli.add_command(init_followers, 'followers')
+cli.add_command(init_compare, 'compare')
 
 cli()

@@ -149,7 +149,7 @@ class TweetArguments:
         :param my_screen_name:
         """
         followers_count = globalVars.user.followers_count
-        myfollowers = []
+        save_followers = []
         try:
             cursor = tweepy.Cursor(globalVars.api.followers_ids, screen_name=my_screen_name, cursor=-1,
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
@@ -160,8 +160,8 @@ class TweetArguments:
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        myfollowers.append(item)
-                f.write('\n'.join(map(str, myfollowers)))
+                        save_followers.append(item)
+                f.write('\n'.join(map(str, save_followers)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
         except BaseException as e:
