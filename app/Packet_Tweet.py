@@ -204,7 +204,7 @@ class TweetArguments:
         follower_list = []
         baddies_list = []
         index = 0
-
+        # TODO: Change this entire block to use a "set" comparison for better readability and efficiency
         try:
             home = os.path.expanduser("~")
             config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.no_follow')
