@@ -13,5 +13,5 @@ setup(
     entry_points='''
     [console_scripts]
     CloudSackedTweets=pq:cli
-    ''',
+    ''', requires=['click', 'progressbar']
 )

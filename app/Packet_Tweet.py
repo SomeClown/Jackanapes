@@ -438,16 +438,16 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    def term_search(term):
+    def term_search(term, count):
         """
 
         :param term:
+        :param count:
         :return:
         """
+        cursor = tweepy.Cursor(globalVars.api.search, q=term).items(count)
         try:
-            search = str(term[0])
-            count = int(term[1])
-            for tweet in tweepy.Cursor(globalVars.api.search, q=search).items(count):
+            for tweet in cursor:
                 globalVars.screen.addstr(str(tweet.created_at) + ': ')
                 globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
                 globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
