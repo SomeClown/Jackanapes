@@ -227,6 +227,25 @@ class TweetArguments:
             print(e)
 
     @staticmethod
+    def grab_user_object(file_name):
+        raw_ids = []
+        count = 1
+        thing = globalVars.api.get_user()
+        with open(file_name, 'r') as f:
+            for line in f:
+                raw_ids.append(line.strip('\n'))
+        composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
+        for outer_list_item in composite_ids:
+            for page in tweepy.Cursor(thing).pages():
+                print(page)
+            """
+            for inner_list_item in outer_list_item:
+                user_object = globalVars.api.get_user(user_id=inner_list_item)
+                print(count, user_object.screen_name)
+                count += 1
+            """
+
+    @staticmethod
     def print_timeline(number: int):
         """
         print user's timeline
