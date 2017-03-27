@@ -5,25 +5,8 @@ import globalVars
 import tweepy
 from functools import wraps
 from utilities import logging_wrapper
-import yaml
 
 __author__ = 'SomeClown'
-
-
-def set_config():
-
-    # Load and assign key variables from yaml configuration file
-    my_config_file = open('config.yml')
-    settings = yaml.load(my_config_file)
-    globalVars.access_token = settings['access_token']
-    globalVars.access_token_secret = settings['access_token_secret']
-    globalVars.consumer_token = settings['consumer_token']
-    globalVars.consumer_token_secret = settings['consumer_token_secret']
-    globalVars.user = settings['user']
-    globalVars.home = settings['home']
-    globalVars.followers = settings['followers']
-    globalVars.friend_file = settings['friend_file']
-    globalVars.no_follow = settings['no_follow']
 
 
 @logging_wrapper
@@ -35,7 +18,7 @@ def initial_auth(original: object) -> object:
     @wraps(original)
     def wrapper(*args, **kwargs):
         # TODO: Write test method to test for auth without constantly re-authing with twitter
-        set_config()
+        #set_config()
         globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
         globalVars.api = tweepy.API(globalVars.auth)
         globalVars.user_id = globalVars.api.get_user(globalVars.user)

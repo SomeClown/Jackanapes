@@ -9,7 +9,6 @@ import re
 import globalVars
 import sys
 from authorization import initial_auth
-from utilities import progress_bar_wrapper
 import tweepy
 
 __author__ = 'SomeClown'
@@ -436,6 +435,24 @@ class TweetArguments:
                 key = globalVars.screen.getch()
                 if key == ord('q'):
                     cleanup(0)
+
+    @staticmethod
+    def compare_users(user, compare_date=0, num=0):
+        """
+
+        Comparison method. This is where we'll take in user arguments to return
+        data such as: how long since a given user tweeted, or how many followers
+        do they have, etc.
+
+        :param user:
+        :param compare_date:
+        :param num:
+        :return:
+        """
+        user_info = globalVars.api.get_user(user)
+        print(user_info.followers_count)
+        print(user_info.statuses_count)
+        print(user_info.created_at)
 
     @staticmethod
     def term_search(term, count):

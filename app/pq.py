@@ -3,7 +3,8 @@
 
 import click
 import Packet_Tweet
-
+import globalVars
+import yaml
 
 __author__ = 'SomeClown'
 
@@ -48,11 +49,28 @@ traffic ?                               containing “traffic” and asking a qu
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
+def set_config():
+
+    # Load and assign key variables from yaml configuration file
+    my_config_file = open('config.yml')
+    settings = yaml.load(my_config_file)
+    globalVars.access_token = settings['access_token']
+    globalVars.access_token_secret = settings['access_token_secret']
+    globalVars.consumer_token = settings['consumer_token']
+    globalVars.consumer_token_secret = settings['consumer_token_secret']
+    globalVars.user = settings['user']
+    globalVars.home = settings['home']
+    globalVars.followers = settings['followers']
+    globalVars.friend_file = settings['friend_file']
+    globalVars.no_follow = settings['no_follow']
+
+
 @click.group(epilog=EPILOG, context_settings=CONTEXT_SETTINGS)
 def cli():
     """
     Command line Twitter (and stuff) client - For questions contact @SomeClown
     """
+    set_config()
 
 
 @click.command(help='Get \'n\' list of friends')
@@ -289,42 +307,44 @@ traffic ?                               containing “traffic” and asking a qu
 @click.command(options_metavar='[options]', short_help='save all friends to disk')
 @click.argument('user_username', metavar='[twitter user name]')
 def init_friends(user_username):
+    """ \b
+        This will download all of your friends (the people you follow) and
+        store the results by user_id in a file, by default called .friends
+        and located in the application directory for the user.
+    """
     friends = Packet_Tweet.TweetArguments()
     friends.save_friends(user_username)
-    """ \b
-    This will download all of your friends (the people you follow) and
-    store the results by user_id in a file, by default called .friends
-    and located in the application directory for the user.
-    """
-    pass
 
 
 @click.command(options_metavar='[options]', short_help='save all followers to disk')
 @click.argument('user_username', metavar='[twitter user name]')
 def init_followers(user_username):
+    """ \b
+       This will download all of your followers (the people following you) and
+       store the results by user_id in a file, by default called .followers
+       and located in the application directory for the user.
+    """
     followers = Packet_Tweet.TweetArguments()
     followers.save_followers(user_username)
+
+
+@click.command(options_metavar='[options]', short_help='various comparisons')
+@click.option('-m', '--me', 'me', is_flag=True, help='add some help here')
+@click.option('-u', '--user', 'user', help='add some help here')
+@click.option('-f', '--file', 'file', is_flag=True, help='add some help here')
+def init_compare(me, user, file=''):
     """ \b
-    This will download all of your followers (the people following you) and
-    store the results by user_id in a file, by default called .followers
-    and located in the application directory for the user.
+        This method makes various comparisons, based on input, between the local user
+        and the various followers and friends they have; comparisons such as whether or
+        not the people they follow follow them back. This is useful for account pruning.
     """
-    pass
-
-
-@click.command(options_metavar='[options]', short_help='compare friends/followers and save to disk')
-def init_compare():
     compare = Packet_Tweet.TweetArguments()
-    compare.compare_followers()
-    """ \b
-    This compares the followers and friends files to see whom you are following
-    who do not follow back. The results of this comparison are stored by user_id
-    in a file, by default called .no_follow and located in teh application
-    directory for the user.
-    """
-    pass
-
-
+    if me is True:
+        compare.compare_users('someclown')
+    elif user:
+        compare.compare_users(user)
+    elif file:
+        compare.compare_followers()
 
 
 cli.add_command(init_friend_list, 'friends')
