@@ -347,7 +347,7 @@ def init_compare(me, user, file=''):
         compare.compare_followers()
 
 
-cli.add_command(init_friend_list, 'friends')
+cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
 cli.add_command(init_retweets, 'retweets')

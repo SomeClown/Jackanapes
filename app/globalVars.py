@@ -2,29 +2,27 @@
 
 __author__ = 'SomeClown'
 
-# Globals
-global screen
-global auth	        # Lazy, fix later
-global api	        # Much drunk, so wow
-global user
-global user_id
-global access_token
-global access_token_secret
-global consumer_token
-global consumer_token_secret
-global home
-global followers
-global friends_file
-global no_follow
-
-global color_black
-global color_red
-global color_green
-global color_yellow
-global color_blue
-global color_purple
-global color_cyan
-global color_white
+screen = ''
+auth = ''
+api = ''
+user = ''
+user_id = ''
+access_token = ''
+access_token_secret = ''
+consumer_token = ''
+consumer_token_secret = ''
+home = ''
+followers = ''
+friends_file = ''
+no_follow = ''
+color_black = ''
+color_red = ''
+color_green = ''
+color_yellow = ''
+color_blue = ''
+color_purple = ''
+color_cyan = ''
+color_white = ''
 
 
 """
