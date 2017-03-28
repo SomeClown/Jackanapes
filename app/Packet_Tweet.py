@@ -10,6 +10,7 @@ import globalVars
 import sys
 from authorization import initial_auth
 import tweepy
+import click
 
 __author__ = 'SomeClown'
 
@@ -229,21 +230,24 @@ class TweetArguments:
     @staticmethod
     def grab_user_object(file_name):
         raw_ids = []
-        count = 1
-        thing = globalVars.api.get_user()
         with open(file_name, 'r') as f:
             for line in f:
                 raw_ids.append(line.strip('\n'))
         composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
-        for outer_list_item in composite_ids:
-            for page in tweepy.Cursor(thing).pages():
-                print(page)
-            """
-            for inner_list_item in outer_list_item:
-                user_object = globalVars.api.get_user(user_id=inner_list_item)
-                print(count, user_object.screen_name)
-                count += 1
-            """
+        home = os.path.expanduser("~")
+        final_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.blob')
+        full_user_objects = []
+        with click.progressbar(composite_ids) as outer_list_item:
+            for item in outer_list_item:
+                full_user_objects.append(globalVars.api.lookup_users(user_ids=item))
+        with click.progressbar(full_user_objects) as n:
+            for item in n:
+                json.dump(item, fp=final_file)
+        """
+        with click.progressbar(all_the_users_to_process) as bar:
+            for user in bar:
+                modify_the_user(user)
+        """
 
     @staticmethod
     def print_timeline(number: int):
