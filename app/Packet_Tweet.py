@@ -11,6 +11,7 @@ import sys
 from authorization import initial_auth
 import tweepy
 import click
+import pickle
 
 __author__ = 'SomeClown'
 
@@ -240,14 +241,8 @@ class TweetArguments:
         with click.progressbar(composite_ids) as outer_list_item:
             for item in outer_list_item:
                 full_user_objects.append(globalVars.api.lookup_users(user_ids=item))
-        with click.progressbar(full_user_objects) as n:
-            for item in n:
-                json.dump(item, fp=final_file)
-        """
-        with click.progressbar(all_the_users_to_process) as bar:
-            for user in bar:
-                modify_the_user(user)
-        """
+        with open(final_file, 'wb') as g:
+            pickle.dump(full_user_objects, g)
 
     @staticmethod
     def print_timeline(number: int):

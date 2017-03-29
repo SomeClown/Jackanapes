@@ -350,7 +350,7 @@ def init_compare(me, user, file=''):
 @click.command(options_metavar='[options]', short_help='save full user objects to file')
 def init_save_objects():
     save_objects = Packet_Tweet.TweetArguments()
-    save_objects.grab_user_object('/Users/brysont/.packetqueue/SomeClown/.followers')
+    save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
