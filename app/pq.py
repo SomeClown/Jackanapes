@@ -370,6 +370,17 @@ def init_friendship(follow, unfollow):
     elif unfollow:
         friendship.friendship_un_follow(unfollow)
 
+
+@click.command(options_metavar='[options]', short_help='block/unblock users')
+@click.option('-b', '--block', 'block', help='block selected user')
+@click.option('-u', '--unblock', 'unblock', help='unblock selected user')
+def init_block(block, unblock):
+    block_status = Packet_Tweet.TweetArguments()
+    if block:
+        block_status.user_block(block)
+    elif unblock:
+        block_status.user_unblock(unblock)
+
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
@@ -385,5 +396,6 @@ cli.add_command(init_followers, 'followers')
 cli.add_command(init_compare, 'compare')
 cli.add_command(init_save_objects, 'save')
 cli.add_command(init_friendship, 'friendship')
+cli.add_command(init_block, 'blocks')
 
 cli()

@@ -592,6 +592,40 @@ class TweetArguments:
             print(e)
 
     @staticmethod
+    def user_block(screen_name=''):
+        """
+        
+        Block a user
+        
+        :param screen_name: 
+        :return: 
+        """
+        try:
+            globalVars.api.create_block(screen_name)
+        except tweepy.TweepError as e:
+            print('Something went wrong')
+            print(e)
+        except BaseException as e:
+            print(e)
+
+    @staticmethod
+    def user_unblock(screen_name=''):
+        """
+        
+        Unblock a user
+        
+        :param screen_name: 
+        :return: 
+        """
+        try:
+            globalVars.api.destroy_block(screen_name)
+        except tweepy.TweepError as e:
+            print('Something went wrong')
+            print(e)
+        except BaseException as e:
+            print(e)
+
+    @staticmethod
     def get_stream():
         """
 

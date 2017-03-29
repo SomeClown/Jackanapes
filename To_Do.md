@@ -21,13 +21,13 @@
 - [X] Add setup function to do initial checks of configs, and setup if not ran before (oauth tokens, create logging
         directory, read configuration from file, etc.)
 - [ ] Add functionality to allow streaming in background, wait for keystrokes, and exit or change stream conditions
-- [ ] Follow user
-- [ ] Un-follow user
+- [X] Follow user
+- [X] Un-follow user
 - [ ] Find user in friends list (direct search, and regex)
 - [ ] Find user in followers list (direct search, and regex)
 - [ ] Mute user
-- [ ] Block user
-- [ ] Unblock user
+- [X] Block user
+- [X] Unblock user
 - [ ] Show blocks
 - [ ] Un-mute user
 - [ ] Add threading to time line search, streaming APIs, etc.
