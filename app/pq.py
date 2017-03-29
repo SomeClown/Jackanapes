@@ -5,6 +5,7 @@ import click
 import Packet_Tweet
 import globalVars
 import yaml
+import os
 
 __author__ = 'SomeClown'
 
@@ -52,17 +53,20 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 def set_config():
 
     # Load and assign key variables from yaml configuration file
-    my_config_file = open('config.yml')
-    settings = yaml.load(my_config_file)
-    globalVars.access_token = settings['access_token']
-    globalVars.access_token_secret = settings['access_token_secret']
-    globalVars.consumer_token = settings['consumer_token']
-    globalVars.consumer_token_secret = settings['consumer_token_secret']
-    globalVars.user = settings['user']
-    globalVars.home = settings['home']
-    globalVars.followers = settings['followers']
-    globalVars.friend_file = settings['friend_file']
-    globalVars.no_follow = settings['no_follow']
+    with open('config.yml', 'r') as my_config_file:
+        #my_config_file = open('config.yml')
+        settings = yaml.load(my_config_file)
+        globalVars.access_token = settings['access_token']
+        globalVars.access_token_secret = settings['access_token_secret']
+        globalVars.consumer_token = settings['consumer_token']
+        globalVars.consumer_token_secret = settings['consumer_token_secret']
+        globalVars.user = settings['user']
+        globalVars.home = settings['home']
+        globalVars.followers = settings['followers']
+        globalVars.friend_file = settings['friend_file']
+        globalVars.no_follow = settings['no_follow']
+        globalVars.home_dir = os.path.expanduser('~')
+        globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home)
 
 
 @click.group(epilog=EPILOG, context_settings=CONTEXT_SETTINGS)
@@ -348,9 +352,12 @@ def init_compare(me, user, file=''):
 
 
 @click.command(options_metavar='[options]', short_help='save full user objects to file')
-def init_save_objects():
+@click.argument('input_file', metavar='[input file]')
+def init_save_objects(input_file):
     save_objects = Packet_Tweet.TweetArguments()
-    save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
+    #save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
+    #operation_file = os.path.join(globalVars.complete_dir_path, globalVars.user, input_file)
+    save_objects.grab_user_object(input_file)
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')

@@ -188,7 +188,7 @@ class TweetArguments:
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
-                        my_friends.append(str(item.id) + ',' + item.screen_name)
+                        my_friends.append(str(item.id))
                 f.write('\n'.join(map(str, my_friends)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
@@ -231,18 +231,23 @@ class TweetArguments:
     @staticmethod
     def grab_user_object(file_name):
         raw_ids = []
-        with open(file_name, 'r') as f:
-            for line in f:
-                raw_ids.append(line.strip('\n'))
-        composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
-        home = os.path.expanduser("~")
-        final_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.blob')
-        full_user_objects = []
-        with click.progressbar(composite_ids) as outer_list_item:
-            for item in outer_list_item:
-                full_user_objects.append(globalVars.api.lookup_users(user_ids=item))
-        with open(final_file, 'wb') as g:
-            pickle.dump(full_user_objects, g)
+        complete_file = os.path.join(globalVars.complete_dir_path, globalVars.user, file_name)
+        out_file = complete_file + '_blob'
+        try:
+            with open(complete_file, 'r') as f:
+                for line in f:
+                    raw_ids.append(line.strip('\n'))
+            composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
+            home = os.path.expanduser("~")
+            #final_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.blob')
+            full_user_objects = []
+            with click.progressbar(composite_ids) as outer_list_item:
+                for item in outer_list_item:
+                    full_user_objects.append(globalVars.api.lookup_users(user_ids=item))
+            with open(out_file, 'wb') as g:
+                pickle.dump(full_user_objects, g)
+        except BaseException as e:
+            print(e)
 
     @staticmethod
     def print_timeline(number: int):
