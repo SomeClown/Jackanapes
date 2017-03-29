@@ -626,6 +626,30 @@ class TweetArguments:
             print(e)
 
     @staticmethod
+    def show_blocks():
+        """
+        Show all users currently being blocked
+        
+        :param screen_name: 
+        :return: 
+        """
+        try:
+            blocks = globalVars.api.blocks()
+            length = len(blocks)
+            n = 0
+            print('\n')
+            while n <= length - 1:
+                print(blocks[n].screen_name + ' (' + blocks[n].name + ')')
+                n = n + 1
+            print('\n' + str(n) + ' blocked users\n')
+
+        except tweepy.TweepError as e:
+            print('Something went wrong')
+            print(e)
+        except BaseException as e:
+            print(e)
+
+    @staticmethod
     def get_stream():
         """
 

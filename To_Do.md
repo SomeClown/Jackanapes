@@ -25,11 +25,11 @@
 - [X] Un-follow user
 - [ ] Find user in friends list (direct search, and regex)
 - [ ] Find user in followers list (direct search, and regex)
-- [ ] Mute user
+- [ ] Mute user (Doesn't appear to be implemented in Tweepy)
 - [X] Block user
 - [X] Unblock user
 - [ ] Show blocks
-- [ ] Un-mute user
+- [ ] Un-mute user (Doesn't appear to be implemented in Tweepy)
 - [ ] Add threading to time line search, streaming APIs, etc.
 - [ ] Show direct messages to authenticated user
 - [ ] Show direct messages sent by authenticated user
@@ -59,4 +59,4 @@
 - [ ] Some functions seem to hit the error condition on exit, despite what should be a clean exit. In functions which
         utilize curses for printing this sometimes results in an incomplete reverting of the terminal
 - [X] compare_followers method requires argument which is not used. Suspect this is coming from argparse configuration
-- [ ] Progress bar runs as function wrapper, but it executes prior to the original function finishing
+- [X] Progress bar runs as function wrapper, but it executes prior to the original function finishing

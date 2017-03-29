@@ -374,12 +374,15 @@ def init_friendship(follow, unfollow):
 @click.command(options_metavar='[options]', short_help='block/unblock users')
 @click.option('-b', '--block', 'block', help='block selected user')
 @click.option('-u', '--unblock', 'unblock', help='unblock selected user')
-def init_block(block, unblock):
+@click.option('-s', '--show', 'show', is_flag=True, help='show users being blocked')
+def init_block(block, unblock, show):
     block_status = Packet_Tweet.TweetArguments()
     if block:
         block_status.user_block(block)
     elif unblock:
         block_status.user_unblock(unblock)
+    elif show:
+        block_status.show_blocks()
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
