@@ -28,7 +28,7 @@
 - [ ] Mute user (Doesn't appear to be implemented in Tweepy)
 - [X] Block user
 - [X] Unblock user
-- [ ] Show blocks
+- [X] Show blocks
 - [ ] Un-mute user (Doesn't appear to be implemented in Tweepy)
 - [ ] Add threading to time line search, streaming APIs, etc.
 - [ ] Show direct messages to authenticated user
