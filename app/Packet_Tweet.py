@@ -320,7 +320,6 @@ class TweetArguments:
         :param number:
         :return:
         """
-        pair = {}
         other_retweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
         try:
             globalVars.screen.addstr('\n')
@@ -329,8 +328,7 @@ class TweetArguments:
                 return
             else:
                 for retweets in other_retweets:
-                    # pair[retweets.id_str] = retweets.text
-                    globalVars.screen.addstr(retweets.retweeted_status.user.id_str, curses.color_pair(1))
+                    globalVars.screen.addstr(retweets.id_str, curses.color_pair(1))
                     globalVars.screen.addstr(': ' + retweets.text + '\n')
                 globalVars.screen.refresh()
         except curses.error:
@@ -543,6 +541,55 @@ class TweetArguments:
             globalVars.api.update_status(status=text)
             print('\nStatus "{}" updated successfully\n'.format(text))
         return None
+
+    @staticmethod
+    def friendship_follow(screen_name=''):
+        """
+        
+        Follow a user
+        
+        :param screen_name:
+        :return: 
+        """
+        try:
+            new_name = ('@' + globalVars.user)
+            print(new_name)
+            globalVars.api.create_friendship(screen_name)
+            friend_tuple = globalVars.api.show_friendship(target_screen_name=new_name,
+                                                          source_screen_name=screen_name)
+            if friend_tuple[1].following is True:
+                print('Successfully followed ' + screen_name)
+            elif friend_tuple[1].following is False:
+                print('WTF? SHIT THE BED!')
+        except tweepy.TweepError as e:
+            print('Something went wrong...')
+            print(e)
+        except BaseException as e:
+            print(e)
+
+    @staticmethod
+    def friendship_un_follow(screen_name=''):
+        """
+        
+        Un-follow a user
+        
+        :param screen_name: 
+        :return: 
+        """
+        try:
+            new_name = ('@' + globalVars.user)
+            globalVars.api.destroy_friendship(screen_name)
+            friend_tuple = globalVars.api.show_friendship(target_screen_name=new_name,
+                                                 source_screen_name=screen_name)
+            if friend_tuple[1].following is False:
+                print('Successfully un-followed ' + screen_name)
+            elif friend_tuple[1].following is True:
+                print('WTF? SHIT THE BED!')
+        except tweepy.TweepError as e:
+            print('Something went wrong...')
+            print(e)
+        except BaseException as e:
+            print(e)
 
     @staticmethod
     def get_stream():

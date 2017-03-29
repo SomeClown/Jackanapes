@@ -355,9 +355,20 @@ def init_compare(me, user, file=''):
 @click.argument('input_file', metavar='[input file]')
 def init_save_objects(input_file):
     save_objects = Packet_Tweet.TweetArguments()
-    #save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
-    #operation_file = os.path.join(globalVars.complete_dir_path, globalVars.user, input_file)
+    # save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
+    # operation_file = os.path.join(globalVars.complete_dir_path, globalVars.user, input_file)
     save_objects.grab_user_object(input_file)
+
+
+@click.command(options_metavar='[options]', short_help='follow/un-follow users')
+@click.option('-f', '--follow', 'follow', help='follow selected user')
+@click.option('-u', '--unfollow', 'unfollow', help='un-follow selected user')
+def init_friendship(follow, unfollow):
+    friendship = Packet_Tweet.TweetArguments()
+    if follow:
+        friendship.friendship_follow(follow)
+    elif unfollow:
+        friendship.friendship_un_follow(unfollow)
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
@@ -373,5 +384,6 @@ cli.add_command(init_friends, 'friends')
 cli.add_command(init_followers, 'followers')
 cli.add_command(init_compare, 'compare')
 cli.add_command(init_save_objects, 'save')
+cli.add_command(init_friendship, 'friendship')
 
 cli()
