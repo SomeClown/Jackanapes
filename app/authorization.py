@@ -18,12 +18,9 @@ def initial_auth(original: object) -> object:
     @wraps(original)
     def wrapper(*args, **kwargs):
         # TODO: Write test method to test for auth without constantly re-authing with twitter
-        #set_config()
         globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
         globalVars.api = tweepy.API(globalVars.auth)
         globalVars.user_id = globalVars.api.get_user(globalVars.user)
-        #home = os.path.expanduser("~")
-        #config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.packetqueue')
 
         # Try to load with access token, if that doesn't work we must not have valid credentials
         # and we begin the process to call out to Twitter and get new credentials assigned
@@ -59,7 +56,6 @@ def initial_auth(original: object) -> object:
                 # so we don't have to do it everytime we run the program
                 # TODO: Change this to use os.mkdirs() so this is more concise
                 home = ''
-                #ifconfig_path = os.path.join(home, '/.packetqueue/', str(globalVars.user.screen_name))
                 if not os.path.exists(home + '/.packetqueue/'):
                     os.mkdir(home + '/.packetqueue/')
                     if not os.path.exists(home + '/.packetqueue/' + str(globalVars.user.screen_name)):

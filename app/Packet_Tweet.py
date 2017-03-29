@@ -229,6 +229,15 @@ class TweetArguments:
 
     @staticmethod
     def grab_user_object(file_name):
+        """
+        
+        takes a file of twitter user_ids as input, retrieves the complete user objects
+        of each one, then stores the resulting objects as a list in binary form on disk.
+        The resulting file is named after the original file, but with '_blob' at the end.
+        
+        :param file_name: 
+        :return: 
+        """
         raw_ids = []
         complete_file = os.path.join(globalVars.complete_dir_path, file_name)
         out_file = complete_file + '_blob'
