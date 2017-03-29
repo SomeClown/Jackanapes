@@ -156,8 +156,7 @@ class TweetArguments:
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=5000)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-            home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.followers')
+            config_file = (globalVars.complete_dir_path + '/.followers')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
@@ -183,12 +182,12 @@ class TweetArguments:
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
-            home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.friends')
+            config_file = (globalVars.complete_dir_path + '/.friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
-                    for item in page:
-                        my_friends.append(str(item.id))
+                    with click.progressbar(page) as outer_items:
+                        for item in outer_items:
+                            my_friends.append(str(item.id))
                 f.write('\n'.join(map(str, my_friends)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
@@ -207,21 +206,21 @@ class TweetArguments:
         index = 0
         # TODO: Change this entire block to use a "set" comparison for better readability and efficiency
         try:
-            home = os.path.expanduser("~")
-            config_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.no_follow')
-            friends_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.friends')
-            followers_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.followers')
+            config_file = (globalVars.complete_dir_path + '/.no_follow')
+            friends_file = (globalVars.complete_dir_path + '/.friends')
+            followers_file = (globalVars.complete_dir_path + '/.followers')
+            print(followers_file)
             with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
                 for i in followers:
                     follower_list.append(i)
                 for j in friends:
-                    friend_id = j.split(',')
-                    friends_list.append(friend_id[0] + '\n')
+                    friends_list.append(j)
             with open(config_file, 'w') as baddies:
-                for item in friends_list:
-                    if item not in follower_list:
-                        baddies_list.append(item)
-                        index += 1
+                with click.progressbar(friends_list) as outer_items:
+                        for item in outer_items:
+                            if item not in follower_list:
+                                baddies_list.append(item)
+                                index += 1
                 baddies.write(''.join(map(str, baddies_list)))
         except tweepy.RateLimitError:
             print(tweepy.RateLimitError(reason='Exceeded Twitter Rate Limit'))
@@ -231,15 +230,13 @@ class TweetArguments:
     @staticmethod
     def grab_user_object(file_name):
         raw_ids = []
-        complete_file = os.path.join(globalVars.complete_dir_path, globalVars.user, file_name)
+        complete_file = os.path.join(globalVars.complete_dir_path, file_name)
         out_file = complete_file + '_blob'
         try:
             with open(complete_file, 'r') as f:
                 for line in f:
                     raw_ids.append(line.strip('\n'))
             composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
-            home = os.path.expanduser("~")
-            #final_file = (home + '/.packetqueue/' + str(globalVars.user_id.screen_name) + '/.blob')
             full_user_objects = []
             with click.progressbar(composite_ids) as outer_list_item:
                 for item in outer_list_item:

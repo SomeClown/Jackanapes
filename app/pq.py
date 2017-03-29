@@ -66,7 +66,7 @@ def set_config():
         globalVars.friend_file = settings['friend_file']
         globalVars.no_follow = settings['no_follow']
         globalVars.home_dir = os.path.expanduser('~')
-        globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home)
+        globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)
 
 
 @click.group(epilog=EPILOG, context_settings=CONTEXT_SETTINGS)
