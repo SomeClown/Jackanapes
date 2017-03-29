@@ -185,7 +185,7 @@ class TweetArguments:
             config_file = (globalVars.complete_dir_path + '/.friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
-                    with click.progressbar(page) as outer_items:
+                    with click.progressbar(page, label='downloading friends list') as outer_items:
                         for item in outer_items:
                             my_friends.append(str(item.id))
                 f.write('\n'.join(map(str, my_friends)))
@@ -216,7 +216,7 @@ class TweetArguments:
                 for j in friends:
                     friends_list.append(j)
             with open(config_file, 'w') as baddies:
-                with click.progressbar(friends_list) as outer_items:
+                with click.progressbar(friends_list, label='comparing friends/followers') as outer_items:
                         for item in outer_items:
                             if item not in follower_list:
                                 baddies_list.append(item)
@@ -247,7 +247,7 @@ class TweetArguments:
                     raw_ids.append(line.strip('\n'))
             composite_ids = [raw_ids[x:x+99] for x in range(0, len(raw_ids), 99)]
             full_user_objects = []
-            with click.progressbar(composite_ids) as outer_list_item:
+            with click.progressbar(composite_ids, label='grabbing user objects') as outer_list_item:
                 for item in outer_list_item:
                     full_user_objects.append(globalVars.api.lookup_users(user_ids=item))
             with open(out_file, 'wb') as g:
@@ -320,6 +320,7 @@ class TweetArguments:
         :param number:
         :return:
         """
+        pair = {}
         other_retweets = globalVars.api.retweets_of_me(count=number, include_user_entities=False)
         try:
             globalVars.screen.addstr('\n')
@@ -328,13 +329,11 @@ class TweetArguments:
                 return
             else:
                 for retweets in other_retweets:
-                    # idName = globalVars.api.get_user(retweets.id_str)
-                    # globalVars.screen.addstr(str(idName.screen_name))
-                    globalVars.screen.addstr(str(retweets.id_str), curses.color_pair(1))
-                    globalVars.screen.addstr(str(': ' + retweets.text + '\n'))
+                    # pair[retweets.id_str] = retweets.text
+                    globalVars.screen.addstr(retweets.retweeted_status.user.id_str, curses.color_pair(1))
+                    globalVars.screen.addstr(': ' + retweets.text + '\n')
                 globalVars.screen.refresh()
         except curses.error:
-            # import pdb; pdb.set_trace()
             cleanup(1)
 
         finally:
