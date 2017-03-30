@@ -481,16 +481,17 @@ class TweetArguments:
         print(user_info.created_at)
 
     @staticmethod
-    def term_search(term, count):
+    def term_search(term, tweet_count):
         """
 
         :param term:
-        :param count:
+        :param tweet_count:
         :return:
         """
-        cursor = tweepy.Cursor(globalVars.api.search, q=term).items(count)
+        # cursor = tweepy.Cursor(globalVars.api.search, q=term).items(count)
         try:
-            for tweet in cursor:
+            item = globalVars.api.search(q=term, count=tweet_count)
+            for tweet in item:
                 globalVars.screen.addstr(str(tweet.created_at) + ': ')
                 globalVars.screen.addstr(str(tweet.user.name), curses.color_pair(1))
                 globalVars.screen.addstr(str(': ' + tweet.text + '\n'))
@@ -646,6 +647,24 @@ class TweetArguments:
         except tweepy.TweepError as e:
             print('Something went wrong')
             print(e)
+        except BaseException as e:
+            print(e)
+
+    @staticmethod
+    def set_spam(screen_name):
+        """
+        
+        Report user for spam, and block
+        
+        :param screen_name: 
+        :return: 
+        """
+        try:
+            globalVars.api.report_spam(screen_name)
+        except tweepy.TweepError as e:
+            print('Something went wrong. This usually means the specified user doesn\'t exist')
+            print(e)
+
         except BaseException as e:
             print(e)
 

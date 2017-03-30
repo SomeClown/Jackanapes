@@ -211,7 +211,7 @@ def init_status(direct, user, status):
 @click.argument('search_term', metavar='[search term]')
 @click.argument('count', nargs=1, required=False, metavar='[number of items]')
 @click.option('--static/--stream', default=True, help='Static or streaming search')
-def init_search_global(static, search_term, count=10):
+def init_search_global(static, search_term, count):
     """ \b
         This searches for a particular search term within the global
         twitter feed, and either displays [count] number of items, or
@@ -384,6 +384,14 @@ def init_block(block, unblock, show):
     elif show:
         block_status.show_blocks()
 
+
+@click.command(options_metavar='[options]', short_help='report and block user for spam')
+@click.argument('user', metavar='[user]')
+def init_spamblock(user):
+    spamblock = Packet_Tweet.TweetArguments()
+    spamblock.set_spam(user)
+
+
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
@@ -400,5 +408,6 @@ cli.add_command(init_compare, 'compare')
 cli.add_command(init_save_objects, 'save')
 cli.add_command(init_friendship, 'friendship')
 cli.add_command(init_block, 'blocks')
+cli.add_command(init_spamblock, 'spam')
 
 cli()
