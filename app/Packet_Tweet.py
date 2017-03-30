@@ -256,9 +256,9 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    def print_timeline(number: int):
+    def print_time_line(number: int):
         """
-        print user's timeline
+        print user's time_line
 
         :param number:
         :return:
@@ -314,8 +314,9 @@ class TweetArguments:
 
     @staticmethod
     def print_retweets(number: int):
-        # Print user's tweets that others have retweeted
         """
+        
+        print user's tweets which have been re_tweeted by others
 
         :param number:
         :return:

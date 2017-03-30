@@ -98,7 +98,7 @@ def init_time_line(number):
     try:
         Packet_Tweet.init_curses()
         time_line = Packet_Tweet.TweetArguments()
-        time_line.print_timeline(number)
+        time_line.print_time_line(number)
     except SystemExit:
         raise
     except KeyboardInterrupt:

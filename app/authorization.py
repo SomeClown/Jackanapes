@@ -19,7 +19,8 @@ def initial_auth(original: object) -> object:
     def wrapper(*args, **kwargs):
         # TODO: Write test method to test for auth without constantly re-authing with twitter
         globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
-        globalVars.api = tweepy.API(globalVars.auth)
+        globalVars.api = tweepy.API(globalVars.auth, retry_count=3, retry_delay=5,
+                                    retry_errors={500, 503, 504})
         globalVars.user_id = globalVars.api.get_user(globalVars.user)
 
         # Try to load with access token, if that doesn't work we must not have valid credentials

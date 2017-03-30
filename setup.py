@@ -1,17 +1,21 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
-    name='CloudSackedTweets',
-    version='0.1a0',
-    packages=[''],
-    package_dir={'': 'app'},
-    url='https://github.com/SomeClown/PQ',
-    license='MIT',
-    author='@someclown',
-    author_email='teren@packetqueue.net',
-    description='twitter utilities client',
-    entry_points='''
-    [console_scripts]
-    CloudSackedTweets=pq:cli
-    ''', requires=['click', 'progressbar', 'tweepy', 'yaml']
-)
+        name='CloudSackedTweets',
+        version='0.1a0',
+        description='twitter utilities client',
+        url='https://github.com/SomeClown/PQ',
+        license='MIT',
+        author='@someclown',
+        author_email='teren@packetqueue.net',
+        packages=['app'],
+        install_requires=[
+            'tweepy',
+            'click',
+            'progressbar2',
+            'pyyaml',
+            ],
+        entry_points = {
+            'console_scripts': ['CloudSackedTweets=app.pq:cli'],
+            }
+        )
