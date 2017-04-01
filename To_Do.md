@@ -11,8 +11,8 @@
 	- [X] Store friends list (use ID)
 	- [ ] Store cursor for later recall of where we were in the stream when last ran
 	- [ ] Look into something like tinydb to see if appropriate as longer term storage vs. flat files
-- [ ] Fix progress bar for oauth authentication, as well as for large data pulls (friends lists, etc.)
-- [ ] Rewrite portions of code to allow for threading (use standard library's threading module)
+- [X] Fix progress bar for oauth authentication, as well as for large data pulls (friends lists, etc.)
+- [ ] Rewrite portions of code with asyncio
 	- [ ] At least separate keyboard controls into separate thread to allow for mid-stream manipulation of searches, etc.
 - [ ] Add colorization to hashtags both in streams and in static data pulls
 - [ ] Add pause feature to streaming, or long, outputs

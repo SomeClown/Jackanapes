@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
         name='CloudSackedTweets',
@@ -8,7 +8,7 @@ setup(
         license='MIT',
         author='@someclown',
         author_email='teren@packetqueue.net',
-        packages=['app'],
+        packages=find_packages(),
         install_requires=[
             'tweepy',
             'click',
