@@ -54,7 +54,6 @@ def set_config():
 
     # Load and assign key variables from yaml configuration file
     with open('config.yml', 'r') as my_config_file:
-        #my_config_file = open('config.yml')
         settings = yaml.load(my_config_file)
         globalVars.access_token = settings['access_token']
         globalVars.access_token_secret = settings['access_token_secret']
@@ -189,10 +188,10 @@ def init_info(me, not_me=''):
 
 
 @click.command(help='send status update')
-@click.argument('user')
-@click.argument('status', default='...forgot status...')
+@click.argument('status')
+@click.argument('user', default=globalVars.user, required=False)
 @click.option('--direct', '-d', 'direct', is_flag=True, help='send direct message')
-def init_status(direct, user, status):
+def init_status(status, direct, user=globalVars.user):
     if direct is True:
         try:
             update = Packet_Tweet.CreateUpdate()
