@@ -12,6 +12,7 @@ from authorization import initial_auth
 import tweepy
 import click
 import pickle
+import json
 
 __author__ = 'SomeClown'
 
@@ -704,6 +705,19 @@ class TweetArguments:
             teren_stream.filter(track=[str1])
         except curses.error:
             cleanup(1)
+
+    @staticmethod
+    def set_testing():
+        test_pull = globalVars.api.retweets_of_me(counts=1)
+        try:
+            for thing in test_pull:
+                foo = globalVars.api.retweets(thing.id_str)
+                bar = foo[0]
+                print(bar._json['user']['name'] + ': ' + bar._json['text'])
+                #print(json.dumps(bar._json, indent=5))
+
+        except tweepy.TweepError as e:
+            print(e)
 
 
 def cleanup(exit_code: object, error=''):

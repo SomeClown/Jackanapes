@@ -392,6 +392,12 @@ def init_spamblock(user):
     spamblock.set_spam(user)
 
 
+@click.command(options_metavar='[options]', short_help='testing')
+def init_testing():
+    testing = Packet_Tweet.TweetArguments()
+    testing.set_testing()
+
+
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
@@ -409,5 +415,6 @@ cli.add_command(init_save_objects, 'save')
 cli.add_command(init_friendship, 'friendship')
 cli.add_command(init_block, 'blocks')
 cli.add_command(init_spamblock, 'spam')
+cli.add_command(init_testing, 'testing')
 
 cli()
