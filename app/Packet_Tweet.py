@@ -530,19 +530,20 @@ class TweetArguments:
         return None
 
     @staticmethod
-    def status_update(text):
+    def status_update(user, msg):
         """
 
         DEPRECATED NOW: Use CreateUpdate.update_status going forward
 
-        :param text:
+        :param user: not used here, included for consistency
+        :param msg:
         :return:
         """
-        if len(text) >= 140:
+        if len(msg) >= 140:
             print('Tweets must be 140 characters or less')
         else:
-            globalVars.api.update_status(status=text)
-            print('\nStatus "{}" updated successfully\n'.format(text))
+            globalVars.api.update_status(status=msg)
+            print('\nStatus "{}" updated successfully\n'.format(msg))
         return None
 
     @staticmethod
@@ -804,12 +805,12 @@ class CreateUpdate:
     @staticmethod
     def status_update(tweet_text: str):
         """
-
+        
         :param tweet_text:
 
         """
         if len(tweet_text) >= 140:
-            print('Tweets must be 140 characters or less')
+            print('Tweets must be 140 characters or less. Your tweet is ' + str(len(tweet_text)))
         else:
             globalVars.api.update_status(status=tweet_text)
             print('\nStatus "{}" updated successfully\n'.format(tweet_text))
