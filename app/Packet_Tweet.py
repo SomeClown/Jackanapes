@@ -329,9 +329,11 @@ class TweetArguments:
                 cleanup(1)
                 return
             else:
-                for retweets in other_retweets:
-                    globalVars.screen.addstr(retweets.id_str, curses.color_pair(1))
-                    globalVars.screen.addstr(': ' + retweets.text + '\n')
+                for thing in other_retweets:
+                    foo = globalVars.api.retweets(thing.id_str)
+                    bar = foo[0]
+                    globalVars.screen.addstr(bar._json['user']['name'], curses.color_pair(1))
+                    globalVars.screen.addstr(': ' + bar._json['text'] + '\n')
                 globalVars.screen.refresh()
         except curses.error:
             cleanup(1)
