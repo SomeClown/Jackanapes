@@ -1,4 +1,4 @@
-### Command Line Twitter Client #
+### Jackanapes - Another Command Line Twitter Utility #
 The primary goal of this project is to implement what I like to call "utility" functionality. In other
 words, that functionality usually missing from mainstream clients, relegated to the realm of web-based for profit
 applications. Functionality like comparing followers to friends, or how may users follow me but have not posted in
