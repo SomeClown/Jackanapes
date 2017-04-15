@@ -17,7 +17,6 @@ def initial_auth(original: object) -> object:
     """
     @wraps(original)
     def wrapper(*args, **kwargs):
-        # TODO: Write test method to test for auth without constantly re-authing with twitter
         globalVars.auth = tweepy.OAuthHandler(globalVars.consumer_token, globalVars.consumer_token_secret)
         globalVars.api = tweepy.API(globalVars.auth, retry_count=3, retry_delay=5,
                                     retry_errors={500, 503, 504})
@@ -57,12 +56,12 @@ def initial_auth(original: object) -> object:
                 # so we don't have to do it everytime we run the program
                 # TODO: Change this to use os.mkdirs() so this is more concise
                 home = ''
-                if not os.path.exists(home + '/.packetqueue/'):
-                    os.mkdir(home + '/.packetqueue/')
-                    if not os.path.exists(home + '/.packetqueue/' + str(globalVars.user.screen_name)):
-                        os.mkdir(home + '/.packetqueue/' + str(globalVars.user.screen_name))
+                if not os.path.exists(home + '/.jackanapes/'):
+                    os.mkdir(home + '/.jackanapes/')
+                    if not os.path.exists(home + '/.jackanapes/' + str(globalVars.user.screen_name)):
+                        os.mkdir(home + '/.jackanapes/' + str(globalVars.user.screen_name))
 
-                if_config_file = (home + '/.packetqueue/' + str(globalVars.user.screen_name) + '/.packetqueue')
+                if_config_file = (home + '/.jackanapes/' + str(globalVars.user.screen_name) + '/.jackanapes')
                 print(if_config_file)
                 with open(if_config_file, 'w+') as outFile:
                     outFile.write(access_token + '\n')  # function as a better way to store
