@@ -2,7 +2,7 @@
 
 
 import click
-import Packet_Tweet
+import jackanapes
 import globalVars
 import yaml
 import os
@@ -80,8 +80,8 @@ def cli():
 @click.argument('number', default=10)
 def init_friend_list(number):
     try:
-        Packet_Tweet.init_curses()
-        run_friends = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        run_friends = jackanapes.TweetArguments()
         run_friends.print_friends(number)
     except SystemExit:
         raise
@@ -95,8 +95,8 @@ def init_friend_list(number):
 @click.argument('number', default=10)
 def init_time_line(number):
     try:
-        Packet_Tweet.init_curses()
-        time_line = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        time_line = jackanapes.TweetArguments()
         time_line.print_time_line(number)
     except SystemExit:
         raise
@@ -110,8 +110,8 @@ def init_time_line(number):
 @click.argument('number', default=10)
 def init_mentions(number):
     try:
-        Packet_Tweet.init_curses()
-        mentions = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        mentions = jackanapes.TweetArguments()
         mentions.print_mentions(number)
     except SystemExit:
         raise
@@ -125,8 +125,8 @@ def init_mentions(number):
 @click.argument('number', default=10)
 def init_retweets(number):
     try:
-        Packet_Tweet.init_curses()
-        retweets = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        retweets = jackanapes.TweetArguments()
         retweets.print_retweets(number)
     except SystemExit:
         raise
@@ -140,8 +140,8 @@ def init_retweets(number):
 @click.argument('number', default=10)
 def init_followers(number):
     try:
-        Packet_Tweet.init_curses()
-        followers = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        followers = jackanapes.TweetArguments()
         followers.show_followers(number)
     except SystemExit:
         raise
@@ -155,8 +155,8 @@ def init_followers(number):
 @click.argument('user', default='')
 def init_stream(user):
     try:
-        Packet_Tweet.init_curses()
-        user_stream = Packet_Tweet.TweetArguments()
+        jackanapes.init_curses()
+        user_stream = jackanapes.TweetArguments()
         user_stream.get_follow_stream(user)
     except SystemExit:
         raise
@@ -164,7 +164,7 @@ def init_stream(user):
         raise
     except BaseException as e:
         print(e)
-        Packet_Tweet.cleanup(1, e)
+        jackanapes.cleanup(1, e)
 
 
 @click.command(help='information on yourself or others')
@@ -173,15 +173,15 @@ def init_stream(user):
 def init_info(me, not_me=''):
     if me:
         try:
-            Packet_Tweet.init_curses()
-            really_me = Packet_Tweet.TweetArguments()
+            jackanapes.init_curses()
+            really_me = jackanapes.TweetArguments()
             really_me.show_my_info()
         finally:
             pass
     if not_me:
         try:
-            Packet_Tweet.init_curses()
-            really_not_me = Packet_Tweet.TweetArguments()
+            jackanapes.init_curses()
+            really_not_me = jackanapes.TweetArguments()
             really_not_me.show_not_me(not_me)
         finally:
             pass
@@ -194,13 +194,13 @@ def init_info(me, not_me=''):
 def init_status(status, direct, user=globalVars.user):
     if direct is True:
         try:
-            update = Packet_Tweet.CreateUpdate()
+            update = jackanapes.CreateUpdate()
             update.direct_update(user, status)
         except BaseException as e:
             print(e)
     else:
         try:
-            update = Packet_Tweet.CreateUpdate()
+            update = jackanapes.CreateUpdate()
             update.status_update(status)
         except BaseException as e:
             print(e)
@@ -247,8 +247,8 @@ traffic ?                               containing “traffic” and asking a qu
     """
     if static is True:
         try:
-            Packet_Tweet.init_curses()
-            this_search = Packet_Tweet.TweetArguments()
+            jackanapes.init_curses()
+            this_search = jackanapes.TweetArguments()
             this_search.term_search(search_term, count)
         finally:
             print(static)
@@ -256,8 +256,8 @@ traffic ?                               containing “traffic” and asking a qu
             print(count)
     elif static is False:
         try:
-            Packet_Tweet.init_curses()
-            stream_search = Packet_Tweet.TweetArguments()
+            jackanapes.init_curses()
+            stream_search = jackanapes.TweetArguments()
             stream_search.get_stream_search(search_term)
         finally:
             print(static)
@@ -315,7 +315,7 @@ def init_friends(user_username):
         store the results by user_id in a file, by default called .friends
         and located in the application directory for the user.
     """
-    friends = Packet_Tweet.TweetArguments()
+    friends = jackanapes.TweetArguments()
     friends.save_friends(user_username)
 
 
@@ -327,7 +327,7 @@ def init_followers(user_username):
        store the results by user_id in a file, by default called .followers
        and located in the application directory for the user.
     """
-    followers = Packet_Tweet.TweetArguments()
+    followers = jackanapes.TweetArguments()
     followers.save_followers(user_username)
 
 
@@ -341,7 +341,7 @@ def init_compare(me, user, file=''):
         and the various followers and friends they have; comparisons such as whether or
         not the people they follow follow them back. This is useful for account pruning.
     """
-    compare = Packet_Tweet.TweetArguments()
+    compare = jackanapes.TweetArguments()
     if me is True:
         compare.compare_users('someclown')
     elif user:
@@ -353,7 +353,7 @@ def init_compare(me, user, file=''):
 @click.command(options_metavar='[options]', short_help='save full user objects to file')
 @click.argument('input_file', metavar='[input file]')
 def init_save_objects(input_file):
-    save_objects = Packet_Tweet.TweetArguments()
+    save_objects = jackanapes.TweetArguments()
     # save_objects.grab_user_object('/Users/someclown/.packetqueue/someclown/.followers')
     # operation_file = os.path.join(globalVars.complete_dir_path, globalVars.user, input_file)
     save_objects.grab_user_object(input_file)
@@ -363,7 +363,7 @@ def init_save_objects(input_file):
 @click.option('-f', '--follow', 'follow', help='follow selected user')
 @click.option('-u', '--unfollow', 'unfollow', help='un-follow selected user')
 def init_friendship(follow, unfollow):
-    friendship = Packet_Tweet.TweetArguments()
+    friendship = jackanapes.TweetArguments()
     if follow:
         friendship.friendship_follow(follow)
     elif unfollow:
@@ -375,7 +375,7 @@ def init_friendship(follow, unfollow):
 @click.option('-u', '--unblock', 'unblock', help='unblock selected user')
 @click.option('-s', '--show', 'show', is_flag=True, help='show users being blocked')
 def init_block(block, unblock, show):
-    block_status = Packet_Tweet.TweetArguments()
+    block_status = jackanapes.TweetArguments()
     if block:
         block_status.user_block(block)
     elif unblock:
@@ -387,13 +387,13 @@ def init_block(block, unblock, show):
 @click.command(options_metavar='[options]', short_help='report and block user for spam')
 @click.argument('user', metavar='[user]')
 def init_spamblock(user):
-    spamblock = Packet_Tweet.TweetArguments()
+    spamblock = jackanapes.TweetArguments()
     spamblock.set_spam(user)
 
 
 @click.command(options_metavar='[options]', short_help='testing')
 def init_testing():
-    testing = Packet_Tweet.TweetArguments()
+    testing = jackanapes.TweetArguments()
     testing.set_testing()
 
 
