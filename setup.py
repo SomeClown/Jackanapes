@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-        name='CloudSackedTweets',
+        name='jackanapes',
         version='0.1a0',
         description='twitter utilities client',
         url='https://github.com/SomeClown/PQ',
@@ -16,6 +16,6 @@ setup(
             'pyyaml',
             ],
         entry_points = {
-            'console_scripts': ['CloudSackedTweets=app.pq:cli'],
+            'console_scripts': ['jackanapes=app.jack:cli'],
             }
         )
