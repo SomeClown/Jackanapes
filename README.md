@@ -10,8 +10,7 @@ While I personally use this application already, mostly for just streaming and s
 anyone else to do the same. My only hope is that I get enough functionality built in that this application becomes
 a useful utility for manipulating various aspects of an account in a way that is useful, free, and intuitive. Note
 that this is a moving target, as I continue to find things to refactor, add, remove, or just add random comments
-to. If I find myself with additional contributors, the process of updating will be made more reasonable and
-community based.
+to.
 
 Also, for more fully featured command-line clients, or at least ones with different approaches, take a look at:
 
