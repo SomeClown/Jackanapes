@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+# NOTE: set $PYTHONPATH equal to the app directory (where the jackanapes module lives)
+
 setup(
         name='jackanapes',
         version='0.1a0',
@@ -14,6 +16,7 @@ setup(
             'click',
             'progressbar2',
             'pyyaml',
+            'jackanapes',
             ],
         entry_points = {
             'console_scripts': ['jackanapes=app.jack:cli'],
