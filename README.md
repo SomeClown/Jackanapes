@@ -41,7 +41,13 @@ that can be done as is. I'll likely end up rewriting this entire section of the 
 offer more flexibility and speed._
 
 
-
+Installation:
+1. CLone or download repo
+2. Register application with Twitter and generate consumer/app tokens/keys
+3. Copy example.yml to config.yml and edit as appropriate
+4. In base directory, run "pip install -e ." to install the jackanapes binary into your (hopefully) virtualenv
+5. "jackanapes" will start you off with a help message as below
+6. Enjoy
 
 
 #### Command line Twitter (and stuff) client - For questions contact @SomeClown
