@@ -15,6 +15,9 @@ import pickle
 import json
 
 __author__ = 'SomeClown'
+__license__ = "MIT"
+__maintainer__ = "Teren Bryson"
+__email__ = "teren@packetqueue.net"
 
 
 class Streamer(tweepy.StreamListener):

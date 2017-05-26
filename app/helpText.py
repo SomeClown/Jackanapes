@@ -2,6 +2,9 @@
 # coding=utf-8
 
 __author__ = 'SomeClown'
+__license__ = "MIT"
+__maintainer__ = "Teren Bryson"
+__email__ = "teren@packetqueue.net"
 
 
 def help_text() -> object:
@@ -24,11 +27,11 @@ def help_text() -> object:
         -f              print list of friends <num>
         -d              send a direct message <@user> <text>
         -S              update twitter status <text>
-        -m              get mentions from logged in user's timeline <num>
+        -m              get mentions from logged in user's time line <num>
         -M              Get information about me
         -n              Get information about someone other than me <@user>
         -r              Get retweets of me by others <num>
-        -T              search logged in user's timeline for <phrase> <num>
+        -T              search logged in user's time line for <phrase> <num>
             --version   show program's version number and exit
         -v, --verbose   verbose flag
 

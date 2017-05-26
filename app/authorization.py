@@ -7,6 +7,9 @@ from functools import wraps
 from utilities import logging_wrapper
 
 __author__ = 'SomeClown'
+__license__ = "MIT"
+__maintainer__ = "Teren Bryson"
+__email__ = "teren@packetqueue.net"
 
 
 @logging_wrapper

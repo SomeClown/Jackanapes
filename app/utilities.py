@@ -5,6 +5,11 @@ import logging
 import time
 import progressbar
 
+__author__ = 'SomeClown'
+__license__ = "MIT"
+__maintainer__ = "Teren Bryson"
+__email__ = "teren@packetqueue.net"
+
 
 def logging_wrapper(original_function: object) -> object:
     """

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 __author__ = 'SomeClown'
+__license__ = "MIT"
+__maintainer__ = "Teren Bryson"
+__email__ = "teren@packetqueue.net"
 
 
 class myFile(object):
