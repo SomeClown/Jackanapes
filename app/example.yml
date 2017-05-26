@@ -1,0 +1,10 @@
+user                    : johndoe
+home                    : .jackanapes
+access_token            : @#$!$aFDSSSDFG3ASFDSADFVBdsfg
+access_token_secret     : SADF2345234safdFAga4w35@!#
+consumer_token          : ASDF@#$DSFG#$%ASdgasdf$#@% 
+consumer_token_secret   : ASDFASASDFasdf#afsdf3@#42S
+friend_file             : .friends
+followers               : .followers
+no_follow               : .no_follow
+post_limit              : 1.5
