@@ -412,10 +412,14 @@ def init_length_check(long_status, long_file, tag):
         check_length = jackanapes.check_length(long_status, tag)
         for item in check_length:
             if not tag:
-                print(item + ' #' + str(check_length.index(item) + 1))
+                update = (item + ' #' + str(check_length.index(item) + 1))
+                status = jackanapes.TweetArguments()
+                status.status_update(msg=update, user=globalVars.user_id)
                 time.sleep(globalVars.post_limit)
             elif tag:
-                print(item + ' ' + tag)
+                update = (item + ' ' + tag)
+                status = jackanapes.TweetArguments()
+                status.status_update(msg=update, user=globalVars.user_id)
                 time.sleep(globalVars.post_limit)
     elif long_file:
         with open(long_file, 'r') as f:
@@ -423,12 +427,15 @@ def init_length_check(long_status, long_file, tag):
             check_length = jackanapes.check_length(status_text, tag)
             for item in check_length:
                 if not tag:
-                    print(item + ' #' + str(check_length.index(item) + 1))
+                    update = (item + ' #' + str(check_length.index(item) + 1))
+                    status = jackanapes.TweetArguments()
+                    status.status_update(msg=update, user=globalVars.user_id)
                     time.sleep(globalVars.post_limit)
                 elif tag:
-                    print(item + ' ' + tag)
+                    update = (item + ' ' + tag)
+                    status = jackanapes.TweetArguments()
+                    status.status_update(msg=update, user=globalVars.user_id)
                     time.sleep(globalVars.post_limit)
-
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')

@@ -752,7 +752,7 @@ def check_length(text, tag):
     :param tag:
     :return text_list: 
     """
-    n = (140 - len(tag))
+    n = (134 - len(tag))
     text_list = textwrap.wrap(text, n, break_long_words=False)
     return text_list
 
