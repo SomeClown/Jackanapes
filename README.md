@@ -26,6 +26,9 @@ but when you register it to Twitter in order to get your consumer/application ke
 you kept the "jackanapes" name and point to the github repo at: https://github.com/SomeClown/Jackanapes. However, 
 that is your choice.
 
+Lastly, I welcome any and all contributions, pull requests, forks, comments, and suggestions.
+
+
 NOTE: _Since rewriting the authentication methods, putting everything into a YAML file, the entire authorization module
 is redundant and doing nothing except logging every call made to it, which of course is on every run since we're
 wrapping all functions with that module/method. The only reason this is all still happening is because I want to
@@ -37,7 +40,7 @@ into the application, but as this is Python and I can't figure out how to hide t
 that can be done as is. I'll likely end up rewriting this entire section of the program in pure C, which should
 offer more flexibility and speed._
 
-Lastly, I welcome any and all contributions, pull requests, forks, comments, and suggestions.
+
 
 
 
