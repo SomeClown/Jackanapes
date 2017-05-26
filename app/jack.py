@@ -65,6 +65,7 @@ def set_config():
         globalVars.followers = settings['followers']
         globalVars.friend_file = settings['friend_file']
         globalVars.no_follow = settings['no_follow']
+        globalVars.post_limit = settings['post_limit']
         globalVars.home_dir = os.path.expanduser('~')
         globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)
 
@@ -410,10 +411,10 @@ def init_length_check(long_status, long_file, tag):
         for item in check_length:
             if not tag:
                 print(item + ' #' + str(check_length.index(item) + 1))
-                time.sleep(1.5)
+                time.sleep(globalVars.post_limit)
             elif tag:
                 print(item + ' ' + tag)
-                time.sleep(1.5)
+                time.sleep(globalVars.post_limit)
     elif long_file:
         with open(long_file, 'r') as f:
             status_text = f.read()
@@ -421,10 +422,10 @@ def init_length_check(long_status, long_file, tag):
             for item in check_length:
                 if not tag:
                     print(item + ' #' + str(check_length.index(item) + 1))
-                    time.sleep(1.5)
+                    time.sleep(globalVars.post_limit)
                 elif tag:
                     print(item + ' ' + tag)
-                    time.sleep(1.5)
+                    time.sleep(globalVars.post_limit)
 
 
 cli.add_command(init_friend_list, 'friend')
