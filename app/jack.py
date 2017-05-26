@@ -405,7 +405,10 @@ def init_testing():
 @click.option('-ls', '--long-status', 'long_status', help='status text')
 @click.option('-lf', '--long-file', 'long_file', help='filename with long text')
 @click.option('-t', '--tag', 'tag', help='hashtag, or other word, to append to individual lines')
-def init_length_check(long_status, long_file, tag):
+@click.option('-p', '--post_limit', 'post_limit', help='Override default limit (1.5 seconds)')
+def init_length_check(long_status, long_file, tag, post_limit):
+    if post_limit:
+            globalVars.post_limit = int(post_limit)
     run_file = "run.txt"
     with open(run_file, 'r') as rf:
         for line in rf:
@@ -421,6 +424,7 @@ def init_length_check(long_status, long_file, tag):
                             update = (item + ' #' + str(check_length.index(item) + 1))
                             status = jackanapes.TweetArguments()
                             status.status_update(msg=update, user=globalVars.user_id)
+                            print(update)
                             time.sleep(globalVars.post_limit)
                         elif tag:
                             update = (item + ' ' + tag)
