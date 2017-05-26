@@ -21,9 +21,12 @@ Also, for more fully featured command-line clients, or at least ones with differ
 
 I'm sure there are more great examples out there, but those are the three I found when I was initially looking for
 something like what I'm writing. All came close, and all are great in their own ways, but I wanted what I wanted, 
-and it's been a fun exercise writing my own client.
+and it's been a fun exercise writing my own client. You are free to use this utility and code however you see fit,
+but when you register it to Twitter in order to get your consumer/application keys/secrets, it would be lovely if
+you kept the "jackanapes" name and point to the github repo at: https://github.com/SomeClown/Jackanapes. However, 
+that is your choice.
 
-NOTE: Since rewriting the authentication methods, putting everything into a YAML file, the entire authorization module
+NOTE: _Since rewriting the authentication methods, putting everything into a YAML file, the entire authorization module
 is redundant and doing nothing except logging every call made to it, which of course is on every run since we're
 wrapping all functions with that module/method. The only reason this is all still happening is because I want to
 still utilize this method to generate the initial config.yml file, and to get user credentials in a more automatic
@@ -32,7 +35,7 @@ sure at this point if it's necessary. The bottom line is that I'm at a crossroad
 and don't have a clear direction in my head just yet. Ideally, I'd have all of the inital credentials baked right
 into the application, but as this is Python and I can't figure out how to hide those keys, it may not be something
 that can be done as is. I'll likely end up rewriting this entire section of the program in pure C, which should
-offer more flexibility and speed.
+offer more flexibility and speed._
 
 Lastly, I welcome any and all contributions, pull requests, forks, comments, and suggestions.
 
