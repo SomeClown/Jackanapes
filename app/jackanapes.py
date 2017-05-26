@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 # Command line twitter client in the style of traditional unix shell commands
 # Extensible so it can run as a bot, or be integrated into another application
 
