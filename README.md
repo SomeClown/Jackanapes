@@ -31,7 +31,7 @@ Lastly, I welcome any and all contributions, pull requests, forks, comments, and
 
 
 ```
-Usage: jackanapes [OPTIONS] COMMAND [ARGS]...
+Usage: jack [OPTIONS] COMMAND [ARGS]...
  
 Options:
   -h, --help  Show this message and exit.
@@ -44,6 +44,7 @@ Commands:
   friends     save all friends to disk
   friendship  follow/un-follow users
   info        information on yourself or others
+  long_status Long (greater than 140 characters) status update
   mentions    Get 'n' number of recent mentions
   retweets    Get 'n' number of recent retweets
   save        save full user objects to file
@@ -52,11 +53,18 @@ Commands:
   spam        report and block user for spam
   status      send status update
   stream      Stream user's twitter feed
-  testing     testing
   tweets      Get 'n' number of recent tweets
+ 
+NOTE: Help for all commands which have sub-commands can be seen by appending '--help' on the end of the command. For
+example, you could say 'jack blocks --help' which would return the following:
+        
+        Options:
+          -b, --block TEXT    block selected user
+          -u, --unblock TEXT  unblock selected user
+          -s, --show          show users being blocked
+          -h, --help          Show this message and exit.
 
- 
- 
+Search methods for all of the functions which allow search may be found in the table below.
 
 Operator                                Finds tweets…
 ----------------------------------------------------------------------------------------------------------------------- 

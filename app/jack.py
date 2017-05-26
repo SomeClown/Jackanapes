@@ -445,6 +445,6 @@ cli.add_command(init_friendship, 'friendship')
 cli.add_command(init_block, 'blocks')
 cli.add_command(init_spamblock, 'spam')
 cli.add_command(init_testing, 'testing')
-cli.add_command(init_length_check, 'length')
+cli.add_command(init_length_check, 'long_status')
 
 cli()
