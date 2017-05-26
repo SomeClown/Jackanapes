@@ -1,10 +1,10 @@
 ### Jackanapes - Another Command Line Twitter Utility # 
 The primary goal of this project is to implement what I like to call "utility" functionality. In other
 words, that functionality usually missing from mainstream clients, relegated to the realm of web-based for profit
-applications. Functionality like comparing followers to friends, or how may users follow me but have not posted in
-some amount of time, bulk removal, add, etc. A secondary goal of this project is to implement all functionality
-from the Twitter API via a traditional Unix interface, or at least to implement all useful mainstream functions,
-where they make sense.
+applications. Functionality such as: comparing followers to friends, finding out how many users follow me but have 
+not posted in some amount of time, pushing automatic updates from existing text files, bulk removal, add, etc. 
+A secondary, and less important, goal of this project is to implement all functionality from the Twitter API via 
+a traditional Unix interface, or at least to implement all useful mainstream functions, where they make sense.
 
 While I personally use this application already, mostly for just streaming and searching my feed, I don't expect
 anyone else to do the same. My only hope is that I get enough functionality built in that this application becomes
@@ -17,6 +17,7 @@ Also, for more fully featured command-line clients, or at least ones with differ
 * Python Twitter Tools: https://github.com/sixohsix/twitter/tree/master
 * Rainbow Stream: https://github.com/DTVD/rainbowstream and the website at: http://www.rainbowstream.org/
 * Turses: https://github.com/dialelo/turses
+* Tweepy: https://github.com/tweepy/tweepy without which, this project would have been much more challenging to write
 
 I'm sure there are more great examples out there, but those are the three I found when I was initially looking for
 something like what I'm writing. All came close, and all are great in their own ways, but I wanted what I wanted, 

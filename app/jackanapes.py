@@ -3,7 +3,7 @@
 # Extensible so it can run as a bot, or be integrated into another application
 
 import curses.textpad
-import json
+import textwrap
 import os
 import re
 import globalVars
@@ -738,6 +738,20 @@ def cleanup(exit_code: object, error=''):
         sys.exit(exit_code)
     else:
         sys.exit(exit_code)
+
+
+def check_length(text, tag):
+    """
+    
+    function to break text larger than 'n' characters into smaller chunks, and
+    to add a 'tag' at the end of each chunk
+    :param text:
+    :param tag:
+    :return text_list: 
+    """
+    n = (140 - len(tag))
+    text_list = textwrap.wrap(text, n, break_long_words=False)
+    return text_list
 
 
 class DisplayTweet(object):

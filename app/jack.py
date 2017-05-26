@@ -6,6 +6,7 @@ import jackanapes
 import globalVars
 import yaml
 import os
+import time
 
 __author__ = 'SomeClown'
 
@@ -397,6 +398,35 @@ def init_testing():
     testing.set_testing()
 
 
+@click.command(options_metavar='[options]', short_help='Long (greater than 140 characters) status update')
+@click.option('-ls', '--long-status', 'long_status', help='status text')
+@click.option('-lf', '--long-file', 'long_file', help='filename with long text')
+@click.option('-t', '--tag', 'tag', help='hashtag, or other word, to append to individual lines')
+def init_length_check(long_status, long_file, tag):
+    if not tag:
+        tag = ''
+    if long_status:
+        check_length = jackanapes.check_length(long_status, tag)
+        for item in check_length:
+            if not tag:
+                print(item + ' #' + str(check_length.index(item) + 1))
+                time.sleep(1.5)
+            elif tag:
+                print(item + ' ' + tag)
+                time.sleep(1.5)
+    elif long_file:
+        with open(long_file, 'r') as f:
+            status_text = f.read()
+            check_length = jackanapes.check_length(status_text, tag)
+            for item in check_length:
+                if not tag:
+                    print(item + ' #' + str(check_length.index(item) + 1))
+                    time.sleep(1.5)
+                elif tag:
+                    print(item + ' ' + tag)
+                    time.sleep(1.5)
+
+
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
@@ -415,5 +445,6 @@ cli.add_command(init_friendship, 'friendship')
 cli.add_command(init_block, 'blocks')
 cli.add_command(init_spamblock, 'spam')
 cli.add_command(init_testing, 'testing')
+cli.add_command(init_length_check, 'length')
 
 cli()
