@@ -49,6 +49,16 @@ Installation:
 5. "jackanapes" will start you off with a help message as below
 6. Enjoy
 
+I have also added a Dockerfile to the project. Example usage below:
+1. docker build "teren/jackanapes:latest" .
+2. docker run -e TERM -t "teren/jackanapes:latest" ./jack.py sg --stream "@cnn"
+
+There are still a few kinks running it this way. The containers don't exit, and most of the keyboard breaks
+do not work. Best bet currently is to run the container and then run the commands inside the container.
+
+docker run -it "teren/jackanapes:latest" /bin/bash
+
+
 
 #### Command line Twitter (and stuff) client - For questions contact @SomeClown
 
