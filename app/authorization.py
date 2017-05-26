@@ -53,8 +53,7 @@ def initial_auth(original: object) -> object:
                 access_token_secret = globalVars.auth.access_token_secret
 
                 # Write all of this good authentication stuff to a file
-                # so we don't have to do it everytime we run the program
-                # TODO: Change this to use os.mkdirs() so this is more concise
+                # so we don't have to do it every time we run the program
                 home = ''
                 if not os.path.exists(home + '/.jackanapes/'):
                     os.mkdir(home + '/.jackanapes/')
