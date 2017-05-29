@@ -13,6 +13,8 @@ import tweepy
 import click
 import pickle
 import json
+import random
+import time
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -550,6 +552,72 @@ class TweetArguments:
             globalVars.api.update_status(status=msg)
             print('\nStatus "{}" updated successfully\n'.format(msg))
         return None
+
+    @staticmethod
+    def do_long_update(long_status, long_file, tag, post_limit, random_limit):
+        """
+
+        Prototype method to hold code to be moved from jack.py module in init_length_check function
+        :param long_status:
+        :param long_file:
+        :param tag:
+        :param post_limit:
+        :param random_limit:
+        :return:
+        """
+        if post_limit:
+            globalVars.post_limit = int(post_limit)
+        run_file = "run.txt"
+        with open(run_file, 'r') as rf:
+            for line in rf:
+                if "no" in line:
+                    break
+                elif "yes" in line:
+                    if not tag:
+                        tag = ''
+                    if long_status:
+                        length_eval = check_length(long_status, tag)
+                        for item in length_eval:
+                            if not tag:
+                                update = (item + ' #' + str(length_eval.index(item) + 1))
+                                status = TweetArguments()
+                                status.status_update(msg=update, user=globalVars.user_id)
+                                print(update)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
+                            elif tag:
+                                update = (item + ' ' + tag)
+                                status = TweetArguments()
+                                status.status_update(msg=update, user=globalVars.user_id)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
+                    elif long_file:
+                        with open(long_file, 'r') as f:
+                            status_text = f.read()
+                            length_eval = check_length(status_text, tag)
+                            for item in length_eval:
+                                if not tag:
+                                    update = (item + ' #' + str(length_eval.index(item) + 1))
+                                    status = TweetArguments()
+                                    status.status_update(msg=update, user=globalVars.user_id)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
+                                elif tag:
+                                    update = (item + ' ' + tag)
+                                    status = TweetArguments()
+                                    status.status_update(msg=update, user=globalVars.user_id)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
+
+    # TODO: Add code from init_length_check() from jack.py module
 
     @staticmethod
     def friendship_follow(screen_name=''):

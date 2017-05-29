@@ -5,10 +5,8 @@ import jackanapes
 import globalVars
 import yaml
 import os
-import time
-import random
 
-__author__ = 'SomeClown'
+__author__ = "SomeClown"
 __license__ = "MIT"
 __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
@@ -26,7 +24,7 @@ EPILOG = '... add search methods here. Need to overload class where Epilog is de
 SEARCH OPERATOR                         FINDS
 -----------------------------------------------------------------------------------------------------------
 watching now                            containing both “watching” and “now”. This is the default operator.
-“happy hour”                            containing the exact phrase “happy hour”.
+"happy hour"                            containing the exact phrase “happy hour”.
 love OR hate                            containing either “love” or “hate” (or both).
 beer -root                              containing “beer” but not “root”.
 #haiku                                  containing the hashtag “haiku”.
@@ -411,57 +409,8 @@ def init_testing():
 @click.option('-r', '--random', 'random_limit', is_flag=True,
               help='Override default limit with random (10 seconds - 2 minutes)')
 def init_length_check(long_status, long_file, tag, post_limit, random_limit):
-    if post_limit:
-        globalVars.post_limit = int(post_limit)
-    run_file = "run.txt"
-    with open(run_file, 'r') as rf:
-        for line in rf:
-            if "no" in line:
-                break
-            elif "yes" in line:
-                if not tag:
-                    tag = ''
-                if long_status:
-                    check_length = jackanapes.check_length(long_status, tag)
-                    for item in check_length:
-                        if not tag:
-                            update = (item + ' #' + str(check_length.index(item) + 1))
-                            status = jackanapes.TweetArguments()
-                            status.status_update(msg=update, user=globalVars.user_id)
-                            print(update)
-                            if random_limit:
-                                time.sleep(random.randint(10, globalVars.random_limit))
-                            else:
-                                time.sleep(globalVars.post_limit)
-                        elif tag:
-                            update = (item + ' ' + tag)
-                            status = jackanapes.TweetArguments()
-                            status.status_update(msg=update, user=globalVars.user_id)
-                            if random_limit:
-                                time.sleep(random.randint(10, globalVars.random_limit))
-                            else:
-                                time.sleep(globalVars.post_limit)
-                elif long_file:
-                    with open(long_file, 'r') as f:
-                        status_text = f.read()
-                        check_length = jackanapes.check_length(status_text, tag)
-                        for item in check_length:
-                            if not tag:
-                                update = (item + ' #' + str(check_length.index(item) + 1))
-                                status = jackanapes.TweetArguments()
-                                status.status_update(msg=update, user=globalVars.user_id)
-                                if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
-                                else:
-                                    time.sleep(globalVars.post_limit)
-                            elif tag:
-                                update = (item + ' ' + tag)
-                                status = jackanapes.TweetArguments()
-                                status.status_update(msg=update, user=globalVars.user_id)
-                                if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
-                                else:
-                                    time.sleep(globalVars.post_limit)
+    long_update = jackanapes.TweetArguments()
+    long_update.do_long_update(long_status, long_file, tag, post_limit, random_limit)
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
