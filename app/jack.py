@@ -69,6 +69,7 @@ def set_config():
         globalVars.friend_file = settings['friend_file']
         globalVars.no_follow = settings['no_follow']
         globalVars.post_limit = settings['post_limit']
+        globalVars.random_limit = settings['random_limit']
         globalVars.home_dir = os.path.expanduser('~')
         globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)
 
@@ -408,12 +409,10 @@ def init_testing():
 @click.option('-t', '--tag', 'tag', help='hashtag, or other word, to append to individual lines')
 @click.option('-p', '--post_limit', 'post_limit', help='Override default limit (1.5 seconds)')
 @click.option('-r', '--random', 'random_limit', is_flag=True,
-              help='Override default limit with random (5 seconds - 10 minutes)')
+              help='Override default limit with random (10 seconds - 2 minutes)')
 def init_length_check(long_status, long_file, tag, post_limit, random_limit):
     if post_limit:
         globalVars.post_limit = int(post_limit)
-    elif random_limit:
-        globalVars.post_limit = random.randint(10, 600)
     run_file = "run.txt"
     with open(run_file, 'r') as rf:
         for line in rf:
@@ -430,12 +429,18 @@ def init_length_check(long_status, long_file, tag, post_limit, random_limit):
                             status = jackanapes.TweetArguments()
                             status.status_update(msg=update, user=globalVars.user_id)
                             print(update)
-                            time.sleep(globalVars.post_limit)
+                            if random_limit:
+                                time.sleep(random.randint(10, globalVars.random_limit))
+                            else:
+                                time.sleep(globalVars.post_limit)
                         elif tag:
                             update = (item + ' ' + tag)
                             status = jackanapes.TweetArguments()
                             status.status_update(msg=update, user=globalVars.user_id)
-                            time.sleep(globalVars.post_limit)
+                            if random_limit:
+                                time.sleep(random.randint(10, globalVars.random_limit))
+                            else:
+                                time.sleep(globalVars.post_limit)
                 elif long_file:
                     with open(long_file, 'r') as f:
                         status_text = f.read()
@@ -445,12 +450,18 @@ def init_length_check(long_status, long_file, tag, post_limit, random_limit):
                                 update = (item + ' #' + str(check_length.index(item) + 1))
                                 status = jackanapes.TweetArguments()
                                 status.status_update(msg=update, user=globalVars.user_id)
-                                time.sleep(globalVars.post_limit)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
                             elif tag:
                                 update = (item + ' ' + tag)
                                 status = jackanapes.TweetArguments()
                                 status.status_update(msg=update, user=globalVars.user_id)
-                                time.sleep(globalVars.post_limit)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
 
 cli.add_command(init_friend_list, 'friend')
 cli.add_command(init_time_line, 'tweets')
