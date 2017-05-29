@@ -558,11 +558,11 @@ class TweetArguments:
         """
 
         Prototype method to hold code to be moved from jack.py module in init_length_check function
-        :param long_status:
-        :param long_file:
-        :param tag:
-        :param post_limit:
-        :param random_limit:
+        :param long_status: Status text for update over 140 characters
+        :param long_file: Filename with plaintext to read for update status
+        :param tag: Hashtag to apply to each tweet in series
+        :param post_limit: How long to wait in between tweets, to avoid API limit
+        :param random_limit: Upper limit for random tweet length (post_limit to random_limit)
         :return:
         """
         if post_limit:
@@ -616,8 +616,6 @@ class TweetArguments:
                                         time.sleep(random.randint(10, globalVars.random_limit))
                                     else:
                                         time.sleep(globalVars.post_limit)
-
-    # TODO: Add code from init_length_check() from jack.py module
 
     @staticmethod
     def friendship_follow(screen_name=''):
