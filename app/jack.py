@@ -6,6 +6,7 @@ import globalVars
 import yaml
 import os
 import time
+import random
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -406,9 +407,13 @@ def init_testing():
 @click.option('-lf', '--long-file', 'long_file', help='filename with long text')
 @click.option('-t', '--tag', 'tag', help='hashtag, or other word, to append to individual lines')
 @click.option('-p', '--post_limit', 'post_limit', help='Override default limit (1.5 seconds)')
-def init_length_check(long_status, long_file, tag, post_limit):
+@click.option('-r', '--random', 'random_limit', is_flag=True,
+              help='Override default limit with random (5 seconds - 10 minutes)')
+def init_length_check(long_status, long_file, tag, post_limit, random_limit):
     if post_limit:
-            globalVars.post_limit = int(post_limit)
+        globalVars.post_limit = int(post_limit)
+    elif random_limit:
+        globalVars.post_limit = random.randint(10, 600)
     run_file = "run.txt"
     with open(run_file, 'r') as rf:
         for line in rf:
