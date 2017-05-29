@@ -10,10 +10,10 @@ home                    : .jackanapes
 # These are your application and consumer tokens and token secrets. Register
 # this application using your Twitter dev account, then generate the appropriate
 # tokens and fill them in here.
-access_token            : @#$!$aFDSSSDFG3ASFDSADFVBdsfg
-access_token_secret     : SADF2345234safdFAga4w35@!#
-consumer_token          : ASDF@#$DSFG#$%ASdgasdf$#@% 
-consumer_token_secret   : ASDFASASDFasdf#afsdf3@#42S
+access_token            : "Your Access Token"
+access_token_secret     : "Your Access Token Secret"
+consumer_token          : "Your Consumer Token"
+consumer_token_secret   : "Your Consumer Token Secret"
 
 # When downloading all friends data to a file, this is the default and lives
 # in the home directory as configured above
