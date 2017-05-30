@@ -151,8 +151,15 @@ def init_stream(user):
             print(e)
             jackanapes.cleanup(1, e)
     elif globalVars.output == 'print':
-        user_stream = jackanapes.TweetArguments()
-        user_stream.get_follow_stream(user)
+        try:
+            user_stream = jackanapes.TweetArguments()
+            user_stream.get_follow_stream(user)
+        except SystemExit:
+            raise
+        except KeyboardInterrupt:
+            raise
+        except BaseException as e:
+            print(e)
     elif globalVars.output == 'web':
         pass
 
@@ -242,17 +249,13 @@ traffic ?                               containing “traffic” and asking a qu
                 this_search = jackanapes.TweetArguments()
                 this_search.term_search(search_term, count)
             finally:
-                print(static)
-                print(search_term)
-                print(count)
+                pass
         elif globalVars.output == 'print':
             try:
                 stream_search = jackanapes.TweetArguments()
                 stream_search.get_stream_search(search_term)
             finally:
-                print(static)
-                print(search_term)
-                print(count)
+                pass
         elif globalVars.output == 'web':
             pass
     elif static is False:
@@ -262,17 +265,13 @@ traffic ?                               containing “traffic” and asking a qu
                 stream_search = jackanapes.TweetArguments()
                 stream_search.get_stream_search(search_term)
             finally:
-                print(static)
-                print(search_term)
-                print(count)
+                pass
         elif globalVars.output == 'print':
             try:
                 stream_search = jackanapes.TweetArguments()
                 stream_search.get_stream_search(search_term)
             finally:
-                print(static)
-                print(search_term)
-                print(count)
+                pass
         elif globalVars.output == 'web':
             pass
 

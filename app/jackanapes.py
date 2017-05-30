@@ -713,8 +713,7 @@ class TweetArguments:
         """
         Show all users currently being blocked
         
-        :param screen_name: 
-        :return: 
+        :return:
         """
         try:
             blocks = globalVars.api.blocks()
