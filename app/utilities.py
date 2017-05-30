@@ -4,6 +4,10 @@ from functools import wraps
 import logging
 import time
 import progressbar
+import yaml
+import globalVars
+import os
+
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -44,3 +48,24 @@ def progress_bar_wrapper(original_function: object) -> object:
             bar.update(i)
         return original_function(*args, **kwargs)
     return wrapper
+
+
+def set_config():
+
+    # Load and assign key variables from yaml configuration file
+    with open('config.yml', 'r') as my_config_file:
+        settings = yaml.load(my_config_file)
+        globalVars.access_token = settings['access_token']
+        globalVars.access_token_secret = settings['access_token_secret']
+        globalVars.consumer_token = settings['consumer_token']
+        globalVars.consumer_token_secret = settings['consumer_token_secret']
+        globalVars.user = settings['user']
+        globalVars.home = settings['home']
+        globalVars.followers = settings['followers']
+        globalVars.friend_file = settings['friend_file']
+        globalVars.no_follow = settings['no_follow']
+        globalVars.post_limit = settings['post_limit']
+        globalVars.random_limit = settings['random_limit']
+        globalVars.output = settings['output']
+        globalVars.home_dir = os.path.expanduser('~')
+        globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)

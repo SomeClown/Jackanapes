@@ -3,8 +3,8 @@
 import click
 import jackanapes
 import globalVars
-import yaml
-import os
+import utilities
+
 
 __author__ = "SomeClown"
 __license__ = "MIT"
@@ -52,32 +52,12 @@ traffic ?                               containing “traffic” and asking a qu
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
-def set_config():
-
-    # Load and assign key variables from yaml configuration file
-    with open('config.yml', 'r') as my_config_file:
-        settings = yaml.load(my_config_file)
-        globalVars.access_token = settings['access_token']
-        globalVars.access_token_secret = settings['access_token_secret']
-        globalVars.consumer_token = settings['consumer_token']
-        globalVars.consumer_token_secret = settings['consumer_token_secret']
-        globalVars.user = settings['user']
-        globalVars.home = settings['home']
-        globalVars.followers = settings['followers']
-        globalVars.friend_file = settings['friend_file']
-        globalVars.no_follow = settings['no_follow']
-        globalVars.post_limit = settings['post_limit']
-        globalVars.random_limit = settings['random_limit']
-        globalVars.home_dir = os.path.expanduser('~')
-        globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)
-
-
 @click.group(epilog=EPILOG, context_settings=CONTEXT_SETTINGS)
 def cli():
     """
     Command line Twitter (and stuff) client - For questions contact @SomeClown
     """
-    set_config()
+    utilities.set_config()
 
 
 @click.command(help='Get \'n\' list of friends')

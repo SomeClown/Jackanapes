@@ -16,6 +16,7 @@ consumer_token = ''
 consumer_token_secret = ''
 post_limit = 0
 random_limit = 0
+output = ''
 home = ''
 home_dir = ''
 complete_dir_path = ''
