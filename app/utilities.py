@@ -67,5 +67,6 @@ def set_config():
         globalVars.post_limit = settings['post_limit']
         globalVars.random_limit = settings['random_limit']
         globalVars.output = settings['output']
+        globalVars.debugging = settings['debugging']
         globalVars.home_dir = os.path.expanduser('~')
         globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)

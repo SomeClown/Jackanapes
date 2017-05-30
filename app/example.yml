@@ -38,3 +38,14 @@ post_limit              : 36.001
 # calculation. We calculate the time between posts, when using random, as a
 # random number between post_limit above, and random_limit below, in seconds.
 random_limit            : 240
+
+# Output flag. This determines what type of output is produced by a given command.
+# Choices are: curses, plain, or web. Curses will output to terminal in a colorized
+# and pleasing (hopefully) manner, while plain will output using plain text, but also
+# in color. The main difference being what we can do with the screen vis-a-vis positioning
+# of text, erasing, moving, etc. Web output is for front-end applications using this
+# code to produce output for web pages
+output                  : print
+
+# Debugging output
+debugging               : False

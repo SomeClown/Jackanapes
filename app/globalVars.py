@@ -68,7 +68,8 @@ color_white = ''
 """
 
 color_black2 = "\033[1;30m{0}\033[00m"
-color_red2 = "\033[01;31m{0}\033[00m"
+color_red2_on = "\033[01;31m"
+color_red2_off = "\33[00m"
 color_green2 = "\033[1;32m{0}\033[00m"
 color_yellow2 = "\033[1;33m{0}\033[00m"
 color_blue2 = "\033[1;34m{0}\033[00m"

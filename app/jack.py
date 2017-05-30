@@ -138,17 +138,23 @@ def init_followers(number):
 @click.command(help='Stream user\'s twitter feed')
 @click.argument('user', default='')
 def init_stream(user):
-    try:
-        jackanapes.init_curses()
+    if globalVars.output == 'curses':
+        try:
+            jackanapes.init_curses()
+            user_stream = jackanapes.TweetArguments()
+            user_stream.get_follow_stream(user)
+        except SystemExit:
+            raise
+        except KeyboardInterrupt:
+            raise
+        except BaseException as e:
+            print(e)
+            jackanapes.cleanup(1, e)
+    elif globalVars.output == 'print':
         user_stream = jackanapes.TweetArguments()
         user_stream.get_follow_stream(user)
-    except SystemExit:
-        raise
-    except KeyboardInterrupt:
-        raise
-    except BaseException as e:
-        print(e)
-        jackanapes.cleanup(1, e)
+    elif globalVars.output == 'web':
+        pass
 
 
 @click.command(help='information on yourself or others')
@@ -230,23 +236,45 @@ traffic ?                               containing “traffic” and asking a qu
 \n
     """
     if static is True:
-        try:
-            jackanapes.init_curses()
-            this_search = jackanapes.TweetArguments()
-            this_search.term_search(search_term, count)
-        finally:
-            print(static)
-            print(search_term)
-            print(count)
+        if globalVars.output == 'curses':
+            try:
+                jackanapes.init_curses()
+                this_search = jackanapes.TweetArguments()
+                this_search.term_search(search_term, count)
+            finally:
+                print(static)
+                print(search_term)
+                print(count)
+        elif globalVars.output == 'print':
+            try:
+                stream_search = jackanapes.TweetArguments()
+                stream_search.get_stream_search(search_term)
+            finally:
+                print(static)
+                print(search_term)
+                print(count)
+        elif globalVars.output == 'web':
+            pass
     elif static is False:
-        try:
-            jackanapes.init_curses()
-            stream_search = jackanapes.TweetArguments()
-            stream_search.get_stream_search(search_term)
-        finally:
-            print(static)
-            print(search_term)
-            print(count)
+        if globalVars.output == 'curses':
+            try:
+                jackanapes.init_curses()
+                stream_search = jackanapes.TweetArguments()
+                stream_search.get_stream_search(search_term)
+            finally:
+                print(static)
+                print(search_term)
+                print(count)
+        elif globalVars.output == 'print':
+            try:
+                stream_search = jackanapes.TweetArguments()
+                stream_search.get_stream_search(search_term)
+            finally:
+                print(static)
+                print(search_term)
+                print(count)
+        elif globalVars.output == 'web':
+            pass
 
 
 @click.command(options_metavar='[options]')
