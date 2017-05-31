@@ -15,6 +15,7 @@ import pickle
 import json
 import random
 import time
+from utilities import debugging_wrapper
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -22,6 +23,7 @@ __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
 
 
+@debugging_wrapper
 class Streamer(tweepy.StreamListener):
     def on_status(self, status):
         """

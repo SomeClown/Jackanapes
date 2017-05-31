@@ -15,17 +15,30 @@ __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
 
 
+def debugging_wrapper(original_function: object) -> object:
+    """
+
+    :param original_function:
+    :return:
+    """
+    @wraps(original_function)
+    def wrapper(*args, **kwargs):
+        print('Function: ' + original_function.__name__ + ' called\n')
+        return original_function(*args, **kwargs)
+    return wrapper
+
+
 def logging_wrapper(original_function: object) -> object:
     """
-        :type original_function: object
-        :rtype: object
-        """
-    logging.basicConfig(filename='{}.log'.format(original_function.__name__),
-                        format='%(asctime)s %(levelname)-8s %(message)s',
-                        datefmt='%a, %d %b %Y %H:%M:%S',level=logging.INFO)
+    :type original_function: object
+    :rtype: object
+    """
 
     @wraps(original_function)
     def wrapper(*args, **kwargs):
+        logging.basicConfig(filename='{}.log'.format(original_function.__name__),
+                            format='%(asctime)s %(levelname)-8s %(message)s',
+                            datefmt='%a, %d %b %Y %H:%M:%S', level=logging.INFO)
         logging.info(
                 'Ran with args: {}, and kwargs: {}'.format(args, kwargs))
         return original_function(*args, **kwargs)
