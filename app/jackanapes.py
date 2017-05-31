@@ -48,6 +48,7 @@ class Streamer(tweepy.StreamListener):
             pass
 
 
+@debugging_wrapper
 def init_curses():
     """
     Setup curses for use in which ever function requires it. Call this as needed
@@ -801,6 +802,7 @@ class TweetArguments:
             print(e)
 
 
+@debugging_wrapper
 def cleanup(exit_code: object, error=''):
     """
 
@@ -817,7 +819,7 @@ def cleanup(exit_code: object, error=''):
     else:
         sys.exit(exit_code)
 
-
+@debugging_wrapper
 def check_length(text, tag):
     """
     
@@ -832,6 +834,7 @@ def check_length(text, tag):
     return text_list
 
 
+@debugging_wrapper
 class DisplayTweet(object):
     """
 
@@ -854,6 +857,7 @@ class DisplayTweet(object):
         pass
 
 
+@debugging_wrapper
 class SaveTweet(object):
     """
 

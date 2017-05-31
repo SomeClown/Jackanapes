@@ -17,6 +17,7 @@ __email__ = "teren@packetqueue.net"
 
 def debugging_wrapper(original_function: object) -> object:
     """
+    Debugging code lives here. Called as needed
 
     :param original_function:
     :return:
