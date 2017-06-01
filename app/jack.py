@@ -5,7 +5,6 @@ import jackanapes
 import globalVars
 import utilities
 
-
 __author__ = "SomeClown"
 __license__ = "MIT"
 __maintainer__ = "Teren Bryson"

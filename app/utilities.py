@@ -15,21 +15,25 @@ __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
 
 
-def debugging_wrapper(original_function: object) -> object:
-    """
-    Debugging code lives here. Called as needed
+def debugging_wrapper(flag):
+    def foobert(original_function):
+        """
+        Debugging code lives here. Called as needed
 
-    :param original_function:
-    :return:
-    """
-    @wraps(original_function)
-    def wrapper(*args, **kwargs):
-        print('Function: ' + original_function.__name__ + ' called\n')
-        return original_function(*args, **kwargs)
-    return wrapper
+        :param original_function:
+        :return:
+        """
+        @wraps(original_function)
+        def wrapper(*args, **kwargs):
+            if flag:
+                print('Function: ' + original_function.__name__ + ' called\n')
+                return original_function(*args, **kwargs)
+            else:
+                pass
+        return wrapper
 
 
-def logging_wrapper(original_function: object) -> object:
+def logging_wrapper(original_function):
     """
     :type original_function: object
     :rtype: object
