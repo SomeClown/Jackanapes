@@ -25,7 +25,7 @@ __email__ = "teren@packetqueue.net"
 flag = True
 
 
-@debugging_wrapper(flag)
+@debugging_wrapper
 class Streamer(tweepy.StreamListener):
     def on_status(self, status):
         """
