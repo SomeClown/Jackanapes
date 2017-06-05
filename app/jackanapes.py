@@ -22,10 +22,10 @@ __license__ = "MIT"
 __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
 
-flag = True
+debug_flag = True
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 class Streamer(tweepy.StreamListener):
     def on_status(self, status):
         """
@@ -72,7 +72,7 @@ class Streamer(tweepy.StreamListener):
             pass
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 def init_curses():
     """
     Setup curses for use in which ever function requires it. Call this as needed
@@ -106,7 +106,7 @@ class TweetArguments:
                 os.mkdir(path)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def print_friends(number: int):
         """
         Print <number> of friends
@@ -152,7 +152,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def show_followers(number: int):
         """
         Print <number> of followers
@@ -186,7 +186,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def save_followers(my_screen_name: str):
         """
         save followers list to a file for later use
@@ -213,7 +213,7 @@ class TweetArguments:
         return None
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def save_friends(my_screen_name: str):
         """
         save friends list to a file for later use
@@ -240,7 +240,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def compare_followers():
         """
         compare followers and friends list to see which friends don't follow back
@@ -274,7 +274,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def grab_user_object(file_name):
         """
         
@@ -303,7 +303,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def print_time_line(number: int):
         """
         print user's time_line
@@ -333,7 +333,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def print_mentions(number: int):
         """
         print user's mentions
@@ -362,7 +362,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def print_retweets(number: int):
         """
         
@@ -395,7 +395,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def show_my_info():
         """
 
@@ -457,7 +457,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def show_not_me(data: str):
         """
 
@@ -518,7 +518,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def compare_users(user, compare_date=0, num=0):
         """
 
@@ -537,7 +537,7 @@ class TweetArguments:
         print(user_info.created_at)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def term_search(term, tweet_count):
         """
 
@@ -563,7 +563,7 @@ class TweetArguments:
                     cleanup(0)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def direct_send(user, msg):
         """
 
@@ -586,7 +586,7 @@ class TweetArguments:
         return None
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def status_update(user, msg):
         """
 
@@ -604,7 +604,7 @@ class TweetArguments:
         return None
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def do_long_update(long_status, long_file, tag, post_limit, random_limit):
         """
 
@@ -669,7 +669,7 @@ class TweetArguments:
                                         time.sleep(globalVars.post_limit)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def friendship_follow(screen_name=''):
         """
         
@@ -695,7 +695,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def friendship_un_follow(screen_name=''):
         """
         
@@ -720,7 +720,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def user_block(screen_name=''):
         """
         
@@ -738,7 +738,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def user_unblock(screen_name=''):
         """
         
@@ -756,7 +756,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def show_blocks():
         """
         Show all users currently being blocked
@@ -780,7 +780,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def set_spam(screen_name):
         """
         
@@ -799,7 +799,7 @@ class TweetArguments:
             print(e)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def get_stream():
         """
 
@@ -808,7 +808,7 @@ class TweetArguments:
         teren_stream.userstream()
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def get_follow_stream(user):
         """
 
@@ -824,7 +824,7 @@ class TweetArguments:
             teren_stream.userstream()
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def get_stream_search(search_hash):
         """
 
@@ -838,7 +838,7 @@ class TweetArguments:
             cleanup(1)
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def set_testing():
         test_pull = globalVars.api.retweets_of_me(counts=1)
         try:
@@ -852,7 +852,7 @@ class TweetArguments:
             print(e)
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 def cleanup(exit_code: object, error=''):
     """
 
@@ -870,7 +870,7 @@ def cleanup(exit_code: object, error=''):
         sys.exit(exit_code)
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 def check_length(text, tag):
     """
     
@@ -885,7 +885,7 @@ def check_length(text, tag):
     return text_list
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 class DisplayTweet(object):
     """
 
@@ -908,7 +908,7 @@ class DisplayTweet(object):
         pass
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 class SaveTweet(object):
     """
 
@@ -925,7 +925,7 @@ class SaveTweet(object):
 
 
 @initial_auth
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 class CreateUpdate:
     """
 
@@ -933,7 +933,7 @@ class CreateUpdate:
 
     """
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def direct_update(user: str, tweet_text: str):
         """
 
@@ -954,7 +954,7 @@ class CreateUpdate:
         return None
 
     @staticmethod
-    @debugging_wrapper
+    @debugging_wrapper(debug_flag)
     def status_update(tweet_text: str):
         """
         
