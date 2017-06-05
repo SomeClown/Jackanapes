@@ -49,6 +49,28 @@ class Streamer(tweepy.StreamListener):
         elif globalVars.output == 'web':
             pass
 
+    def on_direct_message(self, status):
+        """
+
+        :param status:
+        """
+        if globalVars.output == 'curses':
+            globalVars.screen.nodelay(1)
+            c = globalVars.screen.getch()
+            # TODO: Pull status.text into named str, regex for @handle and #hashtag
+            globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
+            globalVars.screen.addstr(str(': ' + status.text + '\n'))
+            globalVars.screen.refresh()  # Refresh screen now that strings added
+            if c == ord('q'):
+                cleanup(0)
+            else:
+                cleanup(0)
+        elif globalVars.output == 'print':
+            print(globalVars.color_red2_on + status.user.name +
+                  globalVars.color_red2_off + ' ' + status.text)
+        elif globalVars.output == 'web':
+            pass
+
 
 @debugging_wrapper
 def init_curses():
