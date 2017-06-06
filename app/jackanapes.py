@@ -55,8 +55,15 @@ class Streamer(tweepy.StreamListener):
         :type raw_data: object
         """
         un_fucked = json.loads(raw_data)
-        #print(json.dumps(un_fucked, indent=5)
-        print(un_fucked["text"])
+        #print(json.dumps(un_fucked, indent=5))
+        """
+        The below works, but the same algorithm using "direct_message
+        doesn't appear to work at all. Not sure why. Both should be
+        keys in the json object/dictionary
+        """
+        for item in un_fucked['friends']:
+            print(item)
+
 
 @debugging_wrapper(debug_flag)
 def init_curses():
@@ -802,13 +809,14 @@ class TweetArguments:
         """
         try:
             teren_stream = tweepy.Stream(globalVars.auth, Streamer())
-            get_user = globalVars.api.get_user(user)
+            if user is True:
+                get_user = globalVars.api.get_user(user)
+            else:
+                get_user = globalVars.api.get_user(globalVars.user)
             user_id = get_user.id
             user_id = str(user_id)
-            if user_id != '17028130':
-                teren_stream.filter(follow=[user_id])
-            else:
-                teren_stream.userstream()
+            print(user_id + ' ' + user)
+            teren_stream.userstream()
         except tweepy.RateLimitError as e:
             print(e)
 

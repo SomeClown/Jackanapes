@@ -106,7 +106,7 @@ def init_follower_list(number):
 
 
 @click.command(help='Stream user\'s twitter feed')
-@click.argument('user', default='')
+@click.argument('user', required=False, default='')
 def init_stream(user):
     if globalVars.output == 'curses':
         try:
