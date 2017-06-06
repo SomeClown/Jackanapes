@@ -49,27 +49,15 @@ class Streamer(tweepy.StreamListener):
         elif globalVars.output == 'web':
             pass
 
-    def on_direct_message(self, status):
+    def on_data(self, raw_data):
         """
 
-        :param status:
+        :type raw_data: object
         """
-        if globalVars.output == 'curses':
-            globalVars.screen.nodelay(1)
-            c = globalVars.screen.getch()
-            # TODO: Pull status.text into named str, regex for @handle and #hashtag
-            globalVars.screen.addstr(str(status.user.name), curses.color_pair(1))
-            globalVars.screen.addstr(str(': ' + status.text + '\n'))
-            globalVars.screen.refresh()  # Refresh screen now that strings added
-            if c == ord('q'):
-                cleanup(0)
-            else:
-                cleanup(0)
-        elif globalVars.output == 'print':
-            print(globalVars.color_red2_on + status.user.name +
-                  globalVars.color_red2_off + ' ' + status.text)
-        elif globalVars.output == 'web':
-            pass
+        un_fucked = json.loads(raw_data)
+        #print(json.dumps(un_fucked, indent=5))
+        for k, v in un_fucked.items():
+            print(k, v)
 
 
 @debugging_wrapper(debug_flag)
@@ -814,14 +802,17 @@ class TweetArguments:
 
         :param user:
         """
-        teren_stream = tweepy.Stream(globalVars.auth, Streamer())
-        get_user = globalVars.api.get_user(user)
-        user_id = get_user.id
-        user_id = str(user_id)
-        if user_id != '17028130':
-            teren_stream.filter(follow=[user_id])
-        else:
-            teren_stream.userstream()
+        try:
+            teren_stream = tweepy.Stream(globalVars.auth, Streamer())
+            get_user = globalVars.api.get_user(user)
+            user_id = get_user.id
+            user_id = str(user_id)
+            if user_id != '17028130':
+                teren_stream.filter(follow=[user_id])
+            else:
+                teren_stream.userstream()
+        except tweepy.RateLimitError as e:
+            print(e)
 
     @staticmethod
     @debugging_wrapper(debug_flag)

@@ -4,6 +4,7 @@ import click
 import jackanapes
 import globalVars
 import utilities
+import tweepy
 
 __author__ = "SomeClown"
 __license__ = "MIT"
@@ -112,6 +113,8 @@ def init_stream(user):
             jackanapes.init_curses()
             user_stream = jackanapes.TweetArguments()
             user_stream.get_follow_stream(user)
+        except tweepy.RateLimitError as e:
+            print(e)
         except SystemExit:
             raise
         except KeyboardInterrupt:
@@ -123,6 +126,8 @@ def init_stream(user):
         try:
             user_stream = jackanapes.TweetArguments()
             user_stream.get_follow_stream(user)
+        except tweepy.RateLimitError as e:
+            print(e)
         except SystemExit:
             raise
         except KeyboardInterrupt:
