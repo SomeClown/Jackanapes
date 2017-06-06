@@ -55,10 +55,8 @@ class Streamer(tweepy.StreamListener):
         :type raw_data: object
         """
         un_fucked = json.loads(raw_data)
-        #print(json.dumps(un_fucked, indent=5))
-        for k, v in un_fucked.items():
-            print(k, v)
-
+        #print(json.dumps(un_fucked, indent=5)
+        print(un_fucked["text"])
 
 @debugging_wrapper(debug_flag)
 def init_curses():
