@@ -59,9 +59,10 @@ class Streamer(tweepy.StreamListener):
             self.on_direct_message(raw_data)
 
     def on_direct_message(self, status):
-        #print(status)
         new_status = json.loads(status)
-        print(new_status['direct_message']['text'])
+        print('DIRECT MESSAGE FROM ' + globalVars.color_red2_on +
+              new_status['direct_message']['sender']['name'] + ': ' + globalVars.color_red2_off +
+              new_status['direct_message']['text'])
 
     def on_error(self, status_code):
         if status_code == 420:
