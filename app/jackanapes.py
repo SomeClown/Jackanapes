@@ -27,6 +27,7 @@ debug_flag = True
 
 @debugging_wrapper(debug_flag)
 class Streamer(tweepy.StreamListener):
+
     def on_status(self, status):
         """
 
@@ -54,15 +55,18 @@ class Streamer(tweepy.StreamListener):
 
         :type raw_data: object
         """
-        un_fucked = json.loads(raw_data)
-        #print(json.dumps(un_fucked, indent=5))
-        """
-        The below works, but the same algorithm using "direct_message
-        doesn't appear to work at all. Not sure why. Both should be
-        keys in the json object/dictionary
-        """
-        for item in un_fucked['friends']:
-            print(item)
+        if 'direct_message' in raw_data:
+            self.on_direct_message(raw_data)
+
+    def on_direct_message(self, status):
+        #print(status)
+        new_status = json.loads(status)
+        print(new_status['direct_message']['text'])
+
+    def on_error(self, status_code):
+        if status_code == 420:
+            print('Error 420')
+            return True
 
 
 @debugging_wrapper(debug_flag)
