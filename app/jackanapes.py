@@ -96,6 +96,7 @@ class CommandBot:
         if command_string == 'DIRECTORY':
             call(['ls', '-lah'])
 
+        call('jackanapes status -d "COMMAND RECEIVED" @someclown', shell=True)
 
 
 @debugging_wrapper(debug_flag)
