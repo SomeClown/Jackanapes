@@ -92,7 +92,10 @@ class CommandBot:
     @staticmethod
     def process_command(command_string):
         print('COMMAND RECEIVED: ' + command_string)
-        call(['ls', '-lah'])
+
+        if command_string == 'DIRECTORY':
+            call(['ls', '-lah'])
+
 
 
 @debugging_wrapper(debug_flag)
