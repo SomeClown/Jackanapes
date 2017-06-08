@@ -27,6 +27,9 @@ debug_flag = True
 
 @debugging_wrapper(debug_flag)
 class Streamer(tweepy.StreamListener):
+    """
+    Streamer class. Trying to only overload the minimum number of methods below
+    """
 
     def on_status(self, status):
         """
@@ -51,12 +54,22 @@ class Streamer(tweepy.StreamListener):
             pass
 
     def on_direct_message(self, status):
+        """
+
+        :param status:
+        :return:
+        """
         user_name = status.direct_message['sender_screen_name']
         status_update = status.direct_message['text']
         print('DIRECT MESSAGE FROM ' + globalVars.color_red2_on +
               user_name + ': ' + globalVars.color_red2_off + status_update)
 
     def on_error(self, status_code):
+        """
+
+        :param status_code:
+        :return:
+        """
         if status_code != 200:
             print(status_code)
             return True
