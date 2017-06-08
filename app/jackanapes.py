@@ -50,24 +50,21 @@ class Streamer(tweepy.StreamListener):
         elif globalVars.output == 'web':
             pass
 
-    def on_data(self, raw_data):
-        """
-
-        :type raw_data: object
-        """
-        if 'direct_message' in raw_data:
-            self.on_direct_message(raw_data)
-
     def on_direct_message(self, status):
-        new_status = json.loads(status)
+        user_name = status.direct_message['sender_screen_name']
+        status_update = status.direct_message['text']
         print('DIRECT MESSAGE FROM ' + globalVars.color_red2_on +
-              new_status['direct_message']['sender']['name'] + ': ' + globalVars.color_red2_off +
-              new_status['direct_message']['text'])
+              user_name + ': ' + globalVars.color_red2_off + status_update)
 
     def on_error(self, status_code):
-        if status_code == 420:
-            print('Error 420')
+        if status_code != 200:
+            print(status_code)
             return True
+
+
+@debugging_wrapper
+class CommandBot:
+    pass
 
 
 @debugging_wrapper(debug_flag)
