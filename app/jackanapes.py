@@ -66,6 +66,7 @@ class Streamer(tweepy.StreamListener):
 
     def on_error(self, status_code):
         """
+        This needs much more work
 
         :param status_code:
         :return:
@@ -77,6 +78,9 @@ class Streamer(tweepy.StreamListener):
 
 @debugging_wrapper
 class CommandBot:
+    """
+    Logic for processing commands (given as direct tweets from specific accounts)
+    """
     pass
 
 
@@ -105,6 +109,9 @@ def init_curses():
 
 @initial_auth
 class TweetArguments:
+    """
+    Class exists mostly to make a coherent collection out of similar methods
+    """
 
     def _mkdir_recursive(self, path):
         sub_path = os.path.dirname(path)
