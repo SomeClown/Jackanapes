@@ -16,6 +16,7 @@ import json
 import random
 import time
 from utilities import debugging_wrapper
+from subprocess import call
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -61,6 +62,13 @@ class Streamer(tweepy.StreamListener):
         """
         user_name = status.direct_message['sender_screen_name']
         status_update = status.direct_message['text']
+
+        # Determine who sent direct tweet, pass to control system if appropriate
+        if user_name == 'SomeClown':
+            control_bot = CommandBot()
+            control_bot.process_command(status_update)
+
+        # Print message to screen, inline with regular status stream
         print('DIRECT MESSAGE FROM ' + globalVars.color_red2_on +
               user_name + ': ' + globalVars.color_red2_off + status_update)
 
@@ -76,12 +84,15 @@ class Streamer(tweepy.StreamListener):
             return True
 
 
-@debugging_wrapper
+@debugging_wrapper(debug_flag)
 class CommandBot:
     """
     Logic for processing commands (given as direct tweets from specific accounts)
     """
-    pass
+    @staticmethod
+    def process_command(command_string):
+        print('COMMAND RECEIVED: ' + command_string)
+        call(['ls', '-lah'])
 
 
 @debugging_wrapper(debug_flag)
