@@ -66,7 +66,7 @@ class Streamer(tweepy.StreamListener):
         # Determine who sent direct tweet, pass to control system if appropriate
         if user_name == 'SomeClown':
             control_bot = CommandBot()
-            control_bot.process_command(status_update)
+            control_bot.process_command(status_update, user_name)
 
         # Print message to screen, inline with regular status stream
         print('DIRECT MESSAGE FROM ' + globalVars.color_red2_on +
@@ -90,13 +90,29 @@ class CommandBot:
     Logic for processing commands (given as direct tweets from specific accounts)
     """
     @staticmethod
-    def process_command(command_string):
+    def process_command(command_string, user_name):
+        """
+        Initial processing method for incoming commands from twitter
+        :param command_string:
+        :param user_name:
+        :return:
+        """
         print('COMMAND RECEIVED: ' + command_string)
 
+        # Logic to parse commands
         if command_string == 'DIRECTORY':
             call(['ls', '-lah'])
+        elif command_string == 'PROC':
+            proc_stat = 'ps -ax | grep -i "jackanapes.py" >> proc_state.txt '
+            proc_result = 'jackanapes long_status -lf proc_state.txt'
+            call(proc_stat, shell=True)
+            call(proc_result, shell=True)
 
-        call('jackanapes status -d "COMMAND RECEIVED" @someclown', shell=True)
+        # Put together a quick response to the calling twitter account
+        user_name = '@' + user_name
+        bot_response = 'jackanapes status -d "COMMAND RECEIVED" '
+        complete_response = bot_response + user_name
+        call(complete_response, shell=True)
 
 
 @debugging_wrapper(debug_flag)
