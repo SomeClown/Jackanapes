@@ -986,25 +986,25 @@ class CreateUpdate:
                                 update = (item + ' #' + str(length_eval.index(item) + 1))
                                 status = CreateUpdate()
                                 if direct:
-                                    pass
+                                    status.direct_update(user=direct, tweet_text=update)
                                 else:
                                     status.status_update(tweet_text=update)
                                     print(update)
-                                    if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
-                                    else:
-                                        time.sleep(globalVars.post_limit)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
                             elif tag:
                                 update = (item + ' ' + tag)
                                 status = CreateUpdate()
                                 if direct:
-                                    pass
+                                    status.direct_update(user=direct, tweet_text=update)
                                 else:
                                     status.status_update(tweet_text=update)
-                                    if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
-                                    else:
-                                        time.sleep(globalVars.post_limit)
+                                if random_limit:
+                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                else:
+                                    time.sleep(globalVars.post_limit)
                     elif long_file:
                         with open(long_file, 'r') as f:
                             status_text = f.read()
@@ -1014,24 +1014,24 @@ class CreateUpdate:
                                     update = (item + ' #' + str(length_eval.index(item) + 1))
                                     status = CreateUpdate()
                                     if direct:
-                                        pass
+                                        status.direct_update(user=direct, tweet_text=update)
                                     else:
                                         status.status_update(tweet_text=update)
-                                        if random_limit:
-                                            time.sleep(random.randint(10, globalVars.random_limit))
-                                        else:
-                                            time.sleep(globalVars.post_limit)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
                                 elif tag:
                                     update = (item + ' ' + tag)
                                     status = CreateUpdate()
                                     if direct:
-                                        pass
+                                        status.direct_update(user=direct, tweet_text=update)
                                     else:
                                         status.status_update(tweet_text=update)
-                                        if random_limit:
-                                            time.sleep(random.randint(10, globalVars.random_limit))
-                                        else:
-                                            time.sleep(globalVars.post_limit)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
 
 
 def main():
