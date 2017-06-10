@@ -389,9 +389,10 @@ def init_testing():
 @click.option('-p', '--post_limit', 'post_limit', help='Override default limit (1.5 seconds)')
 @click.option('-r', '--random', 'random_limit', is_flag=True,
               help='Override default limit with random (10 seconds - 2 minutes)')
-def init_length_check(long_status, long_file, tag, post_limit, random_limit):
-    long_update = jackanapes.TweetArguments()
-    long_update.do_long_update(long_status, long_file, tag, post_limit, random_limit)
+@click.option('-d', '--direct', 'direct', required=False, help='direct flag, followed by username to send to')
+def init_length_check(long_status, long_file, tag, post_limit, random_limit, direct):
+    long_update = jackanapes.CreateUpdate()
+    long_update.do_long_update(long_status, long_file, tag, post_limit, random_limit, direct)
 
 cli.add_command(init_friend_list, 'friends_list')
 cli.add_command(init_time_line, 'tweets')

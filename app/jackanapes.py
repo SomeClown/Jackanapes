@@ -651,71 +651,6 @@ class TweetArguments:
 
     @staticmethod
     @debugging_wrapper(debug_flag)
-    def do_long_update(long_status, long_file, tag, post_limit, random_limit):
-        """
-
-        Prototype method to hold code to be moved from jack.py module in init_length_check function
-        :param long_status: Status text for update over 140 characters
-        :param long_file: Filename with plaintext to read for update status
-        :param tag: Hashtag to apply to each tweet in series
-        :param post_limit: How long to wait in between tweets, to avoid API limit
-        :param random_limit: Upper limit for random tweet length (post_limit to random_limit)
-        :return:
-        """
-        if post_limit:
-            globalVars.post_limit = int(post_limit)
-        run_file = "run.txt"
-        with open(run_file, 'r') as rf:
-            for line in rf:
-                if "no" in line:
-                    break
-                elif "yes" in line:
-                    if not tag:
-                        tag = ''
-                    if long_status:
-                        length_eval = check_length(long_status, tag)
-                        for item in length_eval:
-                            if not tag:
-                                update = (item + ' #' + str(length_eval.index(item) + 1))
-                                status = TweetArguments()
-                                status.status_update(msg=update, user=globalVars.user_id)
-                                print(update)
-                                if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
-                                else:
-                                    time.sleep(globalVars.post_limit)
-                            elif tag:
-                                update = (item + ' ' + tag)
-                                status = TweetArguments()
-                                status.status_update(msg=update, user=globalVars.user_id)
-                                if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
-                                else:
-                                    time.sleep(globalVars.post_limit)
-                    elif long_file:
-                        with open(long_file, 'r') as f:
-                            status_text = f.read()
-                            length_eval = check_length(status_text, tag)
-                            for item in length_eval:
-                                if not tag:
-                                    update = (item + ' #' + str(length_eval.index(item) + 1))
-                                    status = TweetArguments()
-                                    status.status_update(msg=update, user=globalVars.user_id)
-                                    if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
-                                    else:
-                                        time.sleep(globalVars.post_limit)
-                                elif tag:
-                                    update = (item + ' ' + tag)
-                                    status = TweetArguments()
-                                    status.status_update(msg=update, user=globalVars.user_id)
-                                    if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
-                                    else:
-                                        time.sleep(globalVars.post_limit)
-
-    @staticmethod
-    @debugging_wrapper(debug_flag)
     def friendship_follow(screen_name=''):
         """
         
@@ -1019,6 +954,84 @@ class CreateUpdate:
 
     def reply(self):
         pass
+
+    @staticmethod
+    @debugging_wrapper(debug_flag)
+    def do_long_update(long_status, long_file, tag, post_limit, random_limit, direct):
+        """
+
+        Prototype method to hold code to be moved from jack.py module in init_length_check function
+        :param long_status: Status text for update over 140 characters
+        :param long_file: Filename with plaintext to read for update status
+        :param tag: Hashtag to apply to each tweet in series
+        :param post_limit: How long to wait in between tweets, to avoid API limit
+        :param random_limit: Upper limit for random tweet length (post_limit to random_limit)
+        :param direct: user to whom to send direct status update
+        :return:
+        """
+        if post_limit:
+            globalVars.post_limit = int(post_limit)
+        run_file = "run.txt"
+        with open(run_file, 'r') as rf:
+            for line in rf:
+                if "no" in line:
+                    break
+                elif "yes" in line:
+                    if not tag:
+                        tag = ''
+                    if long_status:
+                        length_eval = check_length(long_status, tag)
+                        for item in length_eval:
+                            if not tag:
+                                update = (item + ' #' + str(length_eval.index(item) + 1))
+                                status = CreateUpdate()
+                                if direct:
+                                    pass
+                                else:
+                                    status.status_update(tweet_text=update)
+                                    print(update)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
+                            elif tag:
+                                update = (item + ' ' + tag)
+                                status = CreateUpdate()
+                                if direct:
+                                    pass
+                                else:
+                                    status.status_update(tweet_text=update)
+                                    if random_limit:
+                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                    else:
+                                        time.sleep(globalVars.post_limit)
+                    elif long_file:
+                        with open(long_file, 'r') as f:
+                            status_text = f.read()
+                            length_eval = check_length(status_text, tag)
+                            for item in length_eval:
+                                if not tag:
+                                    update = (item + ' #' + str(length_eval.index(item) + 1))
+                                    status = CreateUpdate()
+                                    if direct:
+                                        pass
+                                    else:
+                                        status.status_update(tweet_text=update)
+                                        if random_limit:
+                                            time.sleep(random.randint(10, globalVars.random_limit))
+                                        else:
+                                            time.sleep(globalVars.post_limit)
+                                elif tag:
+                                    update = (item + ' ' + tag)
+                                    status = CreateUpdate()
+                                    if direct:
+                                        pass
+                                    else:
+                                        status.status_update(tweet_text=update)
+                                        if random_limit:
+                                            time.sleep(random.randint(10, globalVars.random_limit))
+                                        else:
+                                            time.sleep(globalVars.post_limit)
 
 
 def main():
