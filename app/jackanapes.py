@@ -99,19 +99,19 @@ class CommandBot:
         """
         print('COMMAND RECEIVED: ' + command_string)
 
-        # Logic to parse commands
-        if command_string == 'DIRECTORY':
-            call(['ls', '-lah'])
-        elif command_string == 'PROC':
-
+        # Logic to process command arguments
+        if command_string == 'PROC':
             proc_result = check_output(['pgrep', '-lf', 'jackanapes'])
             proc_send = 'jackanapes long_status -ls ' + str(proc_result) + ' -d @someclown'
             call(proc_send, shell=True)
+        elif command_string == 'KILL':
+            pass
 
         # Put together a quick response to the calling twitter account
-        user_name = '@' + user_name
-        bot_response = 'jackanapes status -d "COMMAND RECEIVED" '
-        complete_response = bot_response + user_name
+        complete_user_name = '@' + user_name
+        bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+        complete_response = bot_response + ' ' + complete_user_name
+        print(complete_response)
         call(complete_response, shell=True)
 
 
