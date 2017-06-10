@@ -16,7 +16,7 @@ import json
 import random
 import time
 from utilities import debugging_wrapper
-from subprocess import call
+from subprocess import call, check_output
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
@@ -103,10 +103,10 @@ class CommandBot:
         if command_string == 'DIRECTORY':
             call(['ls', '-lah'])
         elif command_string == 'PROC':
-            proc_stat = 'ps -ax | grep -i "jackanapes.py" >> proc_state.txt '
-            proc_result = 'jackanapes long_status -lf proc_state.txt'
-            call(proc_stat, shell=True)
-            call(proc_result, shell=True)
+
+            proc_result = check_output(['pgrep', '-lf', 'jackanapes'])
+            proc_send = 'jackanapes long_status -ls ' + str(proc_result) + ' -d @someclown'
+            call(proc_send, shell=True)
 
         # Put together a quick response to the calling twitter account
         user_name = '@' + user_name
