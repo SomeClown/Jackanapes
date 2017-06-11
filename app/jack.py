@@ -387,7 +387,7 @@ def init_testing():
 @click.option('-lf', '--long-file', 'long_file', help='filename with long text')
 @click.option('-t', '--tag', 'tag', help='hashtag, or other word, to append to individual lines')
 @click.option('-p', '--post_limit', 'post_limit', help='Override default limit (1.5 seconds)')
-@click.option('-r', '--random', 'random_limit', is_flag=True,
+@click.option('-r', '--random', 'random_limit',
               help='Override default limit with random (10 seconds - 2 minutes)')
 @click.option('-d', '--direct', 'direct', required=False, help='direct flag, followed by username to send to')
 def init_length_check(long_status, long_file, tag, post_limit, random_limit, direct):

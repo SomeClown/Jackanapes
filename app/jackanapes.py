@@ -16,14 +16,14 @@ import json
 import random
 import time
 from utilities import debugging_wrapper
-from subprocess import call, check_output
+from subprocess import call, check_output, getoutput
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
 __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
 
-debug_flag = True
+debug_flag = False
 
 
 @debugging_wrapper(debug_flag)
@@ -97,22 +97,27 @@ class CommandBot:
         :param user_name:
         :return:
         """
-        print('COMMAND RECEIVED: ' + command_string)
-
         # Logic to process command arguments
-        if command_string == 'PROC':
-            proc_result = check_output(['pgrep', '-lf', 'jackanapes'])
-            proc_send = 'jackanapes long_status -ls ' + str(proc_result) + ' -d @someclown'
-            call(proc_send, shell=True)
-        elif command_string == 'KILL':
+        if command_string.isupper():
+            if command_string == 'PROC':
+                complete_user_name = '@' + user_name
+                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                complete_response = bot_response + ' ' + complete_user_name
+                call(complete_response, shell=True)
+                proc_result = check_output(['pgrep', '-lf', 'jackanapes'])
+                proc_send = 'jackanapes long_status -r 0 -p 0 -ls ' + str(proc_result) + ' -d @someclown'
+                call(proc_send, shell=True)
+            elif 'KILL' in command_string:
+                complete_user_name = '@' + user_name
+                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                complete_response = bot_response + ' ' + complete_user_name
+                call(complete_response, shell=True)
+                kill_string = command_string.lower()
+                ko_result = getoutput(kill_string)
+                result_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(ko_result) + '" -d @someclown'
+                call(result_send, shell=True)
+        else:
             pass
-
-        # Put together a quick response to the calling twitter account
-        complete_user_name = '@' + user_name
-        bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
-        complete_response = bot_response + ' ' + complete_user_name
-        print(complete_response)
-        call(complete_response, shell=True)
 
 
 @debugging_wrapper(debug_flag)
@@ -971,6 +976,8 @@ class CreateUpdate:
         """
         if post_limit:
             globalVars.post_limit = int(post_limit)
+        if random_limit:
+            globalVars.random_limit = int(random_limit)
         run_file = "run.txt"
         with open(run_file, 'r') as rf:
             for line in rf:
@@ -991,7 +998,7 @@ class CreateUpdate:
                                     status.status_update(tweet_text=update)
                                     print(update)
                                 if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                    time.sleep(random.randint(globalVars.post_limit, globalVars.random_limit))
                                 else:
                                     time.sleep(globalVars.post_limit)
                             elif tag:
@@ -1002,7 +1009,7 @@ class CreateUpdate:
                                 else:
                                     status.status_update(tweet_text=update)
                                 if random_limit:
-                                    time.sleep(random.randint(10, globalVars.random_limit))
+                                    time.sleep(random.randint(globalVars.post_limit, globalVars.random_limit))
                                 else:
                                     time.sleep(globalVars.post_limit)
                     elif long_file:
@@ -1018,7 +1025,7 @@ class CreateUpdate:
                                     else:
                                         status.status_update(tweet_text=update)
                                     if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                        time.sleep(random.randint(globalVars.post_limit, globalVars.random_limit))
                                     else:
                                         time.sleep(globalVars.post_limit)
                                 elif tag:
@@ -1029,7 +1036,7 @@ class CreateUpdate:
                                     else:
                                         status.status_update(tweet_text=update)
                                     if random_limit:
-                                        time.sleep(random.randint(10, globalVars.random_limit))
+                                        time.sleep(random.randint(globalVars.post_limit, globalVars.random_limit))
                                     else:
                                         time.sleep(globalVars.post_limit)
 

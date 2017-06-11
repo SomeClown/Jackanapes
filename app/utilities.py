@@ -25,7 +25,10 @@ def debugging_wrapper(debug_flag):
         """
         @wraps(original_function)
         def wrapper(*args, **kwargs):
-            print('Function: ' + original_function.__name__ + ' called\n')
+            if debug_flag:
+                print('Function: ' + original_function.__name__ + ' called\n')
+            else:
+                pass
             return original_function(*args, **kwargs)
         return wrapper
     return options
