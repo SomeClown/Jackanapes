@@ -117,7 +117,14 @@ class CommandBot:
                 result_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(ko_result) + '" -d @someclown'
                 call(result_send, shell=True)
             elif 'START' in command_string:
-                pass
+                commands_separated = command_string.split(' ')
+                complete_user_name = '@' + user_name
+                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                complete_response = bot_response + ' ' + complete_user_name
+                call(complete_response, shell=True)
+                proc_send = 'nohup -- jackanapes long_status -lf ' + commands_separated[1].lower() + ' &'
+                call(proc_send, shell=True)
+
         else:
             pass
 
