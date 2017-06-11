@@ -104,8 +104,8 @@ class CommandBot:
                 bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
                 complete_response = bot_response + ' ' + complete_user_name
                 call(complete_response, shell=True)
-                proc_result = check_output(['pgrep', '-lf', 'jackanapes'])
-                proc_send = 'jackanapes long_status -r 0 -p 0 -ls ' + str(proc_result) + ' -d @someclown'
+                proc_result = getoutput('pgrep -lf jackanapes')
+                proc_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(proc_result) + '" -d @someclown'
                 call(proc_send, shell=True)
             elif 'KILL' in command_string:
                 complete_user_name = '@' + user_name
