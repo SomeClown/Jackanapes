@@ -80,7 +80,7 @@ class Streamer(tweepy.StreamListener):
         :return:
         """
         if status_code != 200:
-            print(status_code)
+            print('Error: ' + status_code)
             return True
 
 
@@ -116,6 +116,8 @@ class CommandBot:
                 ko_result = getoutput(kill_string)
                 result_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(ko_result) + '" -d @someclown'
                 call(result_send, shell=True)
+            elif 'START' in command_string:
+                pass
         else:
             pass
 
