@@ -59,9 +59,11 @@ def initial_auth(original: object) -> object:
                 # so we don't have to do it every time we run the program
                 home = ''
                 if not os.path.exists(home + '/.jackanapes/'):
-                    os.mkdir(home + '/.jackanapes/')
+                    final_path = home + './jackanapes/'
+                    os.mkdirs(final_path, exist_ok=True)
                     if not os.path.exists(home + '/.jackanapes/' + str(globalVars.user.screen_name)):
-                        os.mkdir(home + '/.jackanapes/' + str(globalVars.user.screen_name))
+                        final_path = home + '/.jackanapes/' + str(globalVars.user.screen_name)
+                        os.mkdirs(final_path, exist_ok=True)
 
                 if_config_file = (home + '/.jackanapes/' + str(globalVars.user.screen_name) + '/.jackanapes')
                 print(if_config_file)

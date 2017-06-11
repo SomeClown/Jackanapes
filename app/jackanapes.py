@@ -97,8 +97,17 @@ class CommandBot:
         :param user_name:
         :return:
         """
-        # Logic to process command arguments
         if command_string.isupper():
+            """
+            This is the logic to test for incoming direct messages which have commands we
+            want to recognize. All commands and arguments are in uppercase only. We'll convert
+            as needed for file names and such.
+            
+            Commands:
+            PROC - Searches for processes associated with us (PROC)
+            KILL - Kills a particular PID (KILL PID)
+            START - Starts a long_update stream (START <filename>)
+            """
             if command_string == 'PROC':
                 complete_user_name = '@' + user_name
                 bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
@@ -260,7 +269,9 @@ class TweetArguments:
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=5000)
             print('\n ', my_screen_name, 'has: ', followers_count, 'followers ')
-            config_file = (globalVars.complete_dir_path + '/.followers')
+            if not os.path.exists(globalVars.complete_dir_path):
+                os.makedirs(globalVars.complete_dir_path, exist_ok=True)
+            config_file = (globalVars.complete_dir_path + '/.my_followers')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     for item in page:
@@ -287,7 +298,9 @@ class TweetArguments:
                                    wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True,
                                    skip_status=True, include_user_entities=False, count=200)
             print('\n ', my_screen_name, 'has: ', friends_count, 'friends ')
-            config_file = (globalVars.complete_dir_path + '/.friends')
+            if not os.path.exists(globalVars.complete_dir_path):
+                os.makedirs(globalVars.complete_dir_path, exist_ok=True)
+            config_file = (globalVars.complete_dir_path + '/.my_friends')
             with open(config_file, 'w') as f:
                 for page in cursor.pages():
                     with click.progressbar(page, label='downloading friends list') as outer_items:
@@ -312,9 +325,11 @@ class TweetArguments:
         index = 0
         # TODO: Change this entire block to use a "set" comparison for better readability and efficiency
         try:
-            config_file = (globalVars.complete_dir_path + '/.no_follow')
-            friends_file = (globalVars.complete_dir_path + '/.friends')
-            followers_file = (globalVars.complete_dir_path + '/.followers')
+            if not os.path.exists(globalVars.complete_dir_path):
+                os.makedirs(globalVars.complete_dir_path, exist_ok=True)
+            config_file = (globalVars.complete_dir_path + '/.not_following_me')
+            friends_file = (globalVars.complete_dir_path + '/.my_friends')
+            followers_file = (globalVars.complete_dir_path + '/.my_followers')
             print(followers_file)
             with open(friends_file, 'r') as friends, open(followers_file, 'r') as followers:
                 for i in followers:
