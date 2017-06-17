@@ -89,3 +89,16 @@ def set_config():
         globalVars.debugging = settings['debugging']
         globalVars.home_dir = os.path.expanduser('~')
         globalVars.complete_dir_path = os.path.join(globalVars.home_dir, globalVars.home, globalVars.user)
+
+
+def dump_output(sender_function, output_type):
+    """
+    All output functionality lives here
+
+    :param sender_function: Which method or function sent us here
+    :param output_type: One of print, web, curses, or terminal
+    :return:
+    """
+    # TODO: Replace all output format functionality with this function
+    pass
+
