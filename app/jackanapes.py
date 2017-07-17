@@ -49,7 +49,7 @@ class Streamer(tweepy.StreamListener):
             else:
                 cleanup(0)
         elif globalVars.output == 'print':
-            print(globalVars.color_red2_on + status.user.name +
+            print(globalVars.color_red2_on +'{:20}'.format(status.user.name)  +
                   globalVars.color_red2_off + ' ' + status.text)
         elif globalVars.output == 'web':
             pass
