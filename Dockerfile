@@ -7,7 +7,7 @@ ENV PACKAGES="\
 	bash \
 	python3 \
 "
-
+ENV PATH "/jackanapes/app:$PATH"
 
 RUN apk update \
 	&& apk upgrade \
@@ -22,3 +22,5 @@ WORKDIR /jackanapes/app
 ADD . /jackanapes
 
 RUN pip3 install -r /jackanapes/app/requirements.txt
+
+ENTRYPOINT ["jack.py"]
