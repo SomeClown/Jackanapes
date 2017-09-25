@@ -60,6 +60,7 @@ class Streamer(tweepy.StreamListener):
         :param status:
         :return:
         """
+        print('Test message from within on_direct_message function inside of Streamer class')
         user_name = status.direct_message['sender_screen_name']
         status_update = status.direct_message['text']
 
