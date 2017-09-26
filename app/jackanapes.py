@@ -111,25 +111,25 @@ class CommandBot:
             """
             if command_string == 'PROC':
                 complete_user_name = '@' + user_name
-                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                bot_response = './jack.py status -d "COMMAND RECEIVED: ' + command_string + '"'
                 complete_response = bot_response + ' ' + complete_user_name
                 call(complete_response, shell=True)
                 proc_result = getoutput('pgrep -lf jackanapes')
-                proc_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(proc_result) + '" -d @someclown'
+                proc_send = './jack.py long_status -r 0 -p 0 -ls "' + str(proc_result) + '" -d @someclown'
                 call(proc_send, shell=True)
             elif 'KILL' in command_string:
                 complete_user_name = '@' + user_name
-                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                bot_response = './jack.py status -d "COMMAND RECEIVED: ' + command_string + '"'
                 complete_response = bot_response + ' ' + complete_user_name
                 call(complete_response, shell=True)
                 kill_string = command_string.lower()
                 ko_result = getoutput(kill_string)
-                result_send = 'jackanapes long_status -r 0 -p 0 -ls "' + str(ko_result) + '" -d @someclown'
+                result_send = './jack.py long_status -r 0 -p 0 -ls "' + str(ko_result) + '" -d @someclown'
                 call(result_send, shell=True)
             elif 'START' in command_string:
                 commands_separated = command_string.split(' ')
                 complete_user_name = '@' + user_name
-                bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+                bot_response = './jack.py status -d "COMMAND RECEIVED: ' + command_string + '"'
                 complete_response = bot_response + ' ' + complete_user_name
                 call(complete_response, shell=True)
                 proc_send = 'nohup -- jackanapes long_status -lf ' + commands_separated[1].lower() + ' &'
@@ -137,10 +137,11 @@ class CommandBot:
 
         elif command_string == 'What are we doing tonight, Brain?':
             complete_user_name = '@' + user_name
-            bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+            bot_response = './jack.py status -d "COMMAND RECEIVED: ' + command_string + '"'
             complete_response = bot_response + ' ' + complete_user_name
             call(complete_response, shell=True)
-            result_send = 'jackanapes status -d "Same thing we do every night, Pinky, try to take over the Docker world!" @someclown'
+            result_send = './jack.py status -d "Same thing we do every night, Pinky, ' \
+                          'try to take over the Docker world!" @someclown'
             call(result_send, shell=True)
         else:
             pass
