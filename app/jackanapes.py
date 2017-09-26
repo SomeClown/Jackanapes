@@ -135,6 +135,13 @@ class CommandBot:
                 proc_send = 'nohup -- jackanapes long_status -lf ' + commands_separated[1].lower() + ' &'
                 call(proc_send, shell=True)
 
+        elif command_string == 'What are we doing tonight, Brain?':
+            complete_user_name = '@' + user_name
+            bot_response = 'jackanapes status -d "COMMAND RECEIVED: ' + command_string + '"'
+            complete_response = bot_response + ' ' + complete_user_name
+            call(complete_response, shell=True)
+            result_send = 'jackanapes status -d "Same thing we do every night, Pinky, try to take over the Docker world!" @someclown'
+            call(result_send, shell=True)
         else:
             pass
 
