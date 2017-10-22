@@ -7,12 +7,17 @@ import progressbar
 import yaml
 import globalVars
 import os
+import random
 
 
 __author__ = 'SomeClown'
 __license__ = "MIT"
 __maintainer__ = "Teren Bryson"
 __email__ = "teren@packetqueue.net"
+
+
+def nonce():
+    return str(int(time.time() * random.random() * 1000))
 
 
 def debugging_wrapper(debug_flag):
