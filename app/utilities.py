@@ -73,7 +73,7 @@ def set_config():
 
     # Load and assign key variables from yaml configuration file
     with open('config.yml', 'r') as my_config_file:
-        settings = yaml.load(my_config_file)
+        settings = yaml.safe_load(my_config_file)
         globalVars.access_token = settings['access_token']
         globalVars.access_token_secret = settings['access_token_secret']
         globalVars.consumer_token = settings['consumer_token']
