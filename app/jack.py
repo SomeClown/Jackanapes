@@ -394,6 +394,7 @@ def init_length_check(long_status, long_file, tag, post_limit, random_limit, dir
     long_update = jackanapes.CreateUpdate()
     long_update.do_long_update(long_status, long_file, tag, post_limit, random_limit, direct)
 
+
 cli.add_command(init_friend_list, 'friends_list')
 cli.add_command(init_time_line, 'tweets')
 cli.add_command(init_mentions, 'mentions')
